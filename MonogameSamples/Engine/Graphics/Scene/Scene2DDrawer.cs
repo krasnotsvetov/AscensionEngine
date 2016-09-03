@@ -11,15 +11,23 @@ namespace MonogameSamples.Engine.Graphics.Scene
         public SpriteBatch SpriteBatch { get { return spritebatch; } }
         private Scene2D scene;
         private SpriteBatch spritebatch;
+        private GraphicsDevice graphicsDevice;
+        private RenderTarget2D diffuse;
+        private RenderTarget2D depth;
+        private RenderTarget2D normalMap;
+        private RenderTarget2D light;
 
         public Scene2DDrawer(Scene2D scene)
         {
-            spritebatch = new SpriteBatch(GameInfo.GraphicsDevice);
+            graphicsDevice = GameInfo.GraphicsDevice;
+            spritebatch = new SpriteBatch(graphicsDevice);
             this.scene = scene;
         }
 
         public override void Initialize()
         {
+            diffuse = new RenderTarget2D(graphicsDevice, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
+            depth = new RenderTarget2D(graphicsDevice, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height);
             base.Initialize();
         }
 
@@ -27,6 +35,8 @@ namespace MonogameSamples.Engine.Graphics.Scene
 
         public override void Draw(GameTime gameTime)
         {
+            graphicsDevice.SetRenderTargets(diffuse, depth);
+            graphicsDevice.Clear(Color.CornflowerBlue);
             lastMaterial = null;
             spritebatch.Begin();
             // DrawSceneRecursive(scene, gameTime);
@@ -34,6 +44,10 @@ namespace MonogameSamples.Engine.Graphics.Scene
             {
                 DrawEntityRecursive(entity, gameTime);
             }
+            spritebatch.End();
+            graphicsDevice.SetRenderTargets(null);
+            spritebatch.Begin();
+            spritebatch.Draw(diffuse, Vector2.Zero, Color.White);
             spritebatch.End();
             base.Draw(gameTime);
         }
@@ -70,6 +84,7 @@ namespace MonogameSamples.Engine.Graphics.Scene
 
         private void DrawEntity(Entity entity, GameTime gameTime)
         {
+
             foreach (var component in entity.DrawableComponents)
             {
                 var edc = (component as EntityDrawableComponent);

@@ -4,6 +4,18 @@
 
 sampler TextureSampler : register(s0);
 
+struct Light
+{
+	float3 position;
+	float3 color;
+	float invRadius;
+};
+
+struct PixelShaderOutput
+{
+	float4 diffuse : SV_Target0;
+	float4 depth : SV_Target1;
+};
 
 texture test;
 
@@ -18,20 +30,18 @@ SamplerState testSampler {
 
 struct VertexShaderOutput
 {
-	float4 Position : SV_Position;
+	float4 Position : SV_POSITION;
 	float4 Color : COLOR0;
 	float2 UV : TEXCOORD0;
 };
 
 
-float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
+PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 {
-
-	float4 tex = tex2D(TextureSampler, input.UV);
-	if (input.UV.x < 0.5f) {
-		return tex2D(testSampler, input.UV);
-	}
-	return tex;
+	PixelShaderOutput output;
+	output.diffuse = tex2D(TextureSampler, input.UV);
+	output.depth = tex2D(testSampler, input.UV);
+	return output;
 }
 
 technique Technique1
@@ -39,7 +49,7 @@ technique Technique1
 	pass Pass1
 	{
 		
-		PixelShader = compile ps_4_0_level_9_1 PixelShaderFunction();
+		PixelShader = compile ps_5_0 PixelShaderFunction();
 	}
 }
 
