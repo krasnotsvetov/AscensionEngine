@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
-    <Compile Include="Engine\Core\Common\EnityUpdateableComponent.cs" />
+    <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\UpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\DrawableComponent.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
