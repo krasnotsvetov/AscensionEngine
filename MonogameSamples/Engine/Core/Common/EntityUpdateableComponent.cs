@@ -1,4 +1,5 @@
-﻿using MonogameSamples.Engine.Graphics; 
+﻿using Microsoft.Xna.Framework;
+using MonogameSamples.Engine.Graphics;
 
 namespace MonogameSamples.Engine.Core.Common
 {
@@ -6,11 +7,11 @@ namespace MonogameSamples.Engine.Core.Common
     {
 
 
-        public Entity Entity { get { return entity; } }
-        private Entity entity;
-        public EntityUpdateableComponent(Entity entity) : base()
+        public IGameComponent ParentComponent { get { return parentComponent; } }
+        private IGameComponent parentComponent;
+        public EntityUpdateableComponent(IGameComponent parentComponent) : base()
         {
-            this.entity = entity;
+            this.parentComponent = parentComponent;
         }
 
     }

@@ -1,11 +1,15 @@
-﻿using MonogameSamples.Engine.Graphics;
+﻿using Microsoft.Xna.Framework;
+using MonogameSamples.Engine.Core.Components;
+using MonogameSamples.Engine.Graphics;
 
 namespace MonogameSamples.Engine.Core.Common
 {
     public class EntityDrawableComponent : DrawableComponent
     {
 
-        public Entity Entity { get { return entity; } }
+        public IGameComponent ParentComponent { get { return parentComponent; } }
+
+
 
 
         public Material Material
@@ -14,12 +18,14 @@ namespace MonogameSamples.Engine.Core.Common
             set { material = value; }
         }
 
-        private Entity entity;
+        private IGameComponent parentComponent;
         private Material material = null;
 
-        public EntityDrawableComponent(Entity entity) : base()
+
+
+        public EntityDrawableComponent(IGameComponent parentComponent) : base()
         {
-            this.entity = entity;
+            this.parentComponent = parentComponent;
         }
 
          
