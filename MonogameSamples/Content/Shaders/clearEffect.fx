@@ -4,12 +4,7 @@
 
 sampler TextureSampler : register(s0);
 
-struct Light
-{
-	float3 position;
-	float3 color;
-	float invRadius;
-};
+ 
 
 struct PixelShaderOutput
 {
@@ -18,16 +13,7 @@ struct PixelShaderOutput
 	float4 normal : SV_Target2;
 	float4 light : SV_Target3;
 };
-
-texture NormalMap;
-
-SamplerState NormalSampler {
-	Texture = (NormalMap);
-	MinFilter = Linear;
-	MagFilter = Linear;
-	AddressU = Clamp;
-	AddressV = Clamp;
-};
+ 
 
 
 struct VertexShaderOutput
@@ -41,9 +27,10 @@ struct VertexShaderOutput
 PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 {
 	PixelShaderOutput output;
-	output.depth = input.Position.z / input.Position.w;
-	output.diffuse = tex2D(TextureSampler, input.UV) ;
-	output.normal = tex2D(NormalSampler, input.UV);
+	output.depth = float4(1, 1, 1, 1);
+	output.diffuse = float4(1, 1, 1, 1);
+	output.normal = float4(0.5f, 0.5, 1, 1);
+	output.light = float4(0, 0, 0, 1);
 	return output;
 }
 

@@ -4,6 +4,11 @@
 
 sampler TextureSampler : register(s0);
 
+
+float ScreenWidth;
+float ScreenHeight;
+
+
 struct Light
 {
 	float3 position;
@@ -42,7 +47,7 @@ PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 {
 	PixelShaderOutput output;
 	output.depth = input.Position.z / input.Position.w;
-	output.diffuse = tex2D(TextureSampler, input.UV) ;
+	output.diffuse = tex2D(TextureSampler, input.UV) * float4(input.Position.x / ScreenWidth, input.Position.y / ScreenHeight, input.Position.x * input.Position.y / (ScreenWidth * ScreenHeight), 1);
 	output.normal = tex2D(NormalSampler, input.UV);
 	return output;
 }
