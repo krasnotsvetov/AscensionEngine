@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
 using MonogameSamples.Engine.Core.Common;
+using MonogameSamples.Engine.Graphics.SceneSystem;
+using MonogameSamples.Engine.Graphics.Filters;
 
 namespace MonogameSamples.Engine.Graphics
 {
@@ -28,16 +30,18 @@ namespace MonogameSamples.Engine.Graphics
         private GraphicsDevice device;
 
 
+        private List<Filter> filters = new List<Filter>();
+
         private bool isDirty = false;
 
-        public RenderSystem()
+        public RenderSystem(GraphicsDevice graphicsDevice)
         {
-
+            device = graphicsDevice;
         }
 
 
 
-        public RenderSystem(IEnumerable<KeyValuePair<string, DrawableComponent>> gameComponents)
+        public RenderSystem(GraphicsDevice graphicsDevice, IEnumerable<KeyValuePair<string, DrawableComponent>> gameComponents) : this(graphicsDevice)
         {
             gameComponents.ToList().ForEach(pair =>
             {
@@ -55,10 +59,14 @@ namespace MonogameSamples.Engine.Graphics
             _gameComponents.Sort();
         }
 
+        DefferedLightFilter lightFilter;
 
 
         public override void Initialize()
         {
+            lightFilter = new DefferedLightFilter(this);
+            lightFilter.Initialize();
+           
             foreach (var gameComponent in gameComponents.Values)
             {
                 gameComponent.Initialize();
@@ -90,6 +98,14 @@ namespace MonogameSamples.Engine.Graphics
             {
                 gameComponent.Draw(gameTime);
             }
+
+
+
+            device.SetRenderTarget(null);
+            Scene2DDrawer sceneDrawer = gameComponents.Values.First(t => t is Scene2DDrawer) as Scene2DDrawer;
+
+            lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
+
         }
     }
 
