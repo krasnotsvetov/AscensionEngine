@@ -1,17 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
 using MonogameSamples.Engine.Graphics;
+using System;
+using System.Runtime.Serialization;
 
 namespace MonogameSamples.Engine.Core.Common
 {
+    [DataContract]
     public class EntityUpdateableComponent : UpdateableComponent
     {
 
 
-        public IGameComponent ParentComponent { get { return parentComponent; } }
-        private IGameComponent parentComponent;
+        public virtual IGameComponent ParentComponent { get; set; }
+
         public EntityUpdateableComponent(IGameComponent parentComponent) : base()
         {
-            this.parentComponent = parentComponent;
+            ParentComponent = parentComponent;
         }
 
     }

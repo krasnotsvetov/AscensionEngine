@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using System; 
+using System;
+using System.Runtime.Serialization;
 
 namespace MonogameSamples.Engine.Core.Common
 {
+    [DataContract]
     public class UpdateableComponent : IComparable<UpdateableComponent>, IUpdateable, IDisposable, IGameComponent
     {
 
@@ -12,7 +14,10 @@ namespace MonogameSamples.Engine.Core.Common
         public event EventHandler<EventArgs> UpdateOrderChanged;
         public event EventHandler<EventArgs> EnabledChanged;
 
+        [DataMember]
         private int updateOrder = 0;
+
+        [DataMember]
         private bool isEnabled = true;
 
         public virtual int UpdateOrder

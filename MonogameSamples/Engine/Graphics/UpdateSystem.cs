@@ -27,7 +27,6 @@ namespace MonogameSamples.Engine.Graphics
         private Dictionary<string, UpdateableComponent> gameComponents = new Dictionary<string, UpdateableComponent>();
         private GraphicsDevice device;
 
-
         private bool isDirty = false;
 
         public UpdateSystem()

@@ -1,17 +1,20 @@
-﻿using Microsoft.Xna.Framework; 
-using System; 
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Runtime.Serialization;
 
 namespace MonogameSamples.Engine.Core.Common
 {
+    [DataContract]
     public class DrawableComponent : IComparable<DrawableComponent>, IDrawable, IDisposable, IGameComponent
     {
 
-      
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
 
-
+        [DataMember]
         private int drawOrder = 0;
+
+        [DataMember]
         private bool isVisible = true;
 
 

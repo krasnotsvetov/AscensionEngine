@@ -102,8 +102,12 @@ namespace MonogameSamples.Engine.Graphics
 
 
             device.SetRenderTarget(null);
-            Scene2DDrawer sceneDrawer = gameComponents.Values.First(t => t is Scene2DDrawer) as Scene2DDrawer;
-
+            Scene2DDrawer sceneDrawer = (Scene2DDrawer)gameComponents.Values.FirstOrDefault(t => t is Scene2DDrawer);
+            if (sceneDrawer == null)
+            {
+                return;
+            }
+            
             lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
 
         }

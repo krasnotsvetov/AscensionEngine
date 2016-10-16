@@ -3,13 +3,21 @@ using Microsoft.Xna.Framework;
 using MonogameSamples.Engine.Core.Common;
 using MonogameSamples.Engine.Graphics;
 using MonogameSamples.Engine.Graphics.SceneSystem;
+using MonogameSamples.Engine.Core.Common.Attributes;
+using System;
+using System.Runtime.Serialization;
 
 namespace MonogameSamples.Engine.Core.Components
 {
+    [DataContract]
+    [Component("Sprite")]
     public class Sprite : EntityDrawableComponent
     {
-
+       
         private SpriteBatch spriteBatch;
+
+        private Transform transform;
+
         public Sprite(IGameComponent parentComponent) : base(parentComponent)
         {
 
@@ -17,6 +25,7 @@ namespace MonogameSamples.Engine.Core.Components
 
         public override void Initialize()
         {
+            transform = (ParentComponent as Entity).GlobalTransform;
             spriteBatch = ((ParentComponent as Entity).Scene.scene2DDrawer as Scene2DDrawer).SpriteBatch;
             base.Initialize();
         }
@@ -25,8 +34,13 @@ namespace MonogameSamples.Engine.Core.Components
         {
             
             Vector2 position = new Vector2((ParentComponent as Entity).GlobalTransform.Position.X, (ParentComponent as Entity).GlobalTransform.Position.Y);
-            spriteBatch.Draw(Material.textures[0], position, Color.White);
+            spriteBatch.Draw(Material.textures[0], position, new Rectangle(0, 0, Material.textures[0].Width, Material.textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
             base.Draw(gameTime);
+        }
+
+        public override string ToString()
+        {
+            return "Sprite";
         }
     }
 }

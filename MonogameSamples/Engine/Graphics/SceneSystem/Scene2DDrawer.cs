@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonogameSamples.Engine.Core;
 using MonogameSamples.Engine.Core.Common;
+using MonogameSamples.Engine.Core.Components.ParticleSystemComponent;
 
 namespace MonogameSamples.Engine.Graphics.SceneSystem
 {
@@ -78,7 +79,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public override void Draw(GameTime gameTime)
         {
-             
 
             graphicsDevice.SetRenderTargets(depth, diffuse, normalMap, lightMap);
 
@@ -149,6 +149,16 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                     edc.Material.ApplyMaterial();
                     lastMaterial = edc.Material;
                 }
+
+                if (component is ParticleSystem2D)
+                {
+                    lastMaterial = null; // 
+                    spritebatch.End();
+                    Vector3 p = Vector3.Transform(Vector3.One, entity.GlobalTransform.World);
+                    spritebatch.Begin(blendState: BlendState.AlphaBlend, effect: edc.Material.effect, transformMatrix: entity.GlobalTransform.World); // Mul Camera Matrix TODO , before implement camera class.
+                }
+
+
                 if (component.Visible)
                 {
                     component.Draw(gameTime);

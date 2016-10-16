@@ -29,7 +29,7 @@ SamplerState LightMapSampler {
 
 
 
-float3 ambientColor;
+float3 AmbientColor;
 
 float3 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 texCoords)
 {
@@ -75,7 +75,7 @@ float4 DeferredNormalPS(float4 position : SV_Position, float4 color : COLOR0, fl
 	}
 
 
-	return float4((ambientColor + finalColor) * base.rgb, base.a);
+	return float4((AmbientColor + finalColor) * base.rgb, base.a);
 
 
 }

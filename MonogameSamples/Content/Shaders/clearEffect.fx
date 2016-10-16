@@ -30,7 +30,7 @@ PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 	output.depth = float4(1, 1, 1, 1);
 	output.diffuse = float4(1, 1, 1, 1);
 	output.normal = float4(0.5f, 0.5, 1, 1);
-	output.light = float4(0, 0, 0, 1);
+	output.light = float4(0.0, 0.0, 0.0, 1);
 	return output;
 }
 
