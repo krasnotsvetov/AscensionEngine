@@ -68,11 +68,7 @@ namespace MonogameSamples.Engine.Core.Components
 
         public override void SceneChanged(Scene2D lastScene)
         {
-            if (lastScene != null)
-            {
-                lastScene.RemoveLight(this);
-            }
-
+            lastScene.RemoveLight(this);
             if ((ParentComponent as Entity).Scene != null)
             {
                 (ParentComponent as Entity).Scene.AddLight(this);

@@ -34,21 +34,26 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 Scene2D prev = scene;
                 scene = value;
 
-                foreach (Entity entity in entities)
+                //ignoreChangeScene == true, когда сцена временно ставится в null и затем в предыдущую сцену, 
+                //поэтому ничего не меняем
+                if (!ignoreChangeScene)
                 {
-                    entity.Scene = value;
-                }
-
-                if (prev != null)
-                {
-                    foreach (DrawableComponent dc in drawableComponents)
+                    foreach (Entity entity in entities)
                     {
-                        dc.SceneChanged(prev);
+                        entity.Scene = value;
                     }
 
-                    foreach (UpdateableComponent uc in updateableComponents)
+                    if (prev != null)
                     {
-                        uc.SceneChanged(prev);
+                        foreach (DrawableComponent dc in drawableComponents)
+                        {
+                            dc.SceneChanged(prev);
+                        }
+
+                        foreach (UpdateableComponent uc in updateableComponents)
+                        {
+                            uc.SceneChanged(prev);
+                        }
                     }
                 }
             }
@@ -95,7 +100,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         /// <summary>
         /// WARNINIG, set only for load scene.
         /// </summary>
-        public int ID = -1;
+        internal int ID = -1;
 
         private Entity parent;
         private bool isDrawDirty = false;
@@ -106,6 +111,8 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         private Transform parentTransform;
         private Transform globalTransform;
         private bool ignoreChangeTransformEvent = false;
+        private bool ignoreChangeScene = false;
+
 
         public Entity(Scene2D scene) : this()
         {
@@ -194,7 +201,9 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             updateableComponents.Add(transform);
         } 
          
-
+        /// <summary>
+        /// Initialize calls if scene changed.
+        /// </summary>
         public void Initialize()
         {
             if (scene != null)
@@ -295,6 +304,14 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddEntity(Entity entity)
         {
+            Scene2D lastEntityScene = entity.Scene;
+
+            //Don't call sceneChange if scenes is same
+            if (lastEntityScene == scene)
+            {
+                ignoreChangeScene = true;
+            }
+
             if (entity.scene != null)
             {
                 entity.scene.RemoveEntity(entity);
@@ -303,7 +320,9 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             entity.parentTransform = transform;
             entity.Scene = scene;
             entity.parent = this;
-            if (scene != null)
+
+            //Call initialize only if scene changed.
+            if (scene != null && lastEntityScene != scene)
             {
                 entity.Initialize();
             }
@@ -313,6 +332,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 entity.ID = scene.GetNewEntityId();
             }
             entities.Add(entity);
+            entity.ignoreChangeScene = false;
         }
 
 

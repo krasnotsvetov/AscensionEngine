@@ -272,13 +272,16 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddEntity(Entity entity)
         {
-            if (entity.Scene != null)
+            if (entity.Scene != this)
             {
-                entity.Scene.RemoveEntity(entity);
+                if (entity.Scene != null)
+                {
+                    entity.Scene.RemoveEntity(entity);
+                }
+                entity.Scene = this;
+                entity.Initialize();
             }
-            entity.Scene = this;
             entities.Add(entity);
-            entity.Initialize();
         }
 
         
