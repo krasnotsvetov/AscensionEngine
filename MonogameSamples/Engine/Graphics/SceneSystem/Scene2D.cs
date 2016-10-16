@@ -31,12 +31,8 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             scene2DUpdater = new Scene2DUpdater(this);
         }
 
-        public void Save()
-        {
-            entityGraph();
-        }
 
-        private List<List<int>> entityGraph()
+        public void Save()
         {
             List<List<int>> graph = new List<List<int>>();
             List<int> invTopSort = new List<int>();
@@ -88,8 +84,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             xmlWritter.WriteEndElement();
             xmlWritter.WriteEndDocument();
             xmlWritter.Close();
-
-            return graph;
         }
 
         private void dfsEntityGraph(Entity ent, List<List<int>> graph, List<Entity> allEntities)
