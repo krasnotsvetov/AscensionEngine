@@ -22,6 +22,7 @@ namespace MonogameSamples.Engine.Editor
     {
 
         public GameEditor GameEditor;
+        public Scene2D activeScene;
         public EditorForm()
         {
             InitializeComponent();
@@ -48,9 +49,9 @@ namespace MonogameSamples.Engine.Editor
         private void SceneComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             EntityView.Nodes.Clear();
-            var scene = (SceneComboBox.SelectedItem) as Scene2D;
+            activeScene = (SceneComboBox.SelectedItem) as Scene2D;
             EntityView.BeginUpdate();
-            foreach (var ent in scene.Entities)
+            foreach (var ent in activeScene.Entities)
             {
                 AddEntitiesToTreeViewRec(ent, EntityView.Nodes);
                 //int x = 5;
@@ -155,6 +156,10 @@ namespace MonogameSamples.Engine.Editor
             return stream;
         }
 
+        private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            activeScene.Save();
+        }
     }
 
 

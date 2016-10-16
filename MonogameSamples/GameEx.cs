@@ -154,7 +154,7 @@ namespace MonogameSamples
                 });
 
             particleEntity.AddDrawableComponent("ParticleSystem", ps);
-            scene2D.Entities.Add(particleEntity);
+            scene2D.AddEntity(particleEntity);
 
             //sprite.material = new material(basetexture, effect2,
             //    m =>
@@ -171,8 +171,8 @@ namespace MonogameSamples
 
 
             entity.AddDrawableComponent("Sprite0", sprite);
-            scene2D.Entities.Add(entity);
-            scene2D.Entities.Add(entity2);
+            scene2D.AddEntity(entity);
+            scene2D.AddEntity(entity2);
 
             //entity4.AddEntity(particleEntity);
 

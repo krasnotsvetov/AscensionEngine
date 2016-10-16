@@ -53,7 +53,8 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         private bool isGlobalTransformDirty = true;
 
 
-        
+        public Guid Guid;
+        public int ID = -1;
 
         private Entity parent;
         private bool isDrawDirty = false;
@@ -68,6 +69,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public Entity(Scene2D scene)
         {
+            Guid = Guid.NewGuid();
             parent = null;
             this.scene = scene;
             transform = new Transform(this);
@@ -225,12 +227,17 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         }
 
         public void AddEntity(Entity entity)
-        { 
-            scene.Entities.Remove(entity);
+        {
+            if (entity.ID != -1)
+            {
+                entity.scene.RemoveEntity(entity);
+            }
+            entity.ID = scene.GetNewEntityId();
 
             entity.parentTransform = transform;
             entity.scene = scene;
             entity.parent = this;
+
             entities.Add(entity);
         }
 
@@ -255,7 +262,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             if (addToScene)
             {
               
-                scene.Entities.Add(this);
+                scene.AddEntity(entity);
             }
 
         }

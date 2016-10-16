@@ -24,9 +24,10 @@ namespace MonogameSamples.Engine.Core.Components
             {
                 if (base.ParentComponent != null)
                 {
-                    (ParentComponent as Entity).Scene.Lights.Remove(this);
+                    (ParentComponent as Entity).Scene.RemoveLight(this);
                 }
-                (value as Entity).Scene.Lights.Add(this);
+                if (value == null) return;
+                (value as Entity).Scene.AddLight(this);
                 base.ParentComponent = value;
             }
         }

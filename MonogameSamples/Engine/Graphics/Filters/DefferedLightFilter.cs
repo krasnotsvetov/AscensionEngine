@@ -5,6 +5,7 @@ using MonogameSamples.Engine.Core.Components;
 using MonogameSamples.Engine.Graphics.SceneSystem;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -26,7 +27,7 @@ namespace MonogameSamples.Engine.Graphics.Filters
             base.Initialize();
         }
 
-        public void Render(Texture2D diffuse, Texture2D normalMap, Texture2D lightMap, List<Light> lights) 
+        public void Render(Texture2D diffuse, Texture2D normalMap, Texture2D lightMap, ReadOnlyCollection<Light> lights) 
         {
 
             spriteBatch.Begin(effect: effect); 
