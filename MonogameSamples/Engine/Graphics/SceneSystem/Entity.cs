@@ -24,7 +24,33 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 {
                     return;
                 }
+                if (value == null)
+                {
+                    ID = -1;
+                } else
+                {
+                    ID = value.GetNewEntityId();
+                }
+                Scene2D prev = scene;
                 scene = value;
+
+                foreach (Entity entity in entities)
+                {
+                    entity.Scene = value;
+                }
+
+                if (prev != null)
+                {
+                    foreach (DrawableComponent dc in drawableComponents)
+                    {
+                        dc.SceneChanged(prev);
+                    }
+
+                    foreach (UpdateableComponent uc in updateableComponents)
+                    {
+                        uc.SceneChanged(prev);
+                    }
+                }
             }
         }
 
@@ -171,7 +197,23 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void Initialize()
         {
-            //throw new NotImplementedException();
+            if (scene != null)
+            {
+                foreach (DrawableComponent dc in drawableComponents)
+                {
+                    dc.Initialize();
+                }
+
+                foreach (UpdateableComponent uc in updateableComponents)
+                {
+                    uc.Initialize();
+                }
+
+                foreach (Entity e in entities)
+                {
+                    e.Initialize();
+                }
+            }
         }
 
         public List<EntityDrawableComponent> DrawableComponents
@@ -212,12 +254,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddDrawableComponent(string name, EntityDrawableComponent component)
         {
-            if (scene == null)
-            {
-                //TODO
-                throw new Exception("Entity must have scene, before you add a new entity");
-            }
-
             if (components.ContainsKey(name))
             {
                 //TODO
@@ -225,7 +261,11 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             }
 
             component.ParentComponent = this;
-            component.Initialize();
+            if (scene != null)
+            {
+                component.Initialize();
+            }
+
             component.DrawOrderChanged += (s, e) => isDrawDirty = true;
             components.Add(name, component);
             drawableComponents.Add(component);
@@ -235,12 +275,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         public void AddUpdateableComponent(string name, EntityUpdateableComponent component)
         {
 
-            if (scene == null)
-            {
-                //TODO
-                throw new Exception("Entity must have scene, before you add a new entity");
-            }
-
             if (components.ContainsKey(name))
             {
                 //TODO
@@ -248,7 +282,11 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             }
 
             component.ParentComponent = this;
-            component.Initialize();
+
+            if (scene != null)
+            {
+                component.Initialize();
+            }
             component.UpdateOrderChanged += (s, e) => isUpdateDirty = true;
             components.Add(name, component);
             updateableComponents.Add(component);
@@ -257,11 +295,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddEntity(Entity entity)
         {
-            if (scene == null)
-            {
-                //TODO
-                throw new Exception("Entity must have scene, before you add a new entity");
-            }
             if (entity.scene != null)
             {
                 entity.scene.RemoveEntity(entity);
@@ -270,7 +303,15 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             entity.parentTransform = transform;
             entity.Scene = scene;
             entity.parent = this;
-            entity.ID = scene.GetNewEntityId();
+            if (scene != null)
+            {
+                entity.Initialize();
+            }
+
+            if (scene != null)
+            {
+                entity.ID = scene.GetNewEntityId();
+            }
             entities.Add(entity);
         }
 

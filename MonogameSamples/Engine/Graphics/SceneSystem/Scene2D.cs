@@ -277,20 +277,30 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 entity.Scene.RemoveEntity(entity);
             }
             entity.Scene = this;
-            entity.ID = GetNewEntityId();
             entities.Add(entity);
+            entity.Initialize();
         }
+
+        
 
         public void RemoveEntity(Entity entity)
         {
             
-            entity.Scene = null;
             if (entity.ID > -1)
             {
-                freeId.Add(entity.ID);
+                entityDFSFreeID(entity);
             }
-            entity.ID = -1;
+            entity.Scene = null;
             entities.Remove(entity);
+        }
+
+        private void entityDFSFreeID(Entity entity)
+        {
+            freeId.Add(entity.ID);
+            foreach (var e in entity.Entities)
+            {
+                entityDFSFreeID(e);
+            }
         }
 
         public void AddLight(Light light)

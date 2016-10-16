@@ -117,14 +117,15 @@ namespace MonogameSamples
             entity3 = new Entity();
             entity4 = new Entity();
 
-            entity2.AddEntity(entity3);
-            entity3.AddEntity(entity4);
+    
            
 
             
             Light light = new Light(entity2);
             Light light2 = new Light(entity3);
             Light light3 = new Light(entity4);
+
+          
 
             light2.LightColor = Color.CornflowerBlue.ToVector3();
             light3.LightColor = Color.Green.ToVector3();
@@ -142,8 +143,12 @@ namespace MonogameSamples
 
             Sprite sprite = new Sprite(entity);
 
-            
 
+            entity3.AddEntity(entity4);
+
+            scene2D.AddEntity(entity3);
+
+            entity2.AddEntity(entity3);
 
             // If you need to skip texture in Material, for example, Normal Map, use this construction:
             // sprite.Material = new Material(baseTexture, effect, m => m.effect.Parameters["NormalMap"].SetValue((Texture2D)null));

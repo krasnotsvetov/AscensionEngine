@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonogameSamples.Engine.Graphics.SceneSystem;
 using System;
 using System.Runtime.Serialization;
 
@@ -50,6 +51,11 @@ namespace MonogameSamples.Engine.Core.Common
                     EnabledChanged(this, EventArgs.Empty);
                 }
             }
+        }
+
+        public virtual void SceneChanged(Scene2D lastScene)
+        {
+
         }
 
         public virtual void Initialize()

@@ -28,7 +28,7 @@ namespace MonogameSamples.Engine.Core.Common
             this.ParentComponent = parentComponent;
         }
 
-         
+    
 
     }
 }
