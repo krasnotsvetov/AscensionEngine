@@ -114,15 +114,22 @@ namespace MonogameSamples
                 
             entity = new Entity(scene2D);
             entity2 = new Entity(scene2D);
-            entity3 = new Entity(scene2D);
-            entity4 = new Entity(scene2D);
+            entity3 = new Entity();
+            entity4 = new Entity();
 
+            entity2.AddEntity(entity3);
+            entity3.AddEntity(entity4);
+           
+
+            
             Light light = new Light(entity2);
             Light light2 = new Light(entity3);
             Light light3 = new Light(entity4);
 
             light2.LightColor = Color.CornflowerBlue.ToVector3();
             light3.LightColor = Color.Green.ToVector3();
+
+            //We can't add drawable component to Entity which doesn't have Scene.
             entity2.AddDrawableComponent("Light0", light);
             entity3.AddDrawableComponent("Light0", light2);
             entity4.AddDrawableComponent("Light0", light3);
@@ -135,8 +142,7 @@ namespace MonogameSamples
 
             Sprite sprite = new Sprite(entity);
 
-            entity2.AddEntity(entity3);
-            entity3.AddEntity(entity4);
+            
 
 
             // If you need to skip texture in Material, for example, Normal Map, use this construction:
@@ -154,7 +160,6 @@ namespace MonogameSamples
                 });
 
             particleEntity.AddDrawableComponent("ParticleSystem", ps);
-            scene2D.AddEntity(particleEntity);
 
             //sprite.material = new material(basetexture, effect2,
             //    m =>
@@ -171,8 +176,6 @@ namespace MonogameSamples
 
 
             entity.AddDrawableComponent("Sprite0", sprite);
-            scene2D.AddEntity(entity);
-            scene2D.AddEntity(entity2);
 
             //entity4.AddEntity(particleEntity);
 

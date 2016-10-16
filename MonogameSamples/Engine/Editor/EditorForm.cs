@@ -160,6 +160,11 @@ namespace MonogameSamples.Engine.Editor
         {
             activeScene.Save();
         }
+
+        private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Scene2D.Load();
+        }
     }
 
 

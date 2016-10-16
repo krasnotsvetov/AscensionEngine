@@ -32,12 +32,13 @@
             this.EntityView = new System.Windows.Forms.TreeView();
             this.SceneComboBox = new System.Windows.Forms.ComboBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ComponentBox = new System.Windows.Forms.ListBox();
             this.AvailableComponents = new System.Windows.Forms.ComboBox();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.drawingSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -78,6 +79,22 @@
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveSceneToolStripMenuItem,
+            this.openSceneToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // saveSceneToolStripMenuItem
+            // 
+            this.saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
+            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.saveSceneToolStripMenuItem.Text = "Save Scene";
+            this.saveSceneToolStripMenuItem.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
+            // 
             // ComponentBox
             // 
             this.ComponentBox.FormattingEnabled = true;
@@ -114,20 +131,12 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // fileToolStripMenuItem
+            // openSceneToolStripMenuItem
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveSceneToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // saveSceneToolStripMenuItem
-            // 
-            this.saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.saveSceneToolStripMenuItem.Text = "Save Scene";
-            this.saveSceneToolStripMenuItem.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
+            this.openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
+            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.openSceneToolStripMenuItem.Text = "Open Scene";
+            this.openSceneToolStripMenuItem.Click += new System.EventHandler(this.openSceneToolStripMenuItem_Click);
             // 
             // EditorForm
             // 
@@ -166,5 +175,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSceneToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openSceneToolStripMenuItem;
     }
 }

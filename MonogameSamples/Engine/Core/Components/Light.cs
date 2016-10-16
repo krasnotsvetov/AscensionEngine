@@ -22,12 +22,13 @@ namespace MonogameSamples.Engine.Core.Components
 
             set
             {
-                if (base.ParentComponent != null)
+                /*if (base.ParentComponent != null)
                 {
-                    (ParentComponent as Entity).Scene.RemoveLight(this);
+                    (ParentComponent as Entity).Scene?.RemoveLight(this);
                 }
                 if (value == null) return;
-                (value as Entity).Scene.AddLight(this);
+
+                (value as Entity).Scene?.AddLight(this);*/
                 base.ParentComponent = value;
             }
         }
@@ -61,7 +62,7 @@ namespace MonogameSamples.Engine.Core.Components
 
         public override void Initialize()
         {
-            
+            (ParentComponent as Entity).Scene.AddLight(this);
             base.Initialize();
         }
 

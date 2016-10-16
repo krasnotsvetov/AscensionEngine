@@ -15,7 +15,18 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
        
         public ReadOnlyCollection<Entity> Entities { get { return entities.AsReadOnly(); } }
-        public Scene2D Scene { get { return scene; } }
+        public Scene2D Scene
+        {
+            get { return scene; }
+            set
+            {
+                if (value == scene)
+                {
+                    return;
+                }
+                scene = value;
+            }
+        }
 
         private Dictionary<string, IGameComponent> components = new Dictionary<string, IGameComponent>();
 
@@ -54,6 +65,10 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
 
         public Guid Guid;
+
+        /// <summary>
+        /// WARNINIG, set only for load scene.
+        /// </summary>
         public int ID = -1;
 
         private Entity parent;
@@ -66,12 +81,15 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         private Transform globalTransform;
         private bool ignoreChangeTransformEvent = false;
 
-
-        public Entity(Scene2D scene)
+        public Entity(Scene2D scene) : this()
         {
+            scene.AddEntity(this);
+        }
+
+        public Entity()
+        { 
             Guid = Guid.NewGuid();
             parent = null;
-            this.scene = scene;
             transform = new Transform(this);
             globalTransform = new Transform(this);
             parentTransform = null;
@@ -148,10 +166,8 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             };
 
             updateableComponents.Add(transform);
-        }
-
-
-
+        } 
+         
 
         public void Initialize()
         {
@@ -196,6 +212,12 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddDrawableComponent(string name, EntityDrawableComponent component)
         {
+            if (scene == null)
+            {
+                //TODO
+                throw new Exception("Entity must have scene, before you add a new entity");
+            }
+
             if (components.ContainsKey(name))
             {
                 //TODO
@@ -212,6 +234,13 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddUpdateableComponent(string name, EntityUpdateableComponent component)
         {
+
+            if (scene == null)
+            {
+                //TODO
+                throw new Exception("Entity must have scene, before you add a new entity");
+            }
+
             if (components.ContainsKey(name))
             {
                 //TODO
@@ -228,16 +257,20 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public void AddEntity(Entity entity)
         {
-            if (entity.ID != -1)
+            if (scene == null)
+            {
+                //TODO
+                throw new Exception("Entity must have scene, before you add a new entity");
+            }
+            if (entity.scene != null)
             {
                 entity.scene.RemoveEntity(entity);
             }
-            entity.ID = scene.GetNewEntityId();
 
             entity.parentTransform = transform;
-            entity.scene = scene;
+            entity.Scene = scene;
             entity.parent = this;
-
+            entity.ID = scene.GetNewEntityId();
             entities.Add(entity);
         }
 
@@ -249,16 +282,12 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             if (!entities.Contains(entity)) {
                 return;
             }
-            Transform transform = GlobalTransform;
-
-                
-            entity.transform.Position = GlobalTransform.Position;
-            entity.transform.Rotation = GlobalTransform.Rotation;
-            entity.transform.Scale = GlobalTransform.Scale;
-
             entity.parentTransform = null;
             entity.parent = null;
             entities.Remove(entity);
+
+            entity.Transform.SetTransform(entity.globalTransform.Position, entity.globalTransform.Rotation, entity.globalTransform.Scale);
+            
             if (addToScene)
             {
               
