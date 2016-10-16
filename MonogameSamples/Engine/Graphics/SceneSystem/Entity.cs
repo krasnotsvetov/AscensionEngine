@@ -309,7 +309,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             //Don't call sceneChange if scenes is same
             if (lastEntityScene == scene)
             {
-                ignoreChangeScene = true;
+                entity.ignoreChangeScene = true;
             }
 
             if (entity.scene != null)
