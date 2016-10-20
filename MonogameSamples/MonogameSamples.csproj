@@ -85,7 +85,6 @@
     <Compile Include="Engine\Core\Components\Light.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
-    <Compile Include="Engine\Core\GameInfo.cs" />
     <Compile Include="Engine\Editor\EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +101,7 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\Particle2D.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticlePool2D.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleSystem2D.cs" />
+    <Compile Include="Engine\Graphics\MaterialReference.cs" />
     <Compile Include="GameEx.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Background.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Entity.cs" />

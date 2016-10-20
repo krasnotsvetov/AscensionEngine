@@ -34,11 +34,13 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ComponentBox = new System.Windows.Forms.ListBox();
             this.AvailableComponents = new System.Windows.Forms.ComboBox();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.openSceneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.propertyGrid2 = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.drawingSurface)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +57,7 @@
             // 
             this.EntityView.Location = new System.Drawing.Point(12, 74);
             this.EntityView.Name = "EntityView";
-            this.EntityView.Size = new System.Drawing.Size(197, 738);
+            this.EntityView.Size = new System.Drawing.Size(197, 470);
             this.EntityView.TabIndex = 1;
             this.EntityView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.EntityView_AfterSelect);
             // 
@@ -91,9 +93,16 @@
             // saveSceneToolStripMenuItem
             // 
             this.saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
             this.saveSceneToolStripMenuItem.Text = "Save Scene";
             this.saveSceneToolStripMenuItem.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
+            // 
+            // openSceneToolStripMenuItem
+            // 
+            this.openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
+            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
+            this.openSceneToolStripMenuItem.Text = "Open Scene";
+            this.openSceneToolStripMenuItem.Click += new System.EventHandler(this.openSceneToolStripMenuItem_Click);
             // 
             // ComponentBox
             // 
@@ -131,18 +140,27 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // openSceneToolStripMenuItem
+            // propertyGrid1
             // 
-            this.openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.openSceneToolStripMenuItem.Text = "Open Scene";
-            this.openSceneToolStripMenuItem.Click += new System.EventHandler(this.openSceneToolStripMenuItem_Click);
+            this.propertyGrid1.Location = new System.Drawing.Point(1587, 291);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(293, 521);
+            this.propertyGrid1.TabIndex = 8;
+            // 
+            // propertyGrid2
+            // 
+            this.propertyGrid2.Location = new System.Drawing.Point(12, 550);
+            this.propertyGrid2.Name = "propertyGrid2";
+            this.propertyGrid2.Size = new System.Drawing.Size(197, 262);
+            this.propertyGrid2.TabIndex = 9;
             // 
             // EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1902, 1033);
+            this.Controls.Add(this.propertyGrid2);
+            this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.OutputBox);
             this.Controls.Add(this.AvailableComponents);
@@ -176,5 +194,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSceneToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSceneToolStripMenuItem;
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.PropertyGrid propertyGrid2;
     }
 }

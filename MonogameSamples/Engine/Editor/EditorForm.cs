@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonogameSamples.Engine.Core.Common;
 using MonogameSamples.Engine.Core.Common.Attributes;
+using MonogameSamples.Engine.Core.Components;
 using MonogameSamples.Engine.Graphics;
 using MonogameSamples.Engine.Graphics.SceneSystem;
 using System;
@@ -77,12 +79,14 @@ namespace MonogameSamples.Engine.Editor
             {
                 ComponentBox.Items.Clear();
                 var ent = node.Entity;
+                propertyGrid2.SelectedObject = ent;
                 GameEditor.SelectedEntity = ent;
                 foreach (var dc in ent.DrawableComponents)
                 {
                     ComponentBox.Items.Add(new ComponentCell(dc));
                 }
 
+                ComponentBox.Items.Add(new ComponentCell(ent.Transform));
                 foreach (var uc in ent.UpdateableComponents)
                 {
                     ComponentBox.Items.Add(new ComponentCell(uc));
@@ -101,9 +105,13 @@ namespace MonogameSamples.Engine.Editor
             base.WndProc(ref m);
         }
 
+
         private void ComponentBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            if (ComponentBox.SelectedItem != null)
+            {
+                propertyGrid1.SelectedObject =  (ComponentBox.SelectedItem as ComponentCell).Component;
+            }
         }
 
         private class ComponentCell
@@ -163,7 +171,7 @@ namespace MonogameSamples.Engine.Editor
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene2D.Load();
+            Scene2D.Load(GameEditor.renderSystem);
         }
     }
 

@@ -18,44 +18,20 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         public Scene2D Scene
         {
             get { return scene; }
-            set
+            internal set
             {
                 if (value == scene)
                 {
                     return;
                 }
-                if (value == null)
-                {
-                    ID = -1;
-                } else
-                {
-                    ID = value.GetNewEntityId();
-                }
-                Scene2D prev = scene;
+                Scene2D lastScene = scene;
                 scene = value;
-
-                //ignoreChangeScene == true, когда сцена временно ставится в null и затем в предыдущую сцену, 
-                //поэтому ничего не меняем
-                if (!ignoreChangeScene)
+                foreach (Entity entity in entities)
                 {
-                    foreach (Entity entity in entities)
-                    {
-                        entity.Scene = value;
-                    }
-
-                    if (prev != null)
-                    {
-                        foreach (DrawableComponent dc in drawableComponents)
-                        {
-                            dc.SceneChanged(prev);
-                        }
-
-                        foreach (UpdateableComponent uc in updateableComponents)
-                        {
-                            uc.SceneChanged(prev);
-                        }
-                    }
+                    entity.Scene = value;
                 }
+
+                SceneChanged(lastScene);
             }
         }
 
@@ -88,6 +64,9 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 return globalTransform;
             }
         }
+
+      
+
         public Transform ParentTrasform { get { return parentTransform; } }
 
         public Entity Parent { get { return parent; } }
@@ -111,7 +90,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         private Transform parentTransform;
         private Transform globalTransform;
         private bool ignoreChangeTransformEvent = false;
-        private bool ignoreChangeScene = false;
 
 
         public Entity(Scene2D scene) : this()
@@ -123,8 +101,11 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         { 
             Guid = Guid.NewGuid();
             parent = null;
-            transform = new Transform(this);
-            globalTransform = new Transform(this);
+            transform = new Transform("LocalTransform");
+            globalTransform = new Transform("GlobalTrasform");
+
+            transform.ParentComponent = globalTransform.ParentComponent = this;
+
             parentTransform = null;
 
 
@@ -198,7 +179,6 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 }
             };
 
-            updateableComponents.Add(transform);
         } 
          
         /// <summary>
@@ -206,26 +186,30 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         /// </summary>
         public void Initialize()
         {
-            if (scene != null)
+
+            //TODO
+            if (scene == null)
             {
-                foreach (DrawableComponent dc in drawableComponents)
-                {
-                    dc.Initialize();
-                }
+                throw new Exception("Entity should be attached to scene");
+            }
 
-                foreach (UpdateableComponent uc in updateableComponents)
-                {
-                    uc.Initialize();
-                }
+            foreach (UpdateableComponent uc in updateableComponents)
+            {
+                uc.Initialize();
+            }
 
-                foreach (Entity e in entities)
-                {
-                    e.Initialize();
-                }
+            foreach (DrawableComponent dc in drawableComponents)
+            {
+                dc.Initialize();
+            }
+
+            foreach (Entity e in entities)
+            {
+                e.Initialize();
             }
         }
 
-        public List<EntityDrawableComponent> DrawableComponents
+        public ReadOnlyCollection<EntityDrawableComponent> DrawableComponents
         {
             get
             {
@@ -234,11 +218,11 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                     isDrawDirty = false;
                     drawableComponents.Sort();
                 }
-                return drawableComponents;
+                return drawableComponents.AsReadOnly();
             }
         }
 
-        public List<EntityUpdateableComponent> UpdateableComponents
+        public ReadOnlyCollection<EntityUpdateableComponent> UpdateableComponents
         {
             get
             {
@@ -247,7 +231,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                     isUpdateDirty = false;
                     updateableComponents.Sort();
                 }
-                return updateableComponents;
+                return updateableComponents.AsReadOnly();
             }
         }
 
@@ -261,12 +245,17 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         }
 
 
-        public void AddDrawableComponent(string name, EntityDrawableComponent component)
+        public virtual void AddDrawableComponent(EntityDrawableComponent component)
         {
-            if (components.ContainsKey(name))
+            if (component.ParentComponent != null)
+            {
+                throw new Exception("ParentComponent must be null");
+            }
+
+            if (components.ContainsKey(component.Name))
             {
                 //TODO
-                throw new Exception();
+                throw new Exception("Enity has component with same name");
             }
 
             component.ParentComponent = this;
@@ -276,18 +265,22 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             }
 
             component.DrawOrderChanged += (s, e) => isDrawDirty = true;
-            components.Add(name, component);
+            components.Add(component.Name, component);
             drawableComponents.Add(component);
             isDrawDirty = true;
         }
 
-        public void AddUpdateableComponent(string name, EntityUpdateableComponent component)
+        public virtual void AddUpdateableComponent(EntityUpdateableComponent component)
         {
+            if (component.ParentComponent != null)
+            {
+                throw new Exception("ParentComponent must be null");
+            }
 
-            if (components.ContainsKey(name))
+            if (components.ContainsKey(component.Name))
             {
                 //TODO
-                throw new Exception();
+                throw new Exception("Enity has component with same name");
             }
 
             component.ParentComponent = this;
@@ -297,64 +290,122 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 component.Initialize();
             }
             component.UpdateOrderChanged += (s, e) => isUpdateDirty = true;
-            components.Add(name, component);
+            components.Add(component.Name, component);
             updateableComponents.Add(component);
             isUpdateDirty = true;
         }
 
-        public void AddEntity(Entity entity)
+        public virtual void AddEntity(Entity entity)
         {
-            Scene2D lastEntityScene = entity.Scene;
-
-            //Don't call sceneChange if scenes is same
-            if (lastEntityScene == scene)
+            if (entity.parent != null)
             {
-                entity.ignoreChangeScene = true;
+                entity.parent.RemoveEntity(entity, true);
             }
 
-            if (entity.scene != null)
-            {
-                entity.scene.RemoveEntity(entity);
-            }
-
-            entity.parentTransform = transform;
-            entity.Scene = scene;
+            //TODO, setting parameters
             entity.parent = this;
-
-            //Call initialize only if scene changed.
-            if (scene != null && lastEntityScene != scene)
-            {
-                entity.Initialize();
-            }
-
-            if (scene != null)
-            {
-                entity.ID = scene.GetNewEntityId();
-            }
+            entity.parentTransform = transform;
             entities.Add(entity);
-            entity.ignoreChangeScene = false;
+            //
+
+            Scene2D lastScene = entity.scene;
+
+            if (lastScene != null)
+            { 
+                if (lastScene == scene)
+                {
+                    lastScene.RemoveEntity(entity, true);
+                } else
+                {
+                    lastScene.RemoveEntity(entity);
+                    
+                }
+            }
+
+            if (lastScene != scene)
+            {
+                //set recursive scene to all child
+                entity.Scene = scene;
+                if (scene != null)
+                {
+                    scene.entityDFSGetID(entity);
+                    entity.Initialize();
+                }
+            }
         }
 
-
-        public void RemoveEntity(Entity entity, bool addToScene = false)
+        /// <summary>
+        /// Remove entity from child entity and from scene if addToScene equals False
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="addToScene"></param>
+        public virtual void RemoveEntity(Entity entity, bool addToScene = false)
         {
 
+            //TODO make assert here.
+            if (entity.scene != scene)
+            {
+                throw new Exception("");
+            }
 
             if (!entities.Contains(entity)) {
-                return;
+                throw new Exception("entity is not attached to this entity");
             }
+
             entity.parentTransform = null;
             entity.parent = null;
             entities.Remove(entity);
 
             entity.Transform.SetTransform(entity.globalTransform.Position, entity.globalTransform.Rotation, entity.globalTransform.Scale);
-            
-            if (addToScene)
+
+
+
+            if (scene != null)
             {
-              
-                scene.AddEntity(entity);
+                if (addToScene)
+                {
+                    scene.AddEntity(entity);
+                }
+                else
+                {
+                    scene.RemoveEntity(entity);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// This method will be called if scene for Entity will change
+        /// </summary>
+        /// <param name="lastScene">lastScene is reference to previous Scene</param>
+        protected virtual void SceneChanged(Scene2D lastScene)
+        {
+            foreach (var uc in UpdateableComponents)
+            {
+                uc.SceneChanged(lastScene);
             }
 
+            foreach (var dc in DrawableComponents)
+            {
+                dc.SceneChanged(lastScene);
+            }
+        }
+
+
+        /// <summary>
+        /// This method will be called if RenderSystem for scene will change
+        /// </summary>
+        internal void RenderSystemChange()
+        {
+            foreach (var e in entities)
+            {
+                e.RenderSystemChange();
+            }
+
+            foreach (var dc in drawableComponents)
+            {
+                dc.RenderSystemChange();
+            }
         }
     }
 }

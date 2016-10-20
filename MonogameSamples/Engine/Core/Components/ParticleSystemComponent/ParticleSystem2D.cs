@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using MonogameSamples.Engine.Core.Common.Extension;
 using System.Runtime.Serialization;
+using MonogameSamples.Engine.Graphics;
 
 namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 {
@@ -24,7 +25,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         private ParticlePool2D particlePool2D;
 
 
-        private List<Particle2D> particles = new List<Particle2D>();
+        private List<Particle2D> particles;
 
         private SpriteBatch spriteBatch;
 
@@ -36,32 +37,28 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         [DataMember]
         private int textureCount = 1;
 
-        Random rnd = new Random();
+        Random rnd;
 
         Transform globalTransform;
-        public ParticleSystem2D(IGameComponent parentComponent, float frequency, int textureCount) : base(parentComponent)
+        public ParticleSystem2D(string name, float frequency, int textureCount, MaterialReference reference) : base(name, reference)
         {
-            EnableGenerate = true;
-            particlePool2D = new ParticlePool2D(1000, this);
-            if (!(parentComponent is Entity))
-            {
-                //TODO
-                throw new Exception();
-            }
-
-            globalTransform = (parentComponent as Entity).GlobalTransform;
             this.textureCount = textureCount;
-
         }
 
 
         public override void Initialize()
         {
+            base.Initialize();
+            rnd = new Random();
+
+            EnableGenerate = true;
+            particlePool2D = new ParticlePool2D(1000, this);
+            particles = new List<Particle2D>();
+            globalTransform = (ParentComponent as Entity).GlobalTransform;
             this.width = Material.textures[0].Width / textureCount;
             this.height = Material.textures[0].Height;
-            spriteBatch = ((ParentComponent as Entity).Scene.scene2DDrawer as Scene2DDrawer).SpriteBatch;
+            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
             
-            base.Initialize();
         }
 
 
@@ -116,6 +113,14 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         public override string ToString()
         {
             return "ParticleSystem";
+        }
+
+
+        internal override void RenderSystemChange()
+        {
+            base.RenderSystemChange();
+
+            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
         }
     }
 }

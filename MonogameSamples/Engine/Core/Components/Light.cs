@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using MonogameSamples.Engine.Core.Common;
 using MonogameSamples.Engine.Core.Common.Attributes;
+using MonogameSamples.Engine.Graphics;
 using MonogameSamples.Engine.Graphics.SceneSystem;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 
 namespace MonogameSamples.Engine.Core.Components
@@ -47,33 +49,26 @@ namespace MonogameSamples.Engine.Core.Components
 
         public float InvRadius { get { return invRadius; } }
         private float invRadius;
-        public Light(IGameComponent parentComponent) : base(parentComponent)
+        public Light(string name, MaterialReference reference) : base(name, reference)
         {
             Intensity = 1;
             Radius = 300;
             LightColor = Color.Orange.ToVector3();
-
-            if (!(parentComponent is Entity))
-            {
-                //TODO
-                throw new Exception("Light's parentComponent must be Entity");
-            }
         }
 
         public override void Initialize()
         {
-            (ParentComponent as Entity).Scene.AddLight(this);
             base.Initialize();
+            (ParentComponent as Entity).Scene.AddLight(this);
         }
 
         public override void SceneChanged(Scene2D lastScene)
         {
-            lastScene.RemoveLight(this);
-            if ((ParentComponent as Entity).Scene != null)
-            {
-                (ParentComponent as Entity).Scene.AddLight(this);
-            }
             base.SceneChanged(lastScene);
+            if (lastScene != null)
+            {
+                lastScene.RemoveLight(this);
+            }
         }
 
         public override string ToString()

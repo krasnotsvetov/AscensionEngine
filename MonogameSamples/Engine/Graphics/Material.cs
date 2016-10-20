@@ -10,9 +10,9 @@ namespace MonogameSamples.Engine.Graphics
         public List<Texture2D> textures = new List<Texture2D>();
         public ShaderParamsSetter shaderParamsSetter;
 
-        public Material(Texture2D texture, Effect effect = null, ShaderParamsSetter shaderParamsSetter = null)
+        public Material(IEnumerable<Texture2D> textureCollection, Effect effect = null, ShaderParamsSetter shaderParamsSetter = null)
         {
-            textures.Add(texture);
+            textures.AddRange(textureCollection);
             this.effect = effect;
             this.shaderParamsSetter = shaderParamsSetter;
         }

@@ -18,16 +18,16 @@ namespace MonogameSamples.Engine.Core.Components
 
         private Transform transform;
 
-        public Sprite(IGameComponent parentComponent) : base(parentComponent)
+        public Sprite(string name, MaterialReference reference) : base(name, reference)
         {
 
         }
 
         public override void Initialize()
         {
-            transform = (ParentComponent as Entity).GlobalTransform;
-            spriteBatch = ((ParentComponent as Entity).Scene.scene2DDrawer as Scene2DDrawer).SpriteBatch;
             base.Initialize();
+            transform = (ParentComponent as Entity).GlobalTransform;
+            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
         }
 
         public override void Draw(GameTime gameTime)
@@ -41,6 +41,14 @@ namespace MonogameSamples.Engine.Core.Components
         public override string ToString()
         {
             return "Sprite";
+        }
+
+
+        internal override void RenderSystemChange()
+        {
+            base.RenderSystemChange();
+
+            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
         }
     }
 }

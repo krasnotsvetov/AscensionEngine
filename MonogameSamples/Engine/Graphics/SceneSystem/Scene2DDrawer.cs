@@ -37,6 +37,10 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         }
 
         public SpriteBatch SpriteBatch { get { return spritebatch; } }
+        public RenderSystem RenderSystem { get { return renderSystem; } }
+
+        private RenderSystem renderSystem;
+
         private Scene2D scene;
         private SpriteBatch spritebatch;
         private GraphicsDevice graphicsDevice;
@@ -46,10 +50,14 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         private RenderTarget2D lightMap;
         private RenderTarget2D volumeLightMask;
 
-        public Scene2DDrawer(Scene2D scene)
+
+
+
+        public Scene2DDrawer(Scene2D scene, RenderSystem renderSystem)
         {
-            graphicsDevice = GameInfo.GraphicsDevice;
-            spritebatch = new SpriteBatch(graphicsDevice);
+            this.renderSystem = renderSystem;
+            graphicsDevice = renderSystem.Device;
+            spritebatch = renderSystem.SpriteBatch;
             this.scene = scene;
         }
 
@@ -65,7 +73,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             clearTexture = new Texture2D(graphicsDevice, 1, 1);
             clearTexture.SetData<Color>(new Color[] { Color.White });
 
-            clearEffect = GameInfo.Content.Load<Effect>("Shaders\\clearEffect");
+            clearEffect = renderSystem.Shaders["clearEffect"];
 
             base.Initialize();
         }

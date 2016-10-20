@@ -13,6 +13,12 @@ namespace MonogameSamples.Engine.Graphics
     {
 
         public GraphicsDevice Device { get { return device; } }
+        public SpriteBatch SpriteBatch { get { return spriteBatch; } }
+
+
+        public Dictionary<MaterialReference, Material> Materials { get; set; } = new Dictionary<MaterialReference, Material>();
+        public Dictionary<string, Effect> Shaders = new Dictionary<string, Effect>();
+
         public  List<DrawableComponent> GameComponents
         {
             get
@@ -28,6 +34,7 @@ namespace MonogameSamples.Engine.Graphics
 
         private Dictionary<string, DrawableComponent> gameComponents = new Dictionary<string, DrawableComponent>();
         private GraphicsDevice device;
+        private SpriteBatch spriteBatch;
 
 
         private List<Filter> filters = new List<Filter>();
@@ -37,6 +44,7 @@ namespace MonogameSamples.Engine.Graphics
         public RenderSystem(GraphicsDevice graphicsDevice)
         {
             device = graphicsDevice;
+            spriteBatch = new SpriteBatch(device);
         }
 
 

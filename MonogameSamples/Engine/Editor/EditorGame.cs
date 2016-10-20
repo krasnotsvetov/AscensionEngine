@@ -67,6 +67,7 @@ namespace MonogameSamples.Engine.Editor
                     SelectedEntity.GlobalTransform.Position = new Vector3(mouseState.Position, 0);
                 }
             }
+            base.Update(gameTime);
             mouseState.Update();
         }
 

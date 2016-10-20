@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using MonogameSamples.Engine.Core.Components;
 using MonogameSamples.Engine.Graphics;
+using MonogameSamples.Engine.Graphics.SceneSystem;
 using System;
 using System.Runtime.Serialization;
 
@@ -11,24 +12,43 @@ namespace MonogameSamples.Engine.Core.Common
     {
         public virtual IGameComponent ParentComponent { get; set; }
 
+        [DataMember]
+        public string Name;
 
-        public Material Material
+
+        [DataMember]
+        public MaterialReference MaterialReference { get; internal set; }
+
+
+
+        public Material Material { get { return material; } }
+
+        private Material material;
+
+
+
+        public EntityDrawableComponent(string name, MaterialReference materialReference) : base()
         {
-            get { return material; }
-            set { material = value; }
+            this.MaterialReference = materialReference;
+            this.Name = name;
         }
 
 
-        private Material material = null;
-
-
-
-        public EntityDrawableComponent(IGameComponent parentComponent) : base()
+        public override void Initialize()
         {
-            this.ParentComponent = parentComponent;
+            if (MaterialReference != null)
+            {
+                material = (ParentComponent as Entity).Scene.RenderSystem.Materials[MaterialReference];
+            }
+            base.Initialize();
         }
 
-    
-
+        internal virtual void RenderSystemChange()
+        {
+            if (MaterialReference != null)
+            {
+                material = (ParentComponent as Scene2D).RenderSystem.Materials[MaterialReference];
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace MonogameSamples.Engine.Graphics.Filters
 
         public override void Initialize()
         {
-            effect = GameInfo.Content.Load<Effect>("shaders\\lightEffect");
+            effect = RenderSystem.Shaders["lightEffect"];
             base.Initialize();
         }
 

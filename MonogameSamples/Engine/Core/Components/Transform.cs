@@ -73,7 +73,7 @@ namespace MonogameSamples.Engine.Core.Components
             }
         }
 
-        public Transform ToGlobal()
+        internal Transform ToGlobal()
         {
             Matrix world = Matrix.Identity * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
             Vector3 rot = this.rotation;
@@ -87,7 +87,7 @@ namespace MonogameSamples.Engine.Core.Components
                 sc *= t.scale;
                 entity = entity.Parent;
             }
-            return new Transform(ParentComponent, world.Translation, rot, sc);
+            return new Transform("temporaryTransform", world.Translation, rot, sc);
         }
 
 
@@ -112,7 +112,7 @@ namespace MonogameSamples.Engine.Core.Components
         private Vector3 rotation;
         private Vector3 scale;
 
-        public Transform(IGameComponent parentComponent) : base(parentComponent)
+        public Transform(string name) : base(name)
         {
             scale = new Vector3(1, 1, 1);
             world = Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
@@ -120,7 +120,7 @@ namespace MonogameSamples.Engine.Core.Components
         }
 
 
-        public Transform(IGameComponent parentComponent, Vector3 position, Vector3 rotation, Vector3 scale) : base(parentComponent)
+        public Transform(string name, Vector3 position, Vector3 rotation, Vector3 scale) : base(name)
         {
             this.position = position;
             this.rotation = rotation;
@@ -144,14 +144,6 @@ namespace MonogameSamples.Engine.Core.Components
         }
 
 
-        public static Transform operator +(Transform t1, Transform t2)
-        {
-            Vector3 scale1 = t1.scale;
-            Vector3 scale2 = t2.scale;
-            return new Transform(t1.ParentComponent, t1.position + t2.position, t1.rotation + t2.rotation, new Vector3(t1.scale.X * t2.scale.X, t1.scale.Y * t2.scale.Y, t1.scale.Z * t2.scale.Z));
-        }
-
-
 
        public void SetTransform(Vector3 position, Vector3 rotation, Vector3 scale)
        {
@@ -159,44 +151,6 @@ namespace MonogameSamples.Engine.Core.Components
            this.Rotation = rotation;
            this.Scale = scale;
        }
-
-        /*public void UpdateTransform(Vector3 position, Vector3 rotation, Vector3 scale)
-        {
-            this.position = position;
-            this.rotation = rotation;
-            this.scale = scale;
-            world = Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
-
-          
-        }*/
-
-
-        /*  public void UpdateTransformRecursively(Transform transform, Transform parentTransform, Vector3 lastParentPositon, Vector3 lastParentRotation, Vector3 lastParentScale, Vector3 deltaPosition, Vector3 deltaRotation, Vector3 deltaScale)
-        {
-
-            Vector3 lP = transform.Position;
-            Vector3 lR = transform.Rotation;
-            Vector3 lS = transform.Scale;
-
-            Entity entity = transform.ParentComponent as Entity;
-
-
-            Vector3 localPosition = lP - lastParentPositon;
-            Vector3 newPosition = Vector3.Transform(localPosition, Matrix.CreateScale(deltaScale));
-            newPosition = Vector3.Transform(newPosition, Matrix.CreateRotationZ(deltaRotation.Z));
-            newPosition += parentTransform.position;
-
-            transform.rotation += deltaRotation;
-            transform.scale *= scale;
-            transform.position = newPosition;
-            
-
-            foreach (var e in entity.Entities)
-            {
-                UpdateTransformRecursively(e.Transform, transform, lP, lR, lS, deltaPosition, deltaRotation, deltaScale);
-            }
-        }*/
-
 
         public override string ToString()
         {
