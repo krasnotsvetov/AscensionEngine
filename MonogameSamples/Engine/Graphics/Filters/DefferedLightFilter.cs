@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Content;
 
 namespace MonogameSamples.Engine.Graphics.Filters
 {
@@ -23,9 +24,16 @@ namespace MonogameSamples.Engine.Graphics.Filters
 
         public override void Initialize()
         {
-            effect = RenderSystem.Shaders["lightEffect"];
             base.Initialize();
         }
+
+        public override void LoadContent(ContentManager contentManager)
+        {
+            base.LoadContent(contentManager);
+
+            effect = contentManager.Load<Effect>("shaders\\lightEffect");
+        }
+
 
         public void Render(Texture2D diffuse, Texture2D normalMap, Texture2D lightMap, ReadOnlyCollection<Light> lights) 
         {

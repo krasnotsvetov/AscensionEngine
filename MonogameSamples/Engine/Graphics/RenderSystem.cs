@@ -6,6 +6,7 @@ using System.Linq;
 using MonogameSamples.Engine.Core.Common;
 using MonogameSamples.Engine.Graphics.SceneSystem;
 using MonogameSamples.Engine.Graphics.Filters;
+using Microsoft.Xna.Framework.Content;
 
 namespace MonogameSamples.Engine.Graphics
 {
@@ -16,8 +17,7 @@ namespace MonogameSamples.Engine.Graphics
         public SpriteBatch SpriteBatch { get { return spriteBatch; } }
 
 
-        public Dictionary<MaterialReference, Material> Materials { get; set; } = new Dictionary<MaterialReference, Material>();
-        public Dictionary<string, Effect> Shaders = new Dictionary<string, Effect>();
+        //public Dictionary<string, Effect> Shaders = new Dictionary<string, Effect>();
 
         public  List<DrawableComponent> GameComponents
         {
@@ -81,6 +81,18 @@ namespace MonogameSamples.Engine.Graphics
             }
         }
 
+
+        public override void LoadContent(ContentManager contentManager)
+        {
+            base.LoadContent(contentManager);
+            lightFilter.LoadContent(contentManager);
+
+            foreach (var gameComponent in gameComponents.Values)
+            {
+                gameComponent.LoadContent(contentManager);
+            }
+        }
+
         public void AddComponent(KeyValuePair<string, DrawableComponent> drawableComponent)
         {
             if (gameComponents.ContainsKey(drawableComponent.Key))
@@ -110,13 +122,15 @@ namespace MonogameSamples.Engine.Graphics
 
 
             device.SetRenderTarget(null);
-            Scene2DDrawer sceneDrawer = (Scene2DDrawer)gameComponents.Values.FirstOrDefault(t => t is Scene2DDrawer);
+            SceneRenderer sceneDrawer = (SceneRenderer)gameComponents.Values.FirstOrDefault(t => t is SceneRenderer);
             if (sceneDrawer == null)
             {
                 return;
             }
-            
+
+
             lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
+
 
         }
     }

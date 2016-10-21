@@ -24,7 +24,7 @@ namespace MonogameSamples.Engine.Editor
     {
 
         public GameEditor GameEditor;
-        public Scene2D activeScene;
+        public Scene activeScene;
         public EditorForm()
         {
             InitializeComponent();
@@ -34,7 +34,9 @@ namespace MonogameSamples.Engine.Editor
         {
             this.GameEditor = gameEditor;
             RenderSystem rs = (RenderSystem)GameEditor.drawableComponents.Values.FirstOrDefault(t => t is RenderSystem);
-            rs.GameComponents.Where(t => (t is Scene2DDrawer)).ToList().ForEach(w => SceneComboBox.Items.Add((w as Scene2DDrawer).Scene));
+            rs.GameComponents.Where(t => (t is SceneRenderer)).ToList().ForEach(w => SceneComboBox.Items.Add((w as SceneRenderer).Scene));
+            SceneComboBox.SelectedIndex = 0;
+                
         }
 
         private void EditorForm_Load(object sender, EventArgs e)
@@ -43,7 +45,7 @@ namespace MonogameSamples.Engine.Editor
             {
                 if (t.GetCustomAttribute(typeof(ComponentAttribute), true) != null)
                 {
-                    AvailableComponents.Items.Add(t);
+                    AvailableComponents.Items.Add(t.GetCustomAttribute<ComponentAttribute>().Name);
                 }
             }
         }
@@ -51,7 +53,7 @@ namespace MonogameSamples.Engine.Editor
         private void SceneComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             EntityView.Nodes.Clear();
-            activeScene = (SceneComboBox.SelectedItem) as Scene2D;
+            activeScene = (SceneComboBox.SelectedItem) as Scene;
             EntityView.BeginUpdate();
             foreach (var ent in activeScene.Entities)
             {
@@ -79,7 +81,7 @@ namespace MonogameSamples.Engine.Editor
             {
                 ComponentBox.Items.Clear();
                 var ent = node.Entity;
-                propertyGrid2.SelectedObject = ent;
+                EntityPropertyGrid.SelectedObject = ent;
                 GameEditor.SelectedEntity = ent;
                 foreach (var dc in ent.DrawableComponents)
                 {
@@ -108,25 +110,10 @@ namespace MonogameSamples.Engine.Editor
 
         private void ComponentBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ComponentBox.SelectedItem != null)
-            {
-                propertyGrid1.SelectedObject =  (ComponentBox.SelectedItem as ComponentCell).Component;
-            }
+            ComponentPropertyGrid.SelectedObject =  (ComponentBox.SelectedItem as ComponentCell).Component;
         }
 
-        private class ComponentCell
-        {
-            public IGameComponent Component;
-            public ComponentCell(IGameComponent component)
-            {
-                Component = component;
-            }
 
-            public override string ToString()
-            { 
-                return String.Format("{0}" + Component.ToString(), (Component is EntityDrawableComponent) ? "[Drawable]" : "[Updateable]");
-            }
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -171,7 +158,88 @@ namespace MonogameSamples.Engine.Editor
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene2D.Load(GameEditor.renderSystem);
+            Scene.Load(GameEditor.renderSystem);
+        }
+
+        private void addEmptyEntityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ent = new Entity(activeScene);
+            EntityView.BeginUpdate();
+            int t = EntityView.Nodes.Add(new EntityTreeNode(ent));
+            EntityView.EndUpdate();
+        }
+
+        private void EntityView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DoDragDrop(e.Item, DragDropEffects.Move);
+            
+        }
+
+        private void EntityView_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void EntityView_DragDrop(object sender, DragEventArgs e)
+        {
+            EntityTreeNode NewNode;
+
+            if (e.Data.GetDataPresent("MonogameSamples.Engine.Editor.EntityTreeNode", false))
+            {
+                System.Drawing.Point pt = ((TreeView)sender).PointToClient(new System.Drawing.Point(e.X, e.Y));
+                EntityTreeNode DestinationNode = (EntityTreeNode)((TreeView)sender).GetNodeAt(pt);
+                NewNode = (EntityTreeNode)e.Data.GetData("MonogameSamples.Engine.Editor.EntityTreeNode");
+
+
+                if (DestinationNode == null)
+                {
+                    if (NewNode.Entity.Parent != null)
+                    {
+                        NewNode.Entity.Parent.RemoveEntity(NewNode.Entity, true);
+                        NewNode.Remove();
+                        EntityView.Nodes.Add(NewNode);
+                    }
+
+                } else
+                if (DestinationNode.TreeView == EntityView)
+                {
+
+                    Entity ent = DestinationNode.Entity;
+                    do
+                    {
+                        if (NewNode.Entity == ent)
+                        {
+                            return;
+                        }
+                        ent = ent.Parent;
+                    } while (ent != null);
+
+                    EntityView.BeginUpdate();
+                    NewNode.Remove();
+                    DestinationNode.Entity.AddEntity(NewNode.Entity);
+                    DestinationNode.Nodes.Add(NewNode);
+                    DestinationNode.Expand();
+                    EntityView.EndUpdate();
+
+                }
+            }
+        }
+
+     
+    }
+
+
+    public class ComponentCell
+    {
+        public IGameComponent Component;
+        public ComponentCell(IGameComponent component)
+        {
+            Component = component;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}" + Component.ToString(), (Component is EntityDrawableComponent) ? "[Drawable]" : "[Updateable]");
         }
     }
 

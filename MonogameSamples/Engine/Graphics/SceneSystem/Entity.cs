@@ -15,7 +15,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
        
         public ReadOnlyCollection<Entity> Entities { get { return entities.AsReadOnly(); } }
-        public Scene2D Scene
+        public Scene Scene
         {
             get { return scene; }
             internal set
@@ -24,7 +24,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 {
                     return;
                 }
-                Scene2D lastScene = scene;
+                Scene lastScene = scene;
                 scene = value;
                 foreach (Entity entity in entities)
                 {
@@ -85,14 +85,14 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         private bool isDrawDirty = false;
         private bool isUpdateDirty = false;
 
-        private Scene2D scene;
+        private Scene scene;
         private Transform transform;
         private Transform parentTransform;
         private Transform globalTransform;
         private bool ignoreChangeTransformEvent = false;
 
 
-        public Entity(Scene2D scene) : this()
+        public Entity(Scene scene) : this()
         {
             scene.AddEntity(this);
         }
@@ -308,7 +308,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             entities.Add(entity);
             //
 
-            Scene2D lastScene = entity.scene;
+            Scene lastScene = entity.scene;
 
             if (lastScene != null)
             { 
@@ -378,7 +378,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         /// This method will be called if scene for Entity will change
         /// </summary>
         /// <param name="lastScene">lastScene is reference to previous Scene</param>
-        protected virtual void SceneChanged(Scene2D lastScene)
+        protected virtual void SceneChanged(Scene lastScene)
         {
             foreach (var uc in UpdateableComponents)
             {

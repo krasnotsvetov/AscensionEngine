@@ -58,12 +58,15 @@ namespace MonogameSamples.Engine.Editor
         }
 
 
+        private bool AnyActionInEditor = false;
         protected override void Update(GameTime gameTime)
         {
+
             if (mouseState.LeftButton == MouseButtonState.Pressed)
             {
                 if (SelectedEntity != null)
                 {
+                    AnyActionInEditor = true;
                     SelectedEntity.GlobalTransform.Position = new Vector3(mouseState.Position, 0);
                 }
             }

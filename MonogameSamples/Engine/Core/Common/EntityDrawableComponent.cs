@@ -38,7 +38,7 @@ namespace MonogameSamples.Engine.Core.Common
         {
             if (MaterialReference != null)
             {
-                material = (ParentComponent as Entity).Scene.RenderSystem.Materials[MaterialReference];
+                material = (ParentComponent as Entity).Scene.Materials[MaterialReference];
             }
             base.Initialize();
         }
@@ -47,7 +47,7 @@ namespace MonogameSamples.Engine.Core.Common
         {
             if (MaterialReference != null)
             {
-                material = (ParentComponent as Scene2D).RenderSystem.Materials[MaterialReference];
+                material = (ParentComponent as Scene).Materials[MaterialReference];
             }
         }
     }

@@ -4,11 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonogameSamples.Engine.Core;
 using MonogameSamples.Engine.Core.Common;
+using MonogameSamples.Engine.Core.Common.Collections;
 using MonogameSamples.Engine.Core.Components;
 using MonogameSamples.Engine.Core.Components.ParticleSystemComponent;
 using MonogameSamples.Engine.Editor;
-using MonogameSamples.Engine.Graphics; 
+using MonogameSamples.Engine.Graphics;
 using MonogameSamples.Engine.Graphics.SceneSystem;
+using MonogameSamples.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 
@@ -38,7 +40,7 @@ namespace MonogameSamples
         public UpdateSystem updateSystem;
 
 
-        Scene2D scene2D;
+        Scene scene;
 
 
 
@@ -61,17 +63,6 @@ namespace MonogameSamples
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
 
-
-           
-
-
-
-            
-
-           
-
-
-            
             base.Initialize();
         }
 
@@ -85,23 +76,19 @@ namespace MonogameSamples
 
         protected override void LoadContent()
         {
-
-
             renderSystem = new RenderSystem(GraphicsDevice);
-
-            renderSystem.Shaders.Add("clearEffect", Content.Load<Effect>("Shaders\\clearEffect"));
-            renderSystem.Shaders.Add("lightEffect", Content.Load<Effect>("shaders\\lightEffect"));
-
             renderSystem.Initialize();
             updateSystem = new UpdateSystem();
             updateSystem.Initialize();
-
-           
-
-            scene2D = new Scene2D("Scene0", renderSystem);
             drawableComponents.Add("RenderSystem", renderSystem);
             updateableComponents.Add("UpdateSystem", updateSystem);
-            updateSystem.AddComponent(new KeyValuePair<string, UpdateableComponent>("GlobalSceneUpdater", scene2D.scene2DUpdater));
+            scene = new Scene("Scene0", renderSystem);
+            updateSystem.AddComponent(new KeyValuePair<string, UpdateableComponent>("GlobalSceneUpdater", scene.sceneUpdater));
+
+            foreach (var dc in drawableComponents.Values)
+            {
+                dc.LoadContent(Content);
+            }
 
             Matrix test = Matrix.CreateRotationZ(-MathHelper.PiOver4) * Matrix.CreateTranslation(new Vector3(5, -2, 0));
             Matrix test2 = Matrix.CreateRotationZ(-MathHelper.PiOver2) * Matrix.CreateTranslation(new Vector3(-9, 6, 0));
@@ -129,8 +116,8 @@ namespace MonogameSamples
             Texture2D particleTexture = Content.Load<Texture2D>("ParticleSystem2D\\playerParticle");
 
                 
-            entity = new Entity(scene2D);
-            entity2 = new Entity(scene2D);
+            entity = new Entity(scene);
+            entity2 = new Entity(scene);
             entity3 = new Entity();
             entity4 = new Entity();
 
@@ -158,8 +145,19 @@ namespace MonogameSamples
             entity3.Transform.SetTransform(new Vector3(250, 0, 0), Vector3.Zero, new Vector3(1, 1, 1));
             entity4.Transform.SetTransform(new Vector3(250, 0, 0), Vector3.Zero, new Vector3(1, 1, 1));
 
+            IPipelineStateSetter normalPSSetter = new NormalShaderPipelineStateSetter();
+            normalPSSetter.Initialize(effect);
 
-            renderSystem.Materials.Add(new MaterialReference("houseMaterial"), new Material(new[] { baseTexture, baseNormal }, effect, m => m.effect.Parameters["NormalMap"].SetValue(m.textures[1])));
+            IPipelineStateSetter particlePSSetter = new ParticleShaderPipelineStateSetter();
+            particlePSSetter.Initialize(effect2);
+
+            scene.Shaders.Add(new ShaderReference("NormalShader"), new Pair<Effect, IPipelineStateSetter>(effect, normalPSSetter));
+            scene.Shaders.Add(new ShaderReference("ParticleShader"), new Pair<Effect, IPipelineStateSetter>(effect2, particlePSSetter));
+
+
+            scene.Materials.Add(new MaterialReference("houseMaterial"), new Material(new[] { baseTexture, baseNormal }, new ShaderReference("NormalShader")));
+            
+            
 
             Sprite sprite = new Sprite("Sprite0", new MaterialReference("houseMaterial"));
 
@@ -174,14 +172,11 @@ namespace MonogameSamples
             // sprite.Material = new Material(baseTexture, effect, m => m.effect.Parameters["NormalMap"].SetValue((Texture2D)null));
             // You MUST set all values in your shader, but some values can be NullPointer (defualt value)
 
-            renderSystem.Materials.Add(new MaterialReference("PSMaterial"), 
-                new Material(new[] { particleTexture }, particleEffect,
-                m =>
-                {
-                    m.effect.Parameters["NormalMap"].SetValue((Texture2D)null);
-                }));
+            scene.Materials.Add(new MaterialReference("PSMaterial"),
+                new Material(new[] { particleTexture, null }, new ShaderReference("ParticleShader")));
 
-            particleEntity = new Entity(scene2D);
+           
+            particleEntity = new Entity(scene);
             ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, new MaterialReference("PSMaterial"));
 
             particleEntity.AddDrawableComponent( ps);

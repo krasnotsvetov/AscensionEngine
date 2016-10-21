@@ -53,7 +53,7 @@ namespace MonogameSamples.Engine.Core.Common
             }
         }
 
-        public virtual void SceneChanged(Scene2D lastScene)
+        public virtual void SceneChanged(Scene lastScene)
         {
 
         }

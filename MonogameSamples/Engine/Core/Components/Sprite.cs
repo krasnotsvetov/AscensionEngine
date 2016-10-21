@@ -27,7 +27,7 @@ namespace MonogameSamples.Engine.Core.Components
         {
             base.Initialize();
             transform = (ParentComponent as Entity).GlobalTransform;
-            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
+            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
         }
 
         public override void Draw(GameTime gameTime)
@@ -48,7 +48,7 @@ namespace MonogameSamples.Engine.Core.Components
         {
             base.RenderSystemChange();
 
-            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
+            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
         }
     }
 }

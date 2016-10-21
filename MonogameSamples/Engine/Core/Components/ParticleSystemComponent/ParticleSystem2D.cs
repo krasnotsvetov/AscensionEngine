@@ -57,14 +57,14 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
             globalTransform = (ParentComponent as Entity).GlobalTransform;
             this.width = Material.textures[0].Width / textureCount;
             this.height = Material.textures[0].Height;
-            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
+            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
             
         }
 
 
         public virtual void Generate(GameTime gameTime)
         {
-            Spawn(0, rnd.RandomVector2(10, 10), rnd.RandomVector2(100, 100), Vector2.Zero, 0f, 0f, (float)rnd.NextDouble() * 0.4f, -0.01f, 1, Color.White.ToVector4(), 0.01f);
+            Spawn(0, rnd.RandomVector2(10, 10), rnd.RandomVector2(100, 100), Vector2.Zero, 0f, 0f, (float)rnd.NextDouble() * 0.4f, -0.01f, 1, Color.CornflowerBlue.ToVector4(), 0.01f);
         }
 
 
@@ -120,7 +120,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         {
             base.RenderSystemChange();
 
-            spriteBatch = (ParentComponent as Entity).Scene.scene2DDrawer.SpriteBatch;
+            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
         }
     }
 }

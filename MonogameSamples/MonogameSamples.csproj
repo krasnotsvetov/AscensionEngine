@@ -77,6 +77,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Core\Common\Attributes\ComponentAttribute.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pair.cs" />
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\Extension\RandomExtension.cs" />
@@ -101,15 +102,21 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\Particle2D.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticlePool2D.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleSystem2D.cs" />
-    <Compile Include="Engine\Graphics\MaterialReference.cs" />
+    <Compile Include="Engine\Graphics\MaterialSystem\IMaterialFlags.cs" />
+    <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
+    <Compile Include="Engine\Graphics\MaterialSystem\MaterialReference.cs" />
+    <Compile Include="Engine\Graphics\Shaders\ParticleShaderShaderPipelineStateSetter.cs" />
+    <Compile Include="Engine\Graphics\Shaders\NormalShaderPipelineStateSetter.cs" />
+    <Compile Include="Engine\Graphics\Shaders\IPipelineStateSetter.cs" />
+    <Compile Include="Engine\Graphics\Shaders\ShaderReference.cs" />
     <Compile Include="GameEx.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Background.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Entity.cs" />
-    <Compile Include="Engine\Graphics\Material.cs" />
+    <Compile Include="Engine\Graphics\MaterialSystem\Material.cs" />
     <Compile Include="Engine\Graphics\RenderSystem.cs" />
-    <Compile Include="Engine\Graphics\SceneSystem\Scene2D.cs" />
-    <Compile Include="Engine\Graphics\SceneSystem\Scene2DDrawer.cs" />
-    <Compile Include="Engine\Graphics\SceneSystem\Scene2DUpdater.cs" />
+    <Compile Include="Engine\Graphics\SceneSystem\Scene.cs" />
+    <Compile Include="Engine\Graphics\SceneSystem\SceneRenderer.cs" />
+    <Compile Include="Engine\Graphics\SceneSystem\SceneUpdater.cs" />
     <Compile Include="Engine\Graphics\UpdateSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

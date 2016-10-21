@@ -18,7 +18,13 @@ namespace MonogameSamples.Engine.Editor
             Text = "entity";
 
         }
-
+        public override object Clone()
+        {
+            
+            var t = base.Clone();
+            ((EntityTreeNode)t).Entity = Entity;
+            return t;
+        }
     }
 
     class TreeViewExtension

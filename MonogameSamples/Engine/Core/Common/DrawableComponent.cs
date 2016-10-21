@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using MonogameSamples.Engine.Graphics.SceneSystem;
 using System;
 using System.Runtime.Serialization;
@@ -51,7 +52,7 @@ namespace MonogameSamples.Engine.Core.Common
             }
         }
 
-        public virtual void SceneChanged(Scene2D lastScene)
+        public virtual void SceneChanged(Scene lastScene)
         {
         }
 
@@ -62,19 +63,23 @@ namespace MonogameSamples.Engine.Core.Common
 
 
 
-        public virtual int CompareTo(DrawableComponent other)
-        {
-            return drawOrder.CompareTo(other.drawOrder);
-        }
-
       
+
+
+        public virtual void LoadContent(ContentManager contentManager)
+        {
+
+        }
 
         public virtual void Draw(GameTime gameTime)
         {
            
         }
 
-    
+        public virtual int CompareTo(DrawableComponent other)
+        {
+            return drawOrder.CompareTo(other.drawOrder);
+        }
 
         public virtual void Dispose()
         {

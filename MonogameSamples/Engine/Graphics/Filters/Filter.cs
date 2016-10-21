@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace MonogameSamples.Engine.Graphics.Filters
         protected float width;
         protected float height;
 
-        public Filter(RenderSystem renderStstem)
+        public Filter(RenderSystem renderSystem)
         {
-            RenderSystem = renderStstem;
+            RenderSystem = renderSystem;
         }
 
 
@@ -27,7 +28,13 @@ namespace MonogameSamples.Engine.Graphics.Filters
             spriteBatch = new SpriteBatch(RenderSystem.Device);
         }
 
-        public void Dispose()
+        public virtual void LoadContent(ContentManager contentManager)
+        {
+
+        }
+
+
+        public virtual void Dispose()
         {
 
         }

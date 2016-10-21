@@ -47,8 +47,9 @@ PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 {
 	PixelShaderOutput output;
 	output.depth = input.Position.z / input.Position.w;
-	output.diffuse = tex2D(TextureSampler, input.UV) * float4(input.Position.x / ScreenWidth, input.Position.y / ScreenHeight, input.Position.x * input.Position.y / (ScreenWidth * ScreenHeight), 1);
+	output.diffuse = tex2D(TextureSampler, input.UV) * input.Color;// *float4(input.Position.x / ScreenWidth, input.Position.y / ScreenHeight, input.Position.x * input.Position.y / (ScreenWidth * ScreenHeight), 1);
 	output.normal = tex2D(NormalSampler, input.UV);
+	output.light = tex2D(TextureSampler, input.UV);
 	return output;
 }
 
