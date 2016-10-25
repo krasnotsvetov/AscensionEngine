@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonogameSamples.Engine.Core.Common.Collections.Pooling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 {
-    public class Particle2D
+    public class Particle2D : IPoolable
     {
 
         Texture2D texture;
@@ -74,8 +75,13 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
             Size += SizeVelocity * delta;
 
-            Color = new Vector4(Color.X, Color.Y, Color.Z, Color.W - AlphaVelocity * delta);
+            Color = new Vector4(Color.X, Color.Y, Color.Z, Math.Max(0, Color.W - AlphaVelocity * delta));
 
+        }
+
+        public void Clear()
+        {
+            //Nothing to do.
         }
     }
 }

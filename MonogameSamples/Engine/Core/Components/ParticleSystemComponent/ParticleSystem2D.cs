@@ -10,6 +10,7 @@ using System.Text;
 using MonogameSamples.Engine.Core.Common.Extension;
 using System.Runtime.Serialization;
 using MonogameSamples.Engine.Graphics;
+using MonogameSamples.Engine.Core.Common.Collections.Pooling;
 
 namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 {
@@ -22,7 +23,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
         public bool EnableGenerate { get; set; }
 
-        private ParticlePool2D particlePool2D;
+        private IPool<Particle2D> particlePool2D;
 
 
         private List<Particle2D> particles;
@@ -52,7 +53,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
             rnd = new Random();
 
             EnableGenerate = true;
-            particlePool2D = new ParticlePool2D(1000, this);
+            particlePool2D = new Pool<Particle2D>(1000, new ParticleCreator(this));
             particles = new List<Particle2D>();
             globalTransform = (ParentComponent as Entity).GlobalTransform;
             this.width = Material.textures[0].Width / textureCount;
@@ -64,7 +65,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
         public virtual void Generate(GameTime gameTime)
         {
-            Spawn(0, rnd.RandomVector2(10, 10), rnd.RandomVector2(100, 100), Vector2.Zero, 0f, 0f, (float)rnd.NextDouble() * 0.4f, -0.01f, 1, Color.CornflowerBlue.ToVector4(), 0.01f);
+            Spawn(0, rnd.RandomVector2(10, 10), rnd.RandomVector2(100, 100), Vector2.Zero, 0f, 0f, (float)rnd.NextDouble() * 0.4f, -0.01f, 1, Color.CornflowerBlue.ToVector4(), 1f);
         }
 
 
@@ -77,8 +78,9 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
             for (int i = 0; i < particles.Count; i++)
             {
-                if (particles[i].Color.W <= 0f)
+                if (particles[i].Size <= 0)
                 {
+                    particlePool2D.Add(particles[i]);
                     particles.RemoveAt(i);
                     i--;
                     continue;
@@ -94,7 +96,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         public void Spawn(int textureNum, Vector2 position, Vector2 Velocity, Vector2 Acceleration,
             float angle, float angularVelocity, float size, float sizeVelocity, int timeLife, Vector4 Color, float alphaVelocity)
         {
-            Particle2D p = particlePool2D.GetParticle();
+            Particle2D p = particlePool2D.Get();
             p.Initialization(textureNum, width, height, position, Velocity, Acceleration, angle, angularVelocity, size, sizeVelocity, timeLife, Color, alphaVelocity);
             particles.Add(p);
         }

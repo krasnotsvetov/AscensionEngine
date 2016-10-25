@@ -78,12 +78,18 @@
   <ItemGroup>
     <Compile Include="Engine\Core\Common\Attributes\ComponentAttribute.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pair.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pooling\DefaultObjectCreator.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pooling\IObjectCreator.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pooling\IObjectInitializer.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pooling\IPool.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pooling\IPoolable.cs" />
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\Extension\RandomExtension.cs" />
     <Compile Include="Engine\Core\Common\UpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\DrawableComponent.cs" />
     <Compile Include="Engine\Core\Components\Light.cs" />
+    <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleCreator.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
     <Compile Include="Engine\Editor\EditorForm.cs">
@@ -100,7 +106,7 @@
     <Compile Include="Engine\Graphics\Filters\Filter.cs" />
     <Compile Include="Engine\Graphics\Filters\VolumeLightFilter.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\Particle2D.cs" />
-    <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticlePool2D.cs" />
+    <Compile Include="Engine\Core\Common\Collections\Pooling\Pool.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleSystem2D.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialFlags.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
