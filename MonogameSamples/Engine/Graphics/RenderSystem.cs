@@ -129,9 +129,12 @@ namespace MonogameSamples.Engine.Graphics
             }
 
 
+            spriteBatch.Begin();
+            spriteBatch.Draw(sceneDrawer.LightMapTexture, Vector2.Zero, Color.White);
+            spriteBatch.End();
             lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
 
-
+           
         }
     }
 

@@ -31,16 +31,14 @@ SamplerState LightMapSampler {
 
 float3 AmbientColor;
 
-float3 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 texCoords)
+float4 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 texCoords)
 {
-	// направление
 	float3 lightPos = float3(positionLight[index].x, positionLight[index].y, 1);
 	float3 direction = lightPos - pixelPosition;
 		float atten = length(direction);
 
 	direction /= atten;
 
-	// скалярное произведение нормали и направления
 	float dotValue = dot(normal, direction);
 	float amount = 0;
 
@@ -52,32 +50,33 @@ float3 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 tex
 	amount = 1.0 + max(dotValue, 0) * 15.0;
 	atten *= invRadiusLight[index];
 
-	// делаем так, чтобы modifer был всегда больше нуля или равен ему, дабы при далеких источниках область не становилась темной
 
 	float modifer = max((1 - atten), 0);
-	modifer = max(tex2D(LightMapSampler, texCoords).r, modifer);
-	// возращаем результирующий цвет пикселя
-	return colorLight[index] * modifer * amount;
+	//modifer = max(tex2D(LightMapSampler, texCoords).r, modifer);
+	return float4(colorLight[index] * modifer * amount, modifer);
 }
 
 float4 DeferredNormalPS(float4 position : SV_Position, float4 color : COLOR0, float2 texCoords : TEXCOORD0) : COLOR0
 {
-	float4 base = tex2D(DiffuseSampler, texCoords); // получаем цвет из color-карты по координатам texCoords
+	float4 base = tex2D(DiffuseSampler, texCoords);  
 	float3 normal = (tex2D(NormalMapSampler, texCoords) * 2.0f - 1.0f);
 	float3 pixelPosition = float3(ScreenWidth * texCoords.x, ScreenHeight * texCoords.y, 0);
 	float3 finalColor = 0;
 
-
+	float maxModifer = 0;
 	for (int i = 0; i < LightCount; i++)
 	{
-		// подсчитываем все источники света и записываем их в буффер
-		finalColor += CalculateLight(i, normal, pixelPosition, texCoords);
+		float4 temp = CalculateLight(i, normal, pixelPosition, texCoords);
+		finalColor += temp.rgb;
+		if (maxModifer < temp.a) {
+			maxModifer = temp.a;
+		}
 	}
 
+	float4 lm = tex2D(LightMapSampler, texCoords);
+	finalColor += tex2D(DiffuseSampler, texCoords) * lm;
 
 	return float4((AmbientColor + finalColor) * base.rgb, base.a);
-
-
 }
  
  

@@ -65,7 +65,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
         public virtual void Generate(GameTime gameTime)
         {
-            Spawn(0, rnd.RandomVector2(10, 10), rnd.RandomVector2(100, 100), Vector2.Zero, 0f, 0f, (float)rnd.NextDouble() * 0.4f, -0.01f, 1, Color.CornflowerBlue.ToVector4(), 1f);
+            Spawn(0, rnd.RandomVector2(10, 10), rnd.RandomVector2(100, 100), Vector2.Zero, 0f, 0f, (float)rnd.NextDouble() * 0.4f, -0.01f, 1, Color.CornflowerBlue.ToVector4(), 0.1f);
         }
 
 
@@ -78,7 +78,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
             for (int i = 0; i < particles.Count; i++)
             {
-                if (particles[i].Size <= 0)
+                if (particles[i].Color.W <= 0)
                 {
                     particlePool2D.Add(particles[i]);
                     particles.RemoveAt(i);
