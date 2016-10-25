@@ -135,9 +135,9 @@ namespace MonogameSamples
             light3.LightColor = Color.Green.ToVector3();
 
             //We can't add drawable component to Entity which doesn't have Scene.
-           entity2.AddDrawableComponent(light);
+            entity2.AddDrawableComponent(light);
             entity3.AddDrawableComponent(light2);
-           entity4.AddDrawableComponent(light3);
+            entity4.AddDrawableComponent(light3);
 
             entity.Transform.Position = new Vector3(250, 0, 0);
 

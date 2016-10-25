@@ -31,7 +31,7 @@ SamplerState LightMapSampler {
 
 float3 AmbientColor;
 
-float4 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 texCoords)
+float3 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 texCoords)
 {
 	float3 lightPos = float3(positionLight[index].x, positionLight[index].y, 1);
 	float3 direction = lightPos - pixelPosition;
@@ -52,8 +52,7 @@ float4 CalculateLight(int index, float3 normal, float3 pixelPosition, float2 tex
 
 
 	float modifer = max((1 - atten), 0);
-	//modifer = max(tex2D(LightMapSampler, texCoords).r, modifer);
-	return float4(colorLight[index] * modifer * amount, modifer);
+	return colorLight[index] * modifer * amount;
 }
 
 float4 DeferredNormalPS(float4 position : SV_Position, float4 color : COLOR0, float2 texCoords : TEXCOORD0) : COLOR0
@@ -63,14 +62,9 @@ float4 DeferredNormalPS(float4 position : SV_Position, float4 color : COLOR0, fl
 	float3 pixelPosition = float3(ScreenWidth * texCoords.x, ScreenHeight * texCoords.y, 0);
 	float3 finalColor = 0;
 
-	float maxModifer = 0;
 	for (int i = 0; i < LightCount; i++)
 	{
-		float4 temp = CalculateLight(i, normal, pixelPosition, texCoords);
-		finalColor += temp.rgb;
-		if (maxModifer < temp.a) {
-			maxModifer = temp.a;
-		}
+		finalColor += CalculateLight(i, normal, pixelPosition, texCoords);
 	}
 
 	float4 lm = tex2D(LightMapSampler, texCoords);
