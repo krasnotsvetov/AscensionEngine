@@ -14,7 +14,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         Texture2D texture;
         public Particle2D(ParticleSystem2D particleSystem2D)
         {
-            texture = particleSystem2D.Material.textures[0];
+            texture = particleSystem2D.Material.Textures[0];
         }
 
 

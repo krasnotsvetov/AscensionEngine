@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using Microsoft.Xna.Framework.Graphics;
 using MonogameSamples.Engine.Graphics.Shaders;
 using MonogameSamples.Engine.Core.Common.Collections;
+using MonogameSamples.Engine.Graphics.MaterialSystem;
 
 namespace MonogameSamples.Engine.Graphics.SceneSystem
 {
@@ -23,8 +24,9 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         public ReadOnlyCollection<Entity> Entities { get { return entities.AsReadOnly(); } }
         public ReadOnlyCollection<Light> Lights { get { return lights.AsReadOnly(); } }
 
-        public Dictionary<MaterialReference, Material> Materials { get; set; } = new Dictionary<MaterialReference, Material>();
-        public Dictionary<ShaderReference, Pair<Effect, IPipelineStateSetter>> Shaders = new Dictionary<ShaderReference, Pair<Effect, IPipelineStateSetter>>();
+        internal ShaderCollection Shaders = new ShaderCollection();
+        internal MaterialCollection Materials = new MaterialCollection();
+        internal Texture2DCollection Textures = new Texture2DCollection();
 
         public RenderSystem RenderSystem { get { return renderSystem; } }
 

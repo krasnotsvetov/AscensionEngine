@@ -77,6 +77,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Core\Common\Attributes\ComponentAttribute.cs" />
+    <Compile Include="Engine\Core\Common\BaseReference.cs" />
+    <Compile Include="Engine\Core\Common\Collections\IResourceCollection.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pair.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\DefaultObjectCreator.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IObjectCreator.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\Extension\RandomExtension.cs" />
+    <Compile Include="Engine\Core\Common\IReference.cs" />
     <Compile Include="Engine\Core\Common\UpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\DrawableComponent.cs" />
     <Compile Include="Engine\Core\Components\Light.cs" />
@@ -110,11 +113,16 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleSystem2D.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialFlags.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
+    <Compile Include="Engine\Graphics\MaterialSystem\MaterialCollection.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\MaterialReference.cs" />
+    <Compile Include="Engine\Core\Common\Collections\StringReferenceCollection.cs" />
     <Compile Include="Engine\Graphics\Shaders\ParticleShaderShaderPipelineStateSetter.cs" />
     <Compile Include="Engine\Graphics\Shaders\NormalShaderPipelineStateSetter.cs" />
     <Compile Include="Engine\Graphics\Shaders\IPipelineStateSetter.cs" />
+    <Compile Include="Engine\Graphics\Shaders\ShaderCollection.cs" />
     <Compile Include="Engine\Graphics\Shaders\ShaderReference.cs" />
+    <Compile Include="Engine\Graphics\Texture2DCollection.cs" />
+    <Compile Include="Engine\Graphics\Texture2DReference.cs" />
     <Compile Include="GameEx.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Background.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Entity.cs" />

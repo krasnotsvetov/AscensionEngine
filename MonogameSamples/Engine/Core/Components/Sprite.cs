@@ -34,7 +34,7 @@ namespace MonogameSamples.Engine.Core.Components
         {
             
             Vector2 position = new Vector2((ParentComponent as Entity).GlobalTransform.Position.X, (ParentComponent as Entity).GlobalTransform.Position.Y);
-            spriteBatch.Draw(Material.textures[0], position, new Rectangle(0, 0, Material.textures[0].Width, Material.textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
+            spriteBatch.Draw(Material.Textures[0], position, new Rectangle(0, 0, Material.Textures[0].Width, Material.Textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
             base.Draw(gameTime);
         }
 

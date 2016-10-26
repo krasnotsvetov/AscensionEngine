@@ -1,4 +1,16 @@
-﻿
+﻿///
+/// Disclaimer: 
+/// 
+/// This class contains a lot of rubbish and i use it only for features testing.
+/// 
+/// 
+
+
+
+
+
+
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -134,7 +146,7 @@ namespace MonogameSamples
             light2.LightColor = Color.CornflowerBlue.ToVector3();
             light3.LightColor = Color.Green.ToVector3();
 
-            //We can't add drawable component to Entity which doesn't have Scene.
+            //We can't add drawable component to Entity which doesn't have  Scene.
             entity2.AddDrawableComponent(light);
             entity3.AddDrawableComponent(light2);
             entity4.AddDrawableComponent(light3);
@@ -151,15 +163,18 @@ namespace MonogameSamples
             IPipelineStateSetter particlePSSetter = new ParticleShaderPipelineStateSetter();
             particlePSSetter.Initialize(effect2);
 
-            scene.Shaders.Add(new ShaderReference("NormalShader"), new Pair<Effect, IPipelineStateSetter>(effect, normalPSSetter));
-            scene.Shaders.Add(new ShaderReference("ParticleShader"), new Pair<Effect, IPipelineStateSetter>(effect2, particlePSSetter));
+            scene.Shaders.Add(ShaderReference.FromIdentifier("NormalShader"), new Pair<Effect, IPipelineStateSetter>(effect, normalPSSetter));
+            scene.Shaders.Add(ShaderReference.FromIdentifier("ParticleShader"), new Pair<Effect, IPipelineStateSetter>(effect2, particlePSSetter));
 
+            scene.Textures.Add("baseTexture", baseTexture);
+            scene.Textures.Add("baseNormal", baseNormal);
+            scene.Textures.Add("particleTexture", particleTexture);
 
-            scene.Materials.Add(new MaterialReference("houseMaterial"), new Material(new[] { baseTexture, baseNormal }, new ShaderReference("NormalShader")));
+            scene.Materials.Add(MaterialReference.FromIdentifier("houseMaterial"), new Material(scene, new[] { Texture2DReference.FromIdentifier("baseTexture"), Texture2DReference.FromIdentifier("baseNormal") }, ShaderReference.FromIdentifier("NormalShader")));
             
             
 
-            Sprite sprite = new Sprite("Sprite0", new MaterialReference("houseMaterial"));
+            Sprite sprite = new Sprite("Sprite0", MaterialReference.FromIdentifier("houseMaterial"));
 
 
             entity3.AddEntity(entity4);
@@ -172,12 +187,12 @@ namespace MonogameSamples
             // sprite.Material = new Material(baseTexture, effect, m => m.effect.Parameters["NormalMap"].SetValue((Texture2D)null));
             // You MUST set all values in your shader, but some values can be NullPointer (defualt value)
 
-            scene.Materials.Add(new MaterialReference("PSMaterial"),
-                new Material(new[] { particleTexture, null }, new ShaderReference("ParticleShader")));
+            scene.Materials.Add(MaterialReference.FromIdentifier("PSMaterial"),
+                new Material(scene, new[] { Texture2DReference.FromIdentifier("particleTexture"), null }, ShaderReference.FromIdentifier("ParticleShader")));
 
            
             particleEntity = new Entity(scene);
-            ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, new MaterialReference("PSMaterial"));
+            ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, MaterialReference.FromIdentifier("PSMaterial"));
 
             particleEntity.AddDrawableComponent( ps);
 

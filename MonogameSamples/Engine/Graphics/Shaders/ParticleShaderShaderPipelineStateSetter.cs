@@ -24,7 +24,7 @@ namespace MonogameSamples.Engine.Graphics.Shaders
         {
             //effect.Parameters["ScreenWidth"].SetValue((float)renderSystem.Device.Viewport.Width);
             //effect.Parameters["ScreenHeight"].SetValue((float)renderSystem.Device.Viewport.Height);
-            effect.Parameters["NormalMap"].SetValue(material.textures[1]);
+            effect.Parameters["NormalMap"].SetValue(material.Textures[1]);
         }
     }
 }

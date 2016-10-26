@@ -22,7 +22,7 @@ namespace MonogameSamples.Engine.Graphics.Shaders
 
         public void Set(RenderSystem renderSystem, Material material)
         {
-            effect.Parameters["NormalMap"].SetValue(material.textures[1]);
+            effect.Parameters["NormalMap"].SetValue(material.Textures[1]);
         }
     }
 }

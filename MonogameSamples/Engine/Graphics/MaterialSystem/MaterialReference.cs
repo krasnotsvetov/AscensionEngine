@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonogameSamples.Engine.Core.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,27 +8,21 @@ using System.Threading.Tasks;
 
 namespace MonogameSamples.Engine.Graphics
 {
-    [DataContract]
-    public class MaterialReference
+    public class MaterialReference : BaseReference<string>
     {
-        [DataMember]
-        public string MaterialName;
-
-        public MaterialReference(string name)
+        public MaterialReference()
         {
-            MaterialName = name;
+
         }
 
-        public override bool Equals(object obj)
+        protected MaterialReference(string name) : base(name)
         {
-            MaterialReference other = obj as MaterialReference;
-            if (other == null) return false;
-            return MaterialName.Equals(other.MaterialName);
+            
         }
 
-        public override int GetHashCode()
+        public static MaterialReference FromIdentifier(string name)
         {
-            return MaterialName.GetHashCode();
+            return new MaterialReference(name);
         }
     }
 }

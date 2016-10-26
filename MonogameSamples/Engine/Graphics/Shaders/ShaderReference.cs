@@ -1,33 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework.Graphics;
+using MonogameSamples.Engine.Core.Common;
 
 namespace MonogameSamples.Engine.Graphics.Shaders
 {
-    [DataContract]
-    public class ShaderReference
+    public class ShaderReference : BaseReference<string>
     {
-        [DataMember]
-        public string ShaderName;
-
-        public ShaderReference(string name)
+        public ShaderReference()
         {
-            ShaderName = name;
+
         }
 
-        public override bool Equals(object obj)
+        protected ShaderReference(string name) : base(name)
         {
-            ShaderReference other = obj as ShaderReference;
-            if (other == null) return false;
-            return ShaderName.Equals(other.ShaderName);
+
         }
 
-        public override int GetHashCode()
+
+        public static ShaderReference FromIdentifier(string name)
         {
-            return ShaderName.GetHashCode();
+            return new ShaderReference(name);
         }
     }
 }
