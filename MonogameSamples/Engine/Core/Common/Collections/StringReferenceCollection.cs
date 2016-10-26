@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -83,14 +84,28 @@ namespace MonogameSamples.Engine.Core.Common.Collections
             return items[t];
         }
 
-        public Value Remove(Reference t)
+        public bool Remove(Reference t)
         {
-            throw new NotImplementedException();
+            return items.Remove(t);
         }
 
-        public Value Remove(string t)
+        public bool Remove(string t)
         {
-            throw new NotImplementedException();
+            var _r = new Reference();
+            _r.Name = t;
+            return Remove(_r);
+        }
+
+        public IEnumerator<Value> GetEnumerator()
+        {
+            return items.Values.GetEnumerator();
+        }
+
+       
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return items.Values.GetEnumerator();
         }
     }
 }

@@ -14,6 +14,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonogameSamples.Engine.Content;
 using MonogameSamples.Engine.Core;
 using MonogameSamples.Engine.Core.Common;
 using MonogameSamples.Engine.Core.Common.Collections;
@@ -127,7 +128,14 @@ namespace MonogameSamples
             Texture2D baseNormal = Content.Load<Texture2D>("house1Normal");
             Texture2D particleTexture = Content.Load<Texture2D>("ParticleSystem2D\\playerParticle");
 
-                
+
+            ContentSystem contentSystem = ContentSystem.GetInstance();
+            contentSystem.Textures.Add("baseTexture", baseTexture);
+            contentSystem.Textures.Add("baseNormal", baseNormal);
+            contentSystem.Textures.Add("particleTexture", particleTexture);
+            contentSystem.Effect.Add("effect", effect);
+            contentSystem.Effect.Add("ParticleShader", effect2);
+
             entity = new Entity(scene);
             entity2 = new Entity(scene);
             entity3 = new Entity();
@@ -157,24 +165,29 @@ namespace MonogameSamples
             entity3.Transform.SetTransform(new Vector3(250, 0, 0), Vector3.Zero, new Vector3(1, 1, 1));
             entity4.Transform.SetTransform(new Vector3(250, 0, 0), Vector3.Zero, new Vector3(1, 1, 1));
 
-            IPipelineStateSetter normalPSSetter = new NormalShaderPipelineStateSetter();
-            normalPSSetter.Initialize(effect);
 
-            IPipelineStateSetter particlePSSetter = new ParticleShaderPipelineStateSetter();
-            particlePSSetter.Initialize(effect2);
+           
 
-            scene.Shaders.Add(ShaderReference.FromIdentifier("NormalShader"), new Pair<Effect, IPipelineStateSetter>(effect, normalPSSetter));
-            scene.Shaders.Add(ShaderReference.FromIdentifier("ParticleShader"), new Pair<Effect, IPipelineStateSetter>(effect2, particlePSSetter));
 
-            scene.Textures.Add("baseTexture", baseTexture);
-            scene.Textures.Add("baseNormal", baseNormal);
-            scene.Textures.Add("particleTexture", particleTexture);
 
-            scene.Materials.Add(MaterialReference.FromIdentifier("houseMaterial"), new Material(scene, new[] { Texture2DReference.FromIdentifier("baseTexture"), Texture2DReference.FromIdentifier("baseNormal") }, ShaderReference.FromIdentifier("NormalShader")));
-            
-            
+            scene.AddShader(effect, new NormalShaderPipelineStateSetter(), "effect");
+            scene.AddShader(effect2, new ParticleShaderPipelineStateSetter(), "ParticleShader");
 
-            Sprite sprite = new Sprite("Sprite0", MaterialReference.FromIdentifier("houseMaterial"));
+
+
+
+
+            scene.AddMaterial(new Material("HouseMaterial",
+                new[] { Texture2DReference.FromIdentifier("baseTexture"), Texture2DReference.FromIdentifier("baseNormal") },
+                ShaderReference.FromIdentifier("effect")));
+
+            scene.AddMaterial(new Material("PSMaterial",
+                new [] { Texture2DReference.FromIdentifier("particleTexture"), null },
+                ShaderReference.FromIdentifier("ParticleShader")));
+
+
+
+            Sprite sprite = new Sprite("Sprite0", MaterialReference.FromIdentifier("HouseMaterial"));
 
 
             entity3.AddEntity(entity4);
@@ -187,31 +200,14 @@ namespace MonogameSamples
             // sprite.Material = new Material(baseTexture, effect, m => m.effect.Parameters["NormalMap"].SetValue((Texture2D)null));
             // You MUST set all values in your shader, but some values can be NullPointer (defualt value)
 
-            scene.Materials.Add(MaterialReference.FromIdentifier("PSMaterial"),
-                new Material(scene, new[] { Texture2DReference.FromIdentifier("particleTexture"), null }, ShaderReference.FromIdentifier("ParticleShader")));
-
+           
            
             particleEntity = new Entity(scene);
             ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, MaterialReference.FromIdentifier("PSMaterial"));
 
             particleEntity.AddDrawableComponent( ps);
 
-            //sprite.material = new material(basetexture, effect2,
-            //    m =>
-            //    {
-            //        m.effect.parameters["screenwidth"].setvalue((float)graphicsdevice.viewport.width);
-            //        m.effect.parameters["screenheight"].setvalue((float)graphicsdevice.viewport.height);
-            //        m.effect.parameters["normalmap"].setvalue(m.textures[1]);
-
-            //    });
-
-            
-
-
-
             entity.AddDrawableComponent(sprite);
-
-            //entity4.AddEntity(particleEntity);
 
         }
 

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonogameSamples.Engine.Graphics.Shaders;
 using MonogameSamples.Engine.Core.Common.Collections;
 using MonogameSamples.Engine.Graphics.MaterialSystem;
+using MonogameSamples.Engine.Content;
 
 namespace MonogameSamples.Engine.Graphics.SceneSystem
 {
@@ -18,16 +19,19 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         public SceneUpdater sceneUpdater;
         public SceneRenderer sceneRenderer;
 
-        
+
 
         //public List<Scene2D> Scenes { get { return scenes; } }
         public ReadOnlyCollection<Entity> Entities { get { return entities.AsReadOnly(); } }
         public ReadOnlyCollection<Light> Lights { get { return lights.AsReadOnly(); } }
 
-        internal ShaderCollection Shaders = new ShaderCollection();
-        internal MaterialCollection Materials = new MaterialCollection();
-        internal Texture2DCollection Textures = new Texture2DCollection();
+        public ShaderCollection Shaders = new ShaderCollection();
+        public MaterialCollection Materials = new MaterialCollection();
 
+        // internal Texture2DCollection Textures = new Texture2DCollection();
+
+
+        public ContentSystem Content {get; set;}
         public RenderSystem RenderSystem { get { return renderSystem; } }
 
 
@@ -49,6 +53,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             sceneRenderer = new SceneRenderer(this, renderSystem);
             sceneUpdater = new SceneUpdater(this);
 
+            Content = ContentSystem.GetInstance();
             renderSystem.AddComponent(new KeyValuePair<string, DrawableComponent>("SceneDrawer" + Name, sceneRenderer));
         }
 
@@ -69,6 +74,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         public static Scene Load(RenderSystem renderSystem)
         {
             Scene scene = new Scene("temp", renderSystem);
+            ContentSystem cs = ContentSystem.GetInstance();
             Dictionary<int, List<int>> entityGraph = new Dictionary<int, List<int>>();
             Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
             List<int> loadOrder = new List<int>();
@@ -80,6 +86,53 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
+                            var matSerializer = new DataContractSerializer(typeof(Material));
+                            if (reader.Name.Equals("materials"))
+                            {
+                                if (!NextElement(reader, 3))
+                                {
+                                    break;
+                                }
+                                while (reader.Depth == 3)
+                                {
+                                    var t = (Material)matSerializer.ReadObject(reader);
+                                    t.textures = new List<Texture2D>();
+                                    foreach (var r in t.References)
+                                    {
+                                        if (r == null)
+                                        {
+                                            t.textures.Add(null);
+                                        }
+                                        else
+                                        {
+                                            t.textures.Add(cs.Textures[r.Name]);
+                                        }
+                                    }
+                                    scene.Materials.Add(MaterialReference.FromIdentifier(t.MaterialName), t);
+                                    NextElement(reader, 3);
+                                }
+                            }
+
+                            if (reader.Name.Equals("shaders"))
+                            {
+                                if (!NextElement(reader, 3))
+                                {
+                                    break;
+                                }
+                                while (reader.Depth >= 3)
+                                { 
+                                    reader.MoveToNextAttribute();
+                                    string type = reader.Value;
+                                    NextElement(reader, 3);
+                                    var shaderSerializer = new DataContractSerializer(Type.GetType(type));
+                                    var t = (IPipelineStateSetter)shaderSerializer.ReadObject(reader);
+                                    t.Effect = cs.Effect[t.ShaderName];
+                                    scene.Shaders.Add(ShaderReference.FromIdentifier(t.ShaderName), t);
+                                    NextElement(reader, 3);
+                                }
+                                 
+                            }
+
                             if (reader.Name.Equals("rootEntities"))
                             {
                                 if (reader.HasAttributes)
@@ -205,6 +258,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             {
                 if (!reader.Read())
                 {
+                    return false;
                 }
                 if (reader.Depth < depthLevelAbove)
                 {
@@ -230,6 +284,29 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             {
                 xmlWritter.WriteStartDocument();
                 xmlWritter.WriteStartElement("SceneData");
+                xmlWritter.WriteStartElement("scene-data");
+                xmlWritter.WriteStartElement("materials");
+                var serializer = new DataContractSerializer(typeof(Material));
+                foreach (var m in Materials)
+                {
+                    serializer.WriteObject(xmlWritter, m);
+                }
+                xmlWritter.WriteEndElement();
+
+                xmlWritter.WriteStartElement("shaders");
+                int num = 0;
+                foreach (var ps in Shaders)
+                { 
+                    serializer = new DataContractSerializer(ps.GetType());
+                    xmlWritter.WriteStartElement("PipelineState" + num);
+                    xmlWritter.WriteAttributeString("PipelineState" + num, ps.GetType().FullName);
+                    serializer.WriteObject(xmlWritter, ps);
+                    xmlWritter.WriteEndElement();
+                    num++;
+                }
+                xmlWritter.WriteEndElement();
+
+                xmlWritter.WriteEndElement();
                 xmlWritter.WriteStartElement("rootEntities");
                 string entitiesID = "";
                 entities.ForEach(t => entitiesID += t.ID + " ");
@@ -252,27 +329,25 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
                     foreach (var uc in ent.UpdateableComponents)
                     {
+                        serializer = new DataContractSerializer(uc.GetType());
                         xmlWritter.WriteStartElement(String.Format("Updateable-{0}", uc.ToString()));
                         xmlWritter.WriteAttributeString((String.Format("Updateable-{0}", uc.ToString())), uc.GetType().FullName);
-                        var serializer = new DataContractSerializer(uc.GetType());
                         serializer.WriteObject(xmlWritter, uc);
                         xmlWritter.WriteEndElement();
+                        
                     }
-
                     foreach (var dc in ent.DrawableComponents)
                     {
+                        serializer = new DataContractSerializer(dc.GetType());
                         xmlWritter.WriteStartElement(String.Format("Drawable-{0}", dc.ToString()));
                         xmlWritter.WriteAttributeString((String.Format("Drawable-{0}", dc.ToString())), dc.GetType().FullName);
-                        var serializer = new DataContractSerializer(dc.GetType());
                         serializer.WriteObject(xmlWritter, dc);
                         xmlWritter.WriteEndElement();
                     }
                     xmlWritter.WriteEndElement();
                 }
 
-                xmlWritter.WriteStartElement("scene-data");
-                //TODO
-                xmlWritter.WriteEndElement();
+               
                 xmlWritter.WriteEndElement();
                 xmlWritter.WriteEndDocument();
             }
@@ -463,6 +538,34 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         {
             lights.Remove(light);
         }
+
+
+
+        /// <summary>
+        /// effect.Name value will be used for ShaderReference
+        /// </summary>
+        /// <param name="effect"></param>
+        /// <param name="setter"></param>
+        public void AddShader(Effect effect, IPipelineStateSetter setter, string referenceName = "")
+        {
+           
+            setter.Initialize(effect);
+            if (referenceName != "")
+            {
+                setter.ShaderName = referenceName;
+            }
+            Shaders.Add(referenceName.Equals("") ? effect.Name : referenceName, setter);
+        }
+
+        /// <summary>
+        /// material.Name value will be used for MaterialReference
+        /// </summary>
+        /// <param name="material"></param>
+        public void AddMaterial(Material material, string referenceName = "")
+        {
+            Materials.Add(referenceName.Equals("") ? material.MaterialName : referenceName, material);
+        }
+
     }
 
     

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MonogameSamples.Engine.Graphics.MaterialSystem
 {
-    internal class MaterialCollection : StringReferenceCollection<MaterialReference, Material>
+    public class MaterialCollection : StringReferenceCollection<MaterialReference, Material>
     {
 
     }

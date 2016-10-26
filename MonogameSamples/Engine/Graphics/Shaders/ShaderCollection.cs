@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MonogameSamples.Engine.Graphics.Shaders
 {
-    internal class ShaderCollection : StringReferenceCollection<ShaderReference, Pair<Effect, IPipelineStateSetter>>
+    public class ShaderCollection : StringReferenceCollection<ShaderReference, IPipelineStateSetter>
     {
 
     }

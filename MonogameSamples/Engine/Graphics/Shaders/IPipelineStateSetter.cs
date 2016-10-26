@@ -9,7 +9,8 @@ namespace MonogameSamples.Engine.Graphics.Shaders
 {
     public interface IPipelineStateSetter
     {
-
+        string ShaderName { get; set; }
+        Effect Effect { get; set; }
         void Initialize(Effect effect);
         void Set(RenderSystem renderSystem, Material material);
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonogameSamples.Engine.Core.Common.Collections
 {
-    public interface IResourceCollection<ReferenceTypeValue, ReferenceType, Value> where ReferenceType : IReference<ReferenceTypeValue> where Value : class
+    public interface IResourceCollection<ReferenceTypeValue, ReferenceType, Value> : IEnumerable<Value> where ReferenceType : IReference<ReferenceTypeValue> where Value : class
     {
         /// <summary>
         ///  If ResourceCollections contains element False will be return
@@ -18,9 +18,9 @@ namespace MonogameSamples.Engine.Core.Common.Collections
         /// </summary>
         bool Add(ReferenceType t, Value r);
 
-        Value Remove(ReferenceTypeValue t);
+        bool Remove(ReferenceTypeValue t);
 
-        Value Remove(ReferenceType t);
+        bool Remove(ReferenceType t);
 
 
         Value FromIdentifier(ReferenceTypeValue t);

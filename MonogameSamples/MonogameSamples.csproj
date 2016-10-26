@@ -76,6 +76,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Engine\Content\ContentSystem.cs" />
     <Compile Include="Engine\Core\Common\Attributes\ComponentAttribute.cs" />
     <Compile Include="Engine\Core\Common\BaseReference.cs" />
     <Compile Include="Engine\Core\Common\Collections\IResourceCollection.cs" />
