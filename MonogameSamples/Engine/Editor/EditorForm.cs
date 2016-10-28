@@ -237,31 +237,7 @@ namespace MonogameSamples.Engine.Editor
  
 
 
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            IGameComponent component = (ComponentBox.SelectedItem as ComponentCell)?.Component;
-            if (component != null)
-            {
-                using (MemoryStream memStm = new MemoryStream())
-                {
-                    var serializer = new DataContractSerializer(component.GetType());
-                    serializer.WriteObject(memStm, component);
-
-                    memStm.Seek(0, SeekOrigin.Begin);
-
-                    using (var streamReader = new StreamReader(memStm))
-                    {
-                        string result = streamReader.ReadToEnd();
-                        OutputBox.AppendText(result + "\r\n");
-                        using (var t = GenerateStreamFromString(result))
-                        {
-                            var o = serializer.ReadObject(t);
-                        }
-                    }
-                }
-            }
-        }
+ 
 
 
         public static Stream GenerateStreamFromString(string s)
@@ -524,13 +500,13 @@ namespace MonogameSamples.Engine.Editor
 
         private void MaterialBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (MaterialBox.SelectedItem != null)
+            if (MaterialBox.SelectedItem != null && e.Button == MouseButtons.Right)
             {
                 MaterialReferenceContextMenu.Show(this, PointToClient(MousePosition));
             }
         }
 
-        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        private void addMaterialToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new GetNameForm("Material name");
             if (form.ShowDialog() == DialogResult.OK)
