@@ -9,7 +9,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 {
 
 
-    public class Entity : IGameComponent
+    public class Entity
     {
          
 
@@ -247,7 +247,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public virtual void AddDrawableComponent(EntityDrawableComponent component)
         {
-            if (component.ParentComponent != null)
+            if (component.ParentEntity != null)
             {
                 throw new Exception("ParentComponent must be null");
             }
@@ -258,7 +258,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 throw new Exception("Enity has component with same name");
             }
 
-            component.ParentComponent = this;
+            component.ParentEntity = this;
             if (scene != null)
             {
                 component.Initialize();
@@ -406,6 +406,12 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             {
                 dc.RenderSystemChange();
             }
+        }
+
+
+        public override string ToString()
+        {
+            return "TODO";
         }
     }
 }

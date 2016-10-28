@@ -19,6 +19,10 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         public SceneUpdater sceneUpdater;
         public SceneRenderer sceneRenderer;
 
+        public EventHandler<EventArgs> EnititiesChanged;
+        public EventHandler<EventArgs> LightsChanged;
+        public EventHandler<EventArgs> ShadersChanged;
+        public EventHandler<EventArgs> MaterialsChanged;
 
 
         //public List<Scene2D> Scenes { get { return scenes; } }
@@ -27,6 +31,10 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
 
         public ShaderCollection Shaders = new ShaderCollection();
         public MaterialCollection Materials = new MaterialCollection();
+
+        internal List<BaseReference<String>> NotValidReferences = new List<BaseReference<string>>();
+
+            
 
         // internal Texture2DCollection Textures = new Texture2DCollection();
 
@@ -96,8 +104,9 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                                 while (reader.Depth == 3)
                                 {
                                     var t = (Material)matSerializer.ReadObject(reader);
+                                    t.Initialize();
                                     t.textures = new List<Texture2D>();
-                                    foreach (var r in t.References)
+                                    foreach (var r in t.TextureReferences)
                                     {
                                         if (r == null)
                                         {
@@ -108,7 +117,7 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                                             t.textures.Add(cs.Textures[r.Name]);
                                         }
                                     }
-                                    scene.Materials.Add(MaterialReference.FromIdentifier(t.MaterialName), t);
+                                    scene.Materials.Add(t.Reference, t);
                                     NextElement(reader, 3);
                                 }
                             }
@@ -423,6 +432,8 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             }
 
             entities.Add(entity);
+
+            EnititiesChanged?.Invoke(this, EventArgs.Empty);
         }
 
 
@@ -459,7 +470,8 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 entity.Scene = null;
             }
             entities.Remove(entity);
-            
+
+            EnititiesChanged?.Invoke(this, EventArgs.Empty);
         }
 
 
@@ -561,9 +573,9 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
         /// material.Name value will be used for MaterialReference
         /// </summary>
         /// <param name="material"></param>
-        public void AddMaterial(Material material, string referenceName = "")
+        public void AddMaterial(Material material)
         {
-            Materials.Add(referenceName.Equals("") ? material.MaterialName : referenceName, material);
+            Materials.Add(material.Reference, material);
         }
 
     }

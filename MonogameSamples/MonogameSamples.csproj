@@ -88,6 +88,7 @@
     <Compile Include="Engine\Core\Common\Collections\Pooling\IPoolable.cs" />
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
+    <Compile Include="Engine\Core\Common\EventArguments\ResourceCollectionEventArgs.cs" />
     <Compile Include="Engine\Core\Common\Extension\RandomExtension.cs" />
     <Compile Include="Engine\Core\Common\IReference.cs" />
     <Compile Include="Engine\Core\Common\UpdateableComponent.cs" />
@@ -96,6 +97,12 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleCreator.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
+    <Compile Include="Engine\Editor\DialogForms\GetNameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Engine\Editor\DialogForms\GetNameForm.Designer.cs">
+      <DependentUpon>GetNameForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Engine\Editor\EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,6 +111,7 @@
     </Compile>
     <Compile Include="Engine\Editor\EditorGame.cs" />
     <Compile Include="Engine\Editor\EditorMouseState.cs" />
+    <Compile Include="Engine\Editor\MaterialShower.cs" />
     <Compile Include="Engine\Editor\Program.cs" />
     <Compile Include="Engine\Editor\TreeViewExtension.cs" />
     <Compile Include="Engine\Graphics\Filters\DefferedLightFilter.cs" />
@@ -135,6 +143,11 @@
     <Compile Include="Engine\Graphics\UpdateSystem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.4.0.456, Culture=neutral, processorArchitecture=MSIL">
@@ -172,8 +185,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Engine\Editor\DialogForms\GetNameForm.resx">
+      <DependentUpon>GetNameForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Engine\Editor\EditorForm.resx">
       <DependentUpon>EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

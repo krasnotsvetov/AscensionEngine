@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MonogameSamples.Engine.Core.Common.EventArguments;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,10 @@ namespace MonogameSamples.Engine.Core.Common.Collections
     public class StringReferenceCollection<Reference, Value> : IResourceCollection<string, Reference, Value> where Reference : BaseReference<string>, new() where Value : class
     {
 
+        public EventHandler<ResourceCollectionEventArgs<string>> CollectionChanged;
 
         private Dictionary<Reference, Value> items = new Dictionary<Reference, Value>();
+
         public StringReferenceCollection()
         {
 
@@ -27,7 +30,12 @@ namespace MonogameSamples.Engine.Core.Common.Collections
             {
                 if (items.ContainsKey(r))
                 {
+                    var lastValue = items[r];
                     items[r] = value;
+                    if (!lastValue.Equals(value))
+                    {
+                        CollectionChanged?.Invoke(this, new ResourceCollectionEventArgs<string>(Operation.Replaced, r, lastValue, value));
+                    }
                 } else
                 {
                     throw new IndexOutOfRangeException("Collection doesn't contain this key");
@@ -46,7 +54,7 @@ namespace MonogameSamples.Engine.Core.Common.Collections
             {
                 Reference _r = new Reference();
                 _r.Name = r;
-                items[_r] = value;
+                this[_r] = value;
             }
         }
 
@@ -58,6 +66,8 @@ namespace MonogameSamples.Engine.Core.Common.Collections
             }
 
             items.Add(r, v);
+
+            CollectionChanged?.Invoke(this, new ResourceCollectionEventArgs<string>(Operation.Added, r, null, v));
             return true;
         }
 
@@ -86,7 +96,14 @@ namespace MonogameSamples.Engine.Core.Common.Collections
 
         public bool Remove(Reference t)
         {
-            return items.Remove(t);
+            if (!items.ContainsKey(t))
+            {
+                return false;
+            }
+            var lastValue = items[t];
+            bool temp = items.Remove(t);
+            CollectionChanged?.Invoke(this, new ResourceCollectionEventArgs<string>(Operation.Removed, t, lastValue, null));
+            return temp;
         }
 
         public bool Remove(string t)
@@ -106,6 +123,11 @@ namespace MonogameSamples.Engine.Core.Common.Collections
         IEnumerator IEnumerable.GetEnumerator()
         {
             return items.Values.GetEnumerator();
+        }
+
+        public IEnumerable<Reference> References()
+        {
+            return items.Keys;
         }
     }
 }

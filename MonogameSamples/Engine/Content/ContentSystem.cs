@@ -17,6 +17,7 @@ namespace MonogameSamples.Engine.Content
         public Dictionary<string, Texture2D> Textures = new Dictionary<string, Texture2D>();
         public Dictionary<string, Effect> Effect = new Dictionary<string, Effect>();
         public Dictionary<string, Model> Models = new Dictionary<string, Model>();
+        public Dictionary<string, SpriteFont> Fonts = new Dictionary<string, SpriteFont>();
         public Dictionary<string, SoundEffect> SoundEffects = new Dictionary<string, SoundEffect>();
         public Dictionary<string, Song>  Songs = new Dictionary<string, Song>();
 
@@ -30,6 +31,10 @@ namespace MonogameSamples.Engine.Content
 
         private static ContentSystem instance = null;
 
+        /// <summary>
+        /// Return instace of content system.
+        /// </summary>
+        /// <returns></returns>
         public static ContentSystem GetInstance()
         {
             if (instance == null)

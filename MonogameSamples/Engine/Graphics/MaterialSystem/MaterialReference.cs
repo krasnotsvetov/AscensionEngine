@@ -10,19 +10,22 @@ namespace MonogameSamples.Engine.Graphics
 {
     public class MaterialReference : BaseReference<string>
     {
+        /// <summary>
+        /// Don't use this constructor to get a reference for Material. Use Material.Reference to get reference else 
+        /// if material changes name you will have a reference to missing material.
+        /// </summary>
         public MaterialReference()
         {
 
         }
 
-        protected MaterialReference(string name) : base(name)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        internal MaterialReference(string name) : base(name)
         {
             
-        }
-
-        public static MaterialReference FromIdentifier(string name)
-        {
-            return new MaterialReference(name);
         }
     }
 }

@@ -15,11 +15,11 @@ namespace MonogameSamples.Engine.Core.Components
     public class Light : EntityDrawableComponent
     {
 
-        public override IGameComponent ParentComponent
+        public override Entity ParentEntity
         {
             get
             {
-                return base.ParentComponent;
+                return base.ParentEntity;
             }
 
             set
@@ -31,7 +31,7 @@ namespace MonogameSamples.Engine.Core.Components
                 if (value == null) return;
 
                 (value as Entity).Scene?.AddLight(this);*/
-                base.ParentComponent = value;
+                base.ParentEntity = value;
             }
         }
 
@@ -59,7 +59,7 @@ namespace MonogameSamples.Engine.Core.Components
         public override void Initialize()
         {
             base.Initialize();
-            (ParentComponent as Entity).Scene.AddLight(this);
+            ParentEntity.Scene.AddLight(this);
         }
 
         public override void SceneChanged(Scene lastScene)

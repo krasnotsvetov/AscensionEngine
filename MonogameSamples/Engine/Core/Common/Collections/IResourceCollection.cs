@@ -22,6 +22,7 @@ namespace MonogameSamples.Engine.Core.Common.Collections
 
         bool Remove(ReferenceType t);
 
+        IEnumerable<ReferenceType> References();
 
         Value FromIdentifier(ReferenceTypeValue t);
         Value FromReference(ReferenceType t);

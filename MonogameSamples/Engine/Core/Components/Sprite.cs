@@ -26,15 +26,18 @@ namespace MonogameSamples.Engine.Core.Components
         public override void Initialize()
         {
             base.Initialize();
-            transform = (ParentComponent as Entity).GlobalTransform;
-            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
+            transform = ParentEntity.GlobalTransform;
+            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
         }
 
         public override void Draw(GameTime gameTime)
         {
             
-            Vector2 position = new Vector2((ParentComponent as Entity).GlobalTransform.Position.X, (ParentComponent as Entity).GlobalTransform.Position.Y);
-            spriteBatch.Draw(Material.Textures[0], position, new Rectangle(0, 0, Material.Textures[0].Width, Material.Textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
+            Vector2 position = new Vector2(ParentEntity.GlobalTransform.Position.X, ParentEntity.GlobalTransform.Position.Y);
+            if (Material.Textures[0] != null)
+            {
+                spriteBatch.Draw(Material.Textures[0], position, new Rectangle(0, 0, Material.Textures[0].Width, Material.Textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
+            }
             base.Draw(gameTime);
         }
 
@@ -48,7 +51,7 @@ namespace MonogameSamples.Engine.Core.Components
         {
             base.RenderSystemChange();
 
-            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
+            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
         }
     }
 }

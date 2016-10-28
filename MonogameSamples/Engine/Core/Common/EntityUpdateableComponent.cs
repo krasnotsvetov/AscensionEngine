@@ -12,7 +12,7 @@ namespace MonogameSamples.Engine.Core.Common
         [DataMember]
         public string Name { get; set; }
 
-        public virtual IGameComponent ParentComponent { get; set; }
+        public virtual Entity ParentComponent { get; set; }
 
         public EntityUpdateableComponent(String name) : base()
         {

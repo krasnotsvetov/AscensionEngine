@@ -49,6 +49,8 @@ namespace MonogameSamples.Engine.Editor
            
             base.LoadContent();
             form.InitializateGUI(this);
+            form.SetContent();
+
         }
 
 
@@ -58,7 +60,6 @@ namespace MonogameSamples.Engine.Editor
         }
 
 
-        private bool AnyActionInEditor = false;
         protected override void Update(GameTime gameTime)
         {
 
@@ -66,7 +67,6 @@ namespace MonogameSamples.Engine.Editor
             {
                 if (SelectedEntity != null)
                 {
-                    AnyActionInEditor = true;
                     SelectedEntity.GlobalTransform.Position = new Vector3(mouseState.Position, 0);
                 }
             }

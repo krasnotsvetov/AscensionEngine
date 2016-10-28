@@ -21,7 +21,11 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
 
 
+
+
         public bool EnableGenerate { get; set; }
+
+        private Texture2D texture;
 
         private IPool<Particle2D> particlePool2D;
 
@@ -50,18 +54,34 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         public override void Initialize()
         {
             base.Initialize();
+
             rnd = new Random();
 
             EnableGenerate = true;
             particlePool2D = new Pool<Particle2D>(1000, new ParticleCreator(this));
             particles = new List<Particle2D>();
-            globalTransform = (ParentComponent as Entity).GlobalTransform;
+            globalTransform = ParentEntity.GlobalTransform;
+
+            texture = Material.Textures[0];
             this.width = Material.Textures[0].Width / textureCount;
             this.height = Material.Textures[0].Height;
-            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
+            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
             
         }
 
+        protected override void MaterialChanged(object sender, EventArgs empty)
+        {
+            base.MaterialChanged(sender, empty);
+            if (Material != null)
+            {
+                texture = Material.Textures[0];
+                this.width = Material.Textures[0].Width / textureCount;
+                this.height = Material.Textures[0].Height;
+            } else
+            {
+                texture = null;
+            }
+        }
 
         public virtual void Generate(GameTime gameTime)
         {
@@ -97,7 +117,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
             float angle, float angularVelocity, float size, float sizeVelocity, int timeLife, Vector4 Color, float alphaVelocity)
         {
             Particle2D p = particlePool2D.Get();
-            p.Initialization(textureNum, width, height, position, Velocity, Acceleration, angle, angularVelocity, size, sizeVelocity, timeLife, Color, alphaVelocity);
+            p.Initialization(texture, textureNum, width, height, position, Velocity, Acceleration, angle, angularVelocity, size, sizeVelocity, timeLife, Color, alphaVelocity);
             particles.Add(p);
         }
 
@@ -122,7 +142,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         {
             base.RenderSystemChange();
 
-            spriteBatch = (ParentComponent as Entity).Scene.sceneRenderer.SpriteBatch;
+            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
         }
     }
 }

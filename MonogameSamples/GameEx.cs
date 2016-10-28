@@ -176,7 +176,6 @@ namespace MonogameSamples
 
 
 
-
             scene.AddMaterial(new Material("HouseMaterial",
                 new[] { Texture2DReference.FromIdentifier("baseTexture"), Texture2DReference.FromIdentifier("baseNormal") },
                 ShaderReference.FromIdentifier("effect")));
@@ -187,7 +186,7 @@ namespace MonogameSamples
 
 
 
-            Sprite sprite = new Sprite("Sprite0", MaterialReference.FromIdentifier("HouseMaterial"));
+            Sprite sprite = new Sprite("Sprite0", scene.Materials["HouseMaterial"].Reference);
 
 
             entity3.AddEntity(entity4);
@@ -203,7 +202,7 @@ namespace MonogameSamples
            
            
             particleEntity = new Entity(scene);
-            ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, MaterialReference.FromIdentifier("PSMaterial"));
+            ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, scene.Materials["PSMaterial"].Reference);
 
             particleEntity.AddDrawableComponent( ps);
 

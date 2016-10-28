@@ -11,16 +11,12 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
     public class Particle2D : IPoolable
     {
 
-        Texture2D texture;
-        public Particle2D(ParticleSystem2D particleSystem2D)
-        {
-            texture = particleSystem2D.Material.Textures[0];
-        }
 
 
-        public void Initialization(int textureNum, int width, int height, Vector2 position, Vector2 velocity, Vector2 acceleration, 
+        public void Initialization(Texture2D texture, int textureNum, int width, int height, Vector2 position, Vector2 velocity, Vector2 acceleration, 
             float angle, float angularVelocity, float size, float sizeVelocity, int timeLife, Vector4 color, float alphaVelocity)
         {
+            this.texture = texture;
             SourceRectangle = new Rectangle(width * textureNum, 0, width, height);
             Position = position;
             Velocity = velocity;
@@ -37,6 +33,8 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
 
         // Texture Rectangle
+        public Texture2D texture;
+        
         public Rectangle SourceRectangle { get; set; }
 
         public Vector2 Position { get; set; }

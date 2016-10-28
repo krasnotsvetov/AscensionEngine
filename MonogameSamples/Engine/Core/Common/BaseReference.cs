@@ -10,6 +10,8 @@ namespace MonogameSamples.Engine.Core.Common
     [DataContract]
     public class BaseReference<T> : IReference<T> where T : class
     {
+
+        public bool IsValid = true;
         public BaseReference()
         {
 
@@ -24,6 +26,11 @@ namespace MonogameSamples.Engine.Core.Common
         public virtual T Name
         {
             get; set;
+        }
+
+        public override string ToString()
+        {
+            return Name.ToString();
         }
 
         public override bool Equals(object obj)

@@ -17,7 +17,7 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 
         public Particle2D Create()
         {
-            return new Particle2D(system);
+            return new Particle2D();
         }
     }
 }

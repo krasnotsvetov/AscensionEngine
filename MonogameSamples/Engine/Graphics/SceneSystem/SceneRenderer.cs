@@ -135,9 +135,11 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                 if (!ReferenceEquals(lastMaterial, edc.Material))
                 {
                     spritebatch.End();
-                    var setter = scene.Shaders[edc.Material.ShaderReference];
-                    spritebatch.Begin(effect: setter.Effect);
-                    setter.Set(RenderSystem, edc.Material);
+                    var setter = edc.Material.ShaderReference != null ? scene.Shaders[edc.Material.ShaderReference] : null;
+                    //TODO
+#warning COPYPASTE
+                    spritebatch.Begin(effect: setter?.Effect);
+                    setter?.Set(RenderSystem, edc.Material);
                     lastMaterial = edc.Material;
                 }
 
@@ -146,11 +148,12 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
                     lastMaterial = null; // 
                     spritebatch.End();
                     Vector3 p = Vector3.Transform(Vector3.One, entity.GlobalTransform.World);
+                    //TODO
+#warning COPYPASTE
+                    var setter = edc.Material.ShaderReference != null ? scene.Shaders[edc.Material.ShaderReference] : null;
 
-                    var setter = scene.Shaders[edc.Material.ShaderReference];
-
-                    spritebatch.Begin(blendState: BlendState.AlphaBlend, effect: setter.Effect, transformMatrix: entity.GlobalTransform.World); // Mul Camera Matrix TODO , before implement camera class.
-                    setter.Set(RenderSystem, edc.Material);
+                    spritebatch.Begin(blendState: BlendState.AlphaBlend, effect: setter?.Effect, transformMatrix: entity.GlobalTransform.World); // Mul Camera Matrix TODO , before implement camera class.
+                    setter?.Set(RenderSystem, edc.Material);
 
                 }
 
