@@ -70,11 +70,14 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
             particlePool2D = new Pool<Particle2D>(1000, new ParticleCreator(this));
             particles = new List<Particle2D>();
             globalTransform = ParentEntity.GlobalTransform;
-
-            texture = Material.Textures[0];
-            this.width = Material.Textures[0].Width / textureCount;
-            this.height = Material.Textures[0].Height;
             spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
+
+            if (Material != null)
+            {
+                texture = Material.Textures[0];
+                this.width = Material.Textures[0].Width / textureCount;
+                this.height = Material.Textures[0].Height;
+            }
             
         }
 
