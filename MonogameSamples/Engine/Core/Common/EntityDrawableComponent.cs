@@ -16,7 +16,6 @@ namespace MonogameSamples.Engine.Core.Common
         [DataMember]
         public string Name { get; set; }
 
-        [DataMember]
         public MaterialReference MaterialReference {
             get
             {
@@ -38,7 +37,7 @@ namespace MonogameSamples.Engine.Core.Common
             }
         }
 
-
+        [DataMember]
         private MaterialReference reference;
 
         public Material Material

@@ -23,7 +23,6 @@ namespace MonogameSamples.Engine.Graphics
         [DataMember]
         public ShaderReference ShaderReference;
 
-        [DataMember]
         public string MaterialName
         {
             get
@@ -55,6 +54,8 @@ namespace MonogameSamples.Engine.Graphics
 
 
         private MaterialReference reference;
+
+        [DataMember]
         private string name;
 
         public Material(string materialName, IEnumerable<Texture2DReference> textureCollection, ShaderReference shaderReference)
@@ -87,6 +88,7 @@ namespace MonogameSamples.Engine.Graphics
         /// </summary>
         internal void Initialize()
         {
+            ContentSystem contentSystem = ContentSystem.GetInstance();
             reference = new MaterialReference(MaterialName);
             textures = new List<Texture2D>();
             for (int i = 0; i < MAXTEXTURESCOUNT; i++)
@@ -98,7 +100,10 @@ namespace MonogameSamples.Engine.Graphics
             var index = 0;
             foreach (var t in TextureReferences)
             {
-                TextureReferences[index] = t;
+                if (t != null)
+                {
+                    textures[index] = contentSystem.Textures[t.Name];
+                }
                 index++;
             }
         }
