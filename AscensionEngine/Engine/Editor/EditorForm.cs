@@ -206,14 +206,16 @@ namespace Ascension.Engine.Editor
                 var ent = node.Entity;
                 EntityPropertyGrid.SelectedObject = ent;
                 GameEditor.SelectedEntity = ent;
+                ComponentBox.Items.Add(new ComponentCell(ent.Transform));
+
                 foreach (var dc in ent.DrawableComponents)
                 {
                     ComponentBox.Items.Add(new ComponentCell(dc));
                 }
 
-                ComponentBox.Items.Add(new ComponentCell(ent.Transform));
                 foreach (var uc in ent.UpdateableComponents)
                 {
+                    if (uc is Transform) continue;
                     ComponentBox.Items.Add(new ComponentCell(uc));
                 }
                 ComponentPropertyGrid.SelectedObject = null;
@@ -248,7 +250,7 @@ namespace Ascension.Engine.Editor
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene.Load(GameEditor.renderSystem);
+            SceneComboBox.Items.Add(Scene.Load(GameEditor.renderSystem));
         }
 
         private void addEmptyEntityToolStripMenuItem_Click(object sender, EventArgs e)

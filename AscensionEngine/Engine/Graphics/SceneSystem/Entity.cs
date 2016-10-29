@@ -104,6 +104,8 @@ namespace Ascension.Engine.Graphics.SceneSystem
             transform = new Transform("LocalTransform");
             globalTransform = new Transform("GlobalTrasform");
 
+
+            //updateableComponents.Add(transform);
             transform.ParentComponent = globalTransform.ParentComponent = this;
 
             parentTransform = null;

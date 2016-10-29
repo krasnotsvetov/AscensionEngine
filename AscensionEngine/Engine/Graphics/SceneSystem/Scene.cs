@@ -97,6 +97,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                             var matSerializer = new DataContractSerializer(typeof(Material));
                             if (reader.Name.Equals("materials"))
                             {
+                                
                                 if (!NextElement(reader, 3))
                                 {
                                     break;
@@ -158,43 +159,50 @@ namespace Ascension.Engine.Graphics.SceneSystem
                             }
 
                             Entity entity = null; ;
-                            while (isGraphRead && reader.Name.StartsWith("entity") && reader.Depth == 1)
+                            if (reader.Name.StartsWith("def-entities"))
                             {
-                                if (reader.NodeType == XmlNodeType.Element)
-                                {
-                                    entity = new Entity();
-                                    
-                                    reader.MoveToNextAttribute();
-                                    int id = int.Parse(reader.Value);
-                                    entity.ID = id;
-                                }
-                                if (reader.NodeType == XmlNodeType.EndElement)
-                                {
-                                    entities.Add(entity.ID, entity);
-                                }
                                 NextElement(reader, 2);
-                                while (reader.Depth == 2)
+                                while (isGraphRead && reader.Name.StartsWith("entity") && reader.Depth == 2)
                                 {
-                                    reader.MoveToNextAttribute();
-                                    string typeName = reader.Value;
-                                    var serializer = new DataContractSerializer(Type.GetType(typeName));
+                                    if (reader.NodeType == XmlNodeType.Element)
+                                    {
+                                        entity = new Entity();
 
-                                    NextElement(reader, 2);
-                                    var t = serializer.ReadObject(reader);
-                                    if (t is Transform)
-                                    {
-                                        var temp = t as Transform;
-                                        entity.Transform.SetTransform(temp.Position, temp.Rotation, temp.Scale);
-                                    } else
-                                    if (t is UpdateableComponent)
-                                    {
-                                        entity.AddUpdateableComponent((EntityUpdateableComponent)t);
+                                        reader.MoveToNextAttribute();
+                                        int id = int.Parse(reader.Value);
+                                        entity.ID = id;
                                     }
 
-                                    if (t is DrawableComponent)
+
+                                    NextElement(reader, 3);
+
+                                    while (reader.Depth == 3)
                                     {
-                                        entity.AddDrawableComponent((EntityDrawableComponent)t);
+                                        reader.MoveToNextAttribute();
+                                        Console.WriteLine(reader.AttributeCount);
+                                        string typeName = reader.Value;
+                                        var serializer = new DataContractSerializer(Type.GetType(typeName));
+
+                                        NextElement(reader, 3);
+                                        var t = serializer.ReadObject(reader);
+                                        if (t is Transform)
+                                        {
+                                            var temp = t as Transform;
+                                            entity.Transform.SetTransform(temp.Position, temp.Rotation, temp.Scale);
+                                        }
+                                        else
+                                        if (t is UpdateableComponent)
+                                        {
+                                            entity.AddUpdateableComponent((EntityUpdateableComponent)t);
+                                        }
+
+                                        if (t is DrawableComponent)
+                                        {
+                                            entity.AddDrawableComponent((EntityDrawableComponent)t);
+                                        }
+                                        NextElement(reader, 3);
                                     }
+                                    entities.Add(entity.ID, entity);
                                     NextElement(reader, 2);
                                 }
                             }
@@ -331,6 +339,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                     xmlWritter.WriteAttributeString(String.Format("entity-{0}", graph[i][0]), temp);
                 }
                 xmlWritter.WriteEndElement();
+                xmlWritter.WriteStartElement("def-entities");
                 foreach (var ent in allEntities)
                 {
                     xmlWritter.WriteStartElement(String.Format("entity-{0}", ent.ID));
@@ -355,7 +364,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                     }
                     xmlWritter.WriteEndElement();
                 }
-
+                xmlWritter.WriteEndElement();
                
                 xmlWritter.WriteEndElement();
                 xmlWritter.WriteEndDocument();
