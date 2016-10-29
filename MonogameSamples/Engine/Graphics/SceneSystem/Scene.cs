@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Components;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Components;
 using System.Collections.ObjectModel;
 using System.Xml;
 using System;
 using System.Runtime.Serialization;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Graphics.Shaders;
-using MonogameSamples.Engine.Core.Common.Collections;
-using MonogameSamples.Engine.Graphics.MaterialSystem;
-using MonogameSamples.Engine.Content;
+using Ascension.Engine.Graphics.Shaders;
+using Ascension.Engine.Core.Common.Collections;
+using Ascension.Engine.Graphics.MaterialSystem;
+using Ascension.Engine.Content;
 
-namespace MonogameSamples.Engine.Graphics.SceneSystem
+namespace Ascension.Engine.Graphics.SceneSystem
 {
 
     public class Scene

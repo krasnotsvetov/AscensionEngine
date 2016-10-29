@@ -1,4 +1,4 @@
-﻿namespace MonogameSamples.Engine.Editor
+﻿namespace Ascension.Engine.Editor
 {
     partial class EditorForm
     {

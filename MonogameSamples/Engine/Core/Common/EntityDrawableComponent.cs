@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using MonogameSamples.Engine.Core.Components;
-using MonogameSamples.Engine.Graphics;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Core.Components;
+using Ascension.Engine.Graphics;
+using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace MonogameSamples.Engine.Core.Common
+namespace Ascension.Engine.Core.Common
 {
     [DataContract]
     public class EntityDrawableComponent : DrawableComponent

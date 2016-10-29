@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonogameSamples.Engine.Core.Common.Collections.Pooling
+namespace Ascension.Engine.Core.Common.Collections.Pooling
 {
     //Primitive pool
 

@@ -1,4 +1,4 @@
-﻿using MonogameSamples.Engine.Core.Common.EventArguments;
+﻿using Ascension.Engine.Core.Common.EventArguments;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Core.Common.Collections
+namespace Ascension.Engine.Core.Common.Collections
 {
     public class StringReferenceCollection<Reference, Value> : IResourceCollection<string, Reference, Value> where Reference : BaseReference<string>, new() where Value : class
     {

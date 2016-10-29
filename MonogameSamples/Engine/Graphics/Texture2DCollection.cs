@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core.Common.Collections;
+using Ascension.Engine.Core.Common.Collections;
 
-namespace MonogameSamples.Engine.Graphics
+namespace Ascension.Engine.Graphics
 {
     internal class Texture2DCollection : StringReferenceCollection<Texture2DReference, Texture2D>
     {

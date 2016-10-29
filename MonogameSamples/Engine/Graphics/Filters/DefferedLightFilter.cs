@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core;
-using MonogameSamples.Engine.Core.Components;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Core;
+using Ascension.Engine.Core.Components;
+using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
 
-namespace MonogameSamples.Engine.Graphics.Filters
+namespace Ascension.Engine.Graphics.Filters
 {
     public class DefferedLightFilter : Filter
     {

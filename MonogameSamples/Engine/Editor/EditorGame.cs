@@ -6,9 +6,9 @@ using Microsoft.Xna.Framework;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.SceneSystem;
 
-namespace MonogameSamples.Engine.Editor
+namespace Ascension.Engine.Editor
 {
     using MouseButtonState = Microsoft.Xna.Framework.Input.ButtonState;
     public class GameEditor : GameEx

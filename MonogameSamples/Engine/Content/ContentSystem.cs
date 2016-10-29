@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Content
+namespace Ascension.Engine.Content
 {
     /// <summary>
     /// TEMPORARY implementation of ContentSystem.

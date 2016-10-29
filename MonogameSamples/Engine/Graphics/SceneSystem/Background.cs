@@ -1,7 +1,7 @@
 ﻿
-using MonogameSamples.Engine.Core.Common;
+using Ascension.Engine.Core.Common;
 
-namespace MonogameSamples.Engine.Graphics
+namespace Ascension.Engine.Graphics
 {
 
     public class Background

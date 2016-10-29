@@ -1,11 +1,11 @@
-﻿using MonogameSamples.Engine.Core.Common.Collections.Pooling;
+﻿using Ascension.Engine.Core.Common.Collections.Pooling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
+namespace Ascension.Engine.Core.Components.ParticleSystemComponent
 {
     public class ParticleCreator : IObjectCreator<Particle2D>
     {

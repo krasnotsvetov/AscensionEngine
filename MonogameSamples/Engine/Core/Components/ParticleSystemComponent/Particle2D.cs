@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core.Common.Collections.Pooling;
+using Ascension.Engine.Core.Common.Collections.Pooling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
+namespace Ascension.Engine.Core.Components.ParticleSystemComponent
 {
     public class Particle2D : IPoolable
     {

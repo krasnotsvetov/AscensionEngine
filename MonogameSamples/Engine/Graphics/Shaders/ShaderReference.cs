@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core.Common;
+using Ascension.Engine.Core.Common;
 
-namespace MonogameSamples.Engine.Graphics.Shaders
+namespace Ascension.Engine.Graphics.Shaders
 {
     public class ShaderReference : BaseReference<string>
     {

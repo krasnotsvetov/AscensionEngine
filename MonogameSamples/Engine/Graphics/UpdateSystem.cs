@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core.Common;
+using Ascension.Engine.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MonogameSamples.Engine.Graphics
+namespace Ascension.Engine.Graphics
 {
     public class UpdateSystem : UpdateableComponent
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.Runtime.Serialization;
 
-namespace MonogameSamples.Engine.Core.Common
+namespace Ascension.Engine.Core.Common
 {
     [DataContract]
     public class UpdateableComponent : IComparable<UpdateableComponent>, IUpdateable, IDisposable, IGameComponent

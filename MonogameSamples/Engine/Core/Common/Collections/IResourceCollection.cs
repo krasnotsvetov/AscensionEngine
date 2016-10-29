@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Core.Common.Collections
+namespace Ascension.Engine.Core.Common.Collections
 {
     public interface IResourceCollection<ReferenceTypeValue, ReferenceType, Value> : IEnumerable<Value> where ReferenceType : IReference<ReferenceTypeValue> where Value : class
     {

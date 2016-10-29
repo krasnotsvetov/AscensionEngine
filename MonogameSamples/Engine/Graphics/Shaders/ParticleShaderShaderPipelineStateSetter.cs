@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.Serialization;
 
-namespace MonogameSamples.Engine.Graphics.Shaders
+namespace Ascension.Engine.Graphics.Shaders
 {
     [DataContract]
     public class ParticleShaderPipelineStateSetter : IPipelineStateSetter

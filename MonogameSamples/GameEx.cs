@@ -14,20 +14,20 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonogameSamples.Engine.Content;
-using MonogameSamples.Engine.Core;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Common.Collections;
-using MonogameSamples.Engine.Core.Components;
-using MonogameSamples.Engine.Core.Components.ParticleSystemComponent;
-using MonogameSamples.Engine.Editor;
-using MonogameSamples.Engine.Graphics;
-using MonogameSamples.Engine.Graphics.SceneSystem;
-using MonogameSamples.Engine.Graphics.Shaders;
+using Ascension.Engine.Content;
+using Ascension.Engine.Core;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Common.Collections;
+using Ascension.Engine.Core.Components;
+using Ascension.Engine.Core.Components.ParticleSystemComponent;
+using Ascension.Engine.Editor;
+using Ascension.Engine.Graphics;
+using Ascension.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 
-namespace MonogameSamples
+namespace Ascension
 {
 
     /// <summary>

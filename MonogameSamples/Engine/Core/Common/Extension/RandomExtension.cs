@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MonogameSamples.Engine.Core.Common.Extension
+namespace Ascension.Engine.Core.Common.Extension
 {
     public static class RandomExtension
     {

@@ -1,15 +1,15 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Content;
-using MonogameSamples.Engine.Graphics.MaterialSystem;
-using MonogameSamples.Engine.Graphics.SceneSystem;
-using MonogameSamples.Engine.Graphics.Shaders;
+using Ascension.Engine.Content;
+using Ascension.Engine.Graphics.MaterialSystem;
+using Ascension.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Runtime.Serialization;
 
-namespace MonogameSamples.Engine.Graphics
+namespace Ascension.Engine.Graphics
 {
     [DataContract]
     public class Material

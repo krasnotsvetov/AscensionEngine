@@ -3,12 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Graphics.SceneSystem;
-using MonogameSamples.Engine.Graphics.Filters;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.Filters;
 using Microsoft.Xna.Framework.Content;
 
-namespace MonogameSamples.Engine.Graphics
+namespace Ascension.Engine.Graphics
 {
     public class RenderSystem : DrawableComponent
     {

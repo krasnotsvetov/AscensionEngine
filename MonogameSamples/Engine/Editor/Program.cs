@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonogameSamples.Engine.Editor
+namespace Ascension.Engine.Editor
 {
 #if WINDOWS
     /// <summary>
@@ -13,7 +13,7 @@ namespace MonogameSamples.Engine.Editor
         /// </summary>
         [STAThread]
         static void Main()
-        {
+        { 
             using (var form = new EditorForm())
             {
                 using (var game = new GameEditor(form, form.drawingSurface))

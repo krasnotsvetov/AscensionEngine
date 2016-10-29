@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MonogameSamples.Engine.Editor.DialogForms
+namespace Ascension.Engine.Editor.DialogForms
 {
     public partial class GetNameForm : Form
     {

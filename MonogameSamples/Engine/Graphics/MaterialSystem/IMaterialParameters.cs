@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Graphics.MaterialSystem
+namespace Ascension.Engine.Graphics.MaterialSystem
 {
     public interface IMaterialParameters
     {

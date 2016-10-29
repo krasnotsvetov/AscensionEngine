@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Components.ParticleSystemComponent;
-using MonogameSamples.Engine.Graphics.Shaders;
+using Ascension.Engine.Core;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Components.ParticleSystemComponent;
+using Ascension.Engine.Graphics.Shaders;
 
-namespace MonogameSamples.Engine.Graphics.SceneSystem
+namespace Ascension.Engine.Graphics.SceneSystem
 {
     public class SceneRenderer : DrawableComponent
     {

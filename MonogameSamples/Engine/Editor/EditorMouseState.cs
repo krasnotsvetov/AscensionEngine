@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonogameSamples.Engine.Editor
+namespace Ascension.Engine.Editor
 {
     public class EditorMouseState
     {

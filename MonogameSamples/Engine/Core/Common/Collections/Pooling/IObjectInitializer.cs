@@ -1,4 +1,4 @@
-﻿namespace MonogameSamples.Engine.Core.Common.Collections.Pooling
+﻿namespace Ascension.Engine.Core.Common.Collections.Pooling
 {
     public interface IObjectInitializer<T> where T : IPoolable
     {

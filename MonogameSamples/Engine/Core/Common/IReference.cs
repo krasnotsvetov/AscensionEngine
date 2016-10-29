@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Core.Common
+namespace Ascension.Engine.Core.Common
 {
     public interface IReference<T>
     {

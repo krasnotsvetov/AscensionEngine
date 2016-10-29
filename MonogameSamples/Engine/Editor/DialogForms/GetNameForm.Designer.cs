@@ -1,4 +1,4 @@
-﻿namespace MonogameSamples.Engine.Editor.DialogForms
+﻿namespace Ascension.Engine.Editor.DialogForms
 {
     partial class GetNameForm
     {

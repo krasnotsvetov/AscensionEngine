@@ -8,8 +8,8 @@
     <ProjectGuid>{BE67580B-A67F-4012-9C38-36219424B2A6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MonogameSamples</RootNamespace>
-    <AssemblyName>MonogameSamples</AssemblyName>
+    <RootNamespace>AscensionEngine</RootNamespace>
+    <AssemblyName>AscensionEngine</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <MonoGameContentBuilderExe>

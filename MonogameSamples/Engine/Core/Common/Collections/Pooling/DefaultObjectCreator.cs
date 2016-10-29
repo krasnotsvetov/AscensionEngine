@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Core.Common.Collections.Pooling
+namespace Ascension.Engine.Core.Common.Collections.Pooling
 {
     public class DefaultObjectCreator<T>: IObjectCreator<T> where T : class, new()
     {

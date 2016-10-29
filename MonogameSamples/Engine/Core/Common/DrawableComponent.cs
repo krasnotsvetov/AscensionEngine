@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.Runtime.Serialization;
 
-namespace MonogameSamples.Engine.Core.Common
+namespace Ascension.Engine.Core.Common
 {
     [DataContract]
     public class DrawableComponent : IComparable<DrawableComponent>, IDrawable, IDisposable, IGameComponent

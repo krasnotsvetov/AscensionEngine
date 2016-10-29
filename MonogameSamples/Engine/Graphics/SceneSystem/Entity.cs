@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Components;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Components;
 using System.Collections.ObjectModel;
 
-namespace MonogameSamples.Engine.Graphics.SceneSystem
+namespace Ascension.Engine.Graphics.SceneSystem
 {
 
 

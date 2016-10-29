@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Graphics.Shaders
+namespace Ascension.Engine.Graphics.Shaders
 {
     public interface IPipelineStateSetter
     {

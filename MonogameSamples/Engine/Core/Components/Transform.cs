@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Common.Attributes;
-using MonogameSamples.Engine.Graphics;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Common.Attributes;
+using Ascension.Engine.Graphics;
+using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.Runtime.Serialization;
 
-namespace MonogameSamples.Engine.Core.Components
+namespace Ascension.Engine.Core.Components
 {
     [DataContract]
     [Component("Transform")]

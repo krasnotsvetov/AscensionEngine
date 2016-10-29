@@ -1,14 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Content;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Common.Attributes;
-using MonogameSamples.Engine.Core.Common.EventArguments;
-using MonogameSamples.Engine.Core.Components;
-using MonogameSamples.Engine.Editor.DialogForms;
-using MonogameSamples.Engine.Graphics;
-using MonogameSamples.Engine.Graphics.SceneSystem;
-using MonogameSamples.Engine.Graphics.Shaders;
+using Ascension.Engine.Content;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Common.Attributes;
+using Ascension.Engine.Core.Common.EventArguments;
+using Ascension.Engine.Core.Components;
+using Ascension.Engine.Editor.DialogForms;
+using Ascension.Engine.Graphics;
+using Ascension.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,7 +22,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MonogameSamples.Engine.Editor
+namespace Ascension.Engine.Editor
 {
     public partial class EditorForm : Form
     {

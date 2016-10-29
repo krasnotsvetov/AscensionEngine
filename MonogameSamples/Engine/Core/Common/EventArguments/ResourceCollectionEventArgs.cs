@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Core.Common.EventArguments
+namespace Ascension.Engine.Core.Common.EventArguments
 {
     public enum Operation{
         None,

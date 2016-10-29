@@ -1,11 +1,11 @@
-﻿using MonogameSamples.Engine.Core.Common;
+﻿using Ascension.Engine.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonogameSamples.Engine.Graphics
+namespace Ascension.Engine.Graphics
 {
     public class Texture2DReference : BaseReference<string>
     {

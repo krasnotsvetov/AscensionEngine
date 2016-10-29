@@ -1,19 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonogameSamples.Engine.Core.Common;
-using MonogameSamples.Engine.Core.Components;
-using MonogameSamples.Engine.Graphics.SceneSystem;
+using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Components;
+using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MonogameSamples.Engine.Core.Common.Extension;
+using Ascension.Engine.Core.Common.Extension;
 using System.Runtime.Serialization;
-using MonogameSamples.Engine.Graphics;
-using MonogameSamples.Engine.Core.Common.Collections.Pooling;
-using MonogameSamples.Engine.Core.Common.Attributes;
+using Ascension.Engine.Graphics;
+using Ascension.Engine.Core.Common.Collections.Pooling;
+using Ascension.Engine.Core.Common.Attributes;
 
-namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
+namespace Ascension.Engine.Core.Components.ParticleSystemComponent
 {
 
     [DataContract]

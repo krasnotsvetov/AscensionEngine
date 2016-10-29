@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using MonogameSamples.Engine.Core.Common;
+using Ascension.Engine.Core.Common;
 
-namespace MonogameSamples.Engine.Graphics.SceneSystem
+namespace Ascension.Engine.Graphics.SceneSystem
 {
     public class SceneUpdater : UpdateableComponent
     {
