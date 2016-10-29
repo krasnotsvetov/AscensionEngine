@@ -295,6 +295,12 @@ namespace MonogameSamples.Engine.Graphics.SceneSystem
             isUpdateDirty = true;
         }
 
+
+        public virtual bool ContainsComponentName(string name)
+        {
+            return components.ContainsKey(name);
+        }
+
         public virtual void AddEntity(Entity entity)
         {
             if (entity.parent != null)

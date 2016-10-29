@@ -45,6 +45,13 @@ namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
         Random rnd;
 
         Transform globalTransform;
+
+        public ParticleSystem2D(string name, MaterialReference reference) : base(name, reference)
+        {
+            this.textureCount = 1;
+           
+        }
+
         public ParticleSystem2D(string name, float frequency, int textureCount, MaterialReference reference) : base(name, reference)
         {
             this.textureCount = textureCount;

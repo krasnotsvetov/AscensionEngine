@@ -49,6 +49,7 @@ namespace MonogameSamples.Engine.Core.Components
 
         public float InvRadius { get { return invRadius; } }
         private float invRadius;
+
         public Light(string name, MaterialReference reference) : base(name, reference)
         {
             Intensity = 1;

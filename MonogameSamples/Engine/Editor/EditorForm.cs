@@ -81,7 +81,7 @@ namespace MonogameSamples.Engine.Editor
             {
                 if (t.GetCustomAttribute(typeof(ComponentAttribute), true) != null)
                 {
-                    AvailableComponents.Items.Add(t.GetCustomAttribute<ComponentAttribute>().Name);
+                    AvailableComponents.Items.Add(new TypeCell(t,t.GetCustomAttribute<ComponentAttribute>().Name));
                 }
             }
             ComponentPropertyGrid.MouseUp += ComponentPropertyGrid_MouseUp;
@@ -200,10 +200,8 @@ namespace MonogameSamples.Engine.Editor
         private void EntityView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             EntityTreeNode node = (EntityTreeNode)EntityView.SelectedNode;
-
             if (node != null)
             {
-                
                 ComponentBox.Items.Clear();
                 var ent = node.Entity;
                 EntityPropertyGrid.SelectedObject = ent;
@@ -232,13 +230,6 @@ namespace MonogameSamples.Engine.Editor
             //Console.WriteLine(m);
             base.WndProc(ref m);
         }
-
-
- 
-
-
- 
-
 
         public static Stream GenerateStreamFromString(string s)
         {
@@ -493,10 +484,6 @@ namespace MonogameSamples.Engine.Editor
             ComponentPropertyGrid.SelectedObject = (ComponentBox.SelectedItem as ComponentCell).Component;
         }
 
-        private void EntityView_MouseUp(object sender, MouseEventArgs e)
-        {
-
-        }
 
         private void MaterialBox_MouseUp(object sender, MouseEventArgs e)
         {
@@ -518,10 +505,69 @@ namespace MonogameSamples.Engine.Editor
                 }
             }
         }
+
+        private void addComponent_Click(object sender, EventArgs e)
+        {
+            if (GameEditor.SelectedEntity != null)
+            {
+                if (AvailableComponents.SelectedItem != null)
+                {
+                    
+                    var c = (AvailableComponents.SelectedItem as TypeCell).ComponentType;
+                    var n = (AvailableComponents.SelectedItem as TypeCell).Name;
+                    int startIndex = 1;
+                    string suffix = "";
+                    while (GameEditor.SelectedEntity.ContainsComponentName(n + suffix))
+                    {
+                        suffix = startIndex.ToString();
+                        startIndex++;
+                    }
+                    if (c.IsSubclassOf(typeof(EntityDrawableComponent)))
+                    {
+                        var t = Activator.CreateInstance(c, new[] { n + suffix, null });
+                        GameEditor.SelectedEntity.AddDrawableComponent((EntityDrawableComponent)t);
+                    } else
+                    {
+                        
+                        var t = Activator.CreateInstance(c, new[] { n + suffix });
+                        GameEditor.SelectedEntity.AddUpdateableComponent((EntityUpdateableComponent)t);
+                    }
+                }
+            }
+        }
+
+#warning refactor to generics.
+        public class TypeCell
+        {
+            public Type ComponentType;
+            public string Name;
+            public TypeCell(Type type, string name)
+            {
+                ComponentType = type;
+                this.Name = name;
+            }
+
+            public override string ToString()
+            {
+                return String.Format("{0}" + Name, (ComponentType.IsSubclassOf(typeof(EntityDrawableComponent))) ? "[Drawable]" : "[Updateable]");
+            }
+        }
+
+        private void ComponentBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EntityView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                EntityView.SelectedNode = EntityView.GetNodeAt(e.Location);
+        }
+
     }
 
 
-
+#warning refactor to generics.
     public class ComponentCell
     {
         public IGameComponent Component;

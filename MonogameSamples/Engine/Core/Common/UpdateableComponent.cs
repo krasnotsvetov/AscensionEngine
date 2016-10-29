@@ -30,10 +30,7 @@ namespace MonogameSamples.Engine.Core.Common
             set
             {
                 updateOrder = value;
-                if (UpdateOrderChanged != null)
-                {
-                    UpdateOrderChanged(this, EventArgs.Empty);
-                }
+                UpdateOrderChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -46,10 +43,7 @@ namespace MonogameSamples.Engine.Core.Common
             set
             {
                 isEnabled = value;
-                if (EnabledChanged != null)
-                {
-                    EnabledChanged(this, EventArgs.Empty);
-                }
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

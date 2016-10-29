@@ -42,11 +42,11 @@
             this.ComponentBox = new System.Windows.Forms.ListBox();
             this.AvailableComponents = new System.Windows.Forms.ComboBox();
             this.OutputBox = new System.Windows.Forms.RichTextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.ComponentPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.EntityPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.TabsMain = new System.Windows.Forms.TabControl();
             this.ScenesPage = new System.Windows.Forms.TabPage();
+            this.addComponent = new System.Windows.Forms.Button();
             this.MaterialsPage = new System.Windows.Forms.TabPage();
             this.TexturesPanel = new System.Windows.Forms.Panel();
             this.MaterialParams = new System.Windows.Forms.PropertyGrid();
@@ -74,6 +74,7 @@
             // EntityView
             // 
             this.EntityView.AllowDrop = true;
+            this.EntityView.HideSelection = false;
             this.EntityView.Location = new System.Drawing.Point(6, 36);
             this.EntityView.Name = "EntityView";
             this.EntityView.Size = new System.Drawing.Size(197, 450);
@@ -82,7 +83,7 @@
             this.EntityView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.EntityView_AfterSelect);
             this.EntityView.DragDrop += new System.Windows.Forms.DragEventHandler(this.EntityView_DragDrop);
             this.EntityView.DragEnter += new System.Windows.Forms.DragEventHandler(this.EntityView_DragEnter);
-            this.EntityView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EntityView_MouseUp);
+            this.EntityView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EntityView_MouseDown);
             // 
             // SceneComboBox
             // 
@@ -118,14 +119,14 @@
             // saveSceneToolStripMenuItem
             // 
             this.saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
             this.saveSceneToolStripMenuItem.Text = "Save Scene";
             this.saveSceneToolStripMenuItem.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
             // 
             // openSceneToolStripMenuItem
             // 
             this.openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
             this.openSceneToolStripMenuItem.Text = "Open Scene";
             this.openSceneToolStripMenuItem.Click += new System.EventHandler(this.openSceneToolStripMenuItem_Click);
             // 
@@ -155,7 +156,7 @@
             // addMaterialToolStripMenuItem
             // 
             this.addMaterialToolStripMenuItem.Name = "addMaterialToolStripMenuItem";
-            this.addMaterialToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.addMaterialToolStripMenuItem.Size = new System.Drawing.Size(112, 26);
             this.addMaterialToolStripMenuItem.Text = "Add";
             this.addMaterialToolStripMenuItem.Click += new System.EventHandler(this.addMaterialToolStripMenuItem_Click);
             // 
@@ -167,14 +168,17 @@
             this.ComponentBox.Name = "ComponentBox";
             this.ComponentBox.Size = new System.Drawing.Size(254, 196);
             this.ComponentBox.TabIndex = 4;
+            this.ComponentBox.SelectedIndexChanged += new System.EventHandler(this.ComponentBox_SelectedIndexChanged);
             this.ComponentBox.SelectedValueChanged += new System.EventHandler(this.ComponentBox_SelectedValueChanged);
             // 
             // AvailableComponents
             // 
+            this.AvailableComponents.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.AvailableComponents.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.AvailableComponents.FormattingEnabled = true;
             this.AvailableComponents.Location = new System.Drawing.Point(1614, 27);
             this.AvailableComponents.Name = "AvailableComponents";
-            this.AvailableComponents.Size = new System.Drawing.Size(254, 24);
+            this.AvailableComponents.Size = new System.Drawing.Size(197, 24);
             this.AvailableComponents.TabIndex = 5;
             // 
             // OutputBox
@@ -214,6 +218,7 @@
             // 
             // ScenesPage
             // 
+            this.ScenesPage.Controls.Add(this.addComponent);
             this.ScenesPage.Controls.Add(this.SceneComboBox);
             this.ScenesPage.Controls.Add(this.EntityView);
             this.ScenesPage.Controls.Add(this.ComponentPropertyGrid);
@@ -228,6 +233,16 @@
             this.ScenesPage.TabIndex = 0;
             this.ScenesPage.Text = "Scenes";
             this.ScenesPage.UseVisualStyleBackColor = true;
+            // 
+            // addComponent
+            // 
+            this.addComponent.Location = new System.Drawing.Point(1817, 27);
+            this.addComponent.Name = "addComponent";
+            this.addComponent.Size = new System.Drawing.Size(51, 23);
+            this.addComponent.TabIndex = 10;
+            this.addComponent.Text = "+";
+            this.addComponent.UseVisualStyleBackColor = true;
+            this.addComponent.Click += new System.EventHandler(this.addComponent_Click);
             // 
             // MaterialsPage
             // 
@@ -315,7 +330,6 @@
             this.ClientSize = new System.Drawing.Size(1902, 1033);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.TabsMain);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.MainMenu);
             this.MainMenuStrip = this.MainMenu;
             this.Name = "EditorForm";
@@ -343,7 +357,6 @@
         public System.Windows.Forms.ListBox ComponentBox;
         private System.Windows.Forms.ComboBox AvailableComponents;
         private System.Windows.Forms.RichTextBox OutputBox;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSceneToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSceneToolStripMenuItem;
@@ -363,5 +376,6 @@
         private System.Windows.Forms.Panel TexturesPanel;
         private System.Windows.Forms.ToolStripMenuItem materialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addMaterialToolStripMenuItem;
+        private System.Windows.Forms.Button addComponent;
     }
 }

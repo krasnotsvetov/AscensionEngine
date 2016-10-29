@@ -14,7 +14,7 @@ namespace MonogameSamples.Engine.Core.Common
         public virtual Entity ParentEntity { get; set; }
 
         [DataMember]
-        public string Name;
+        public string Name { get; set; }
 
         [DataMember]
         public MaterialReference MaterialReference {

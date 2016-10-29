@@ -29,10 +29,7 @@ namespace MonogameSamples.Engine.Core.Common
             set
             {
                 drawOrder = value;
-                if (DrawOrderChanged != null)
-                {
-                    DrawOrderChanged(this, EventArgs.Empty);
-                }
+                DrawOrderChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -45,10 +42,7 @@ namespace MonogameSamples.Engine.Core.Common
             set
             {
                 isVisible = value;
-                if (VisibleChanged != null)
-                {
-                    VisibleChanged(this, EventArgs.Empty);
-                }
+                VisibleChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
