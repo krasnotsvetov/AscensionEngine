@@ -11,11 +11,13 @@ using MonogameSamples.Engine.Core.Common.Extension;
 using System.Runtime.Serialization;
 using MonogameSamples.Engine.Graphics;
 using MonogameSamples.Engine.Core.Common.Collections.Pooling;
+using MonogameSamples.Engine.Core.Common.Attributes;
 
 namespace MonogameSamples.Engine.Core.Components.ParticleSystemComponent
 {
 
     [DataContract]
+    [Component("ParticleSystem")]
     public class ParticleSystem2D : EntityDrawableComponent
     {
 
