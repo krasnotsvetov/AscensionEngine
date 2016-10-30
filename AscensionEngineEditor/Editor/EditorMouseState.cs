@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Ascension.Engine.Editor
+namespace AscensionEditor
 {
     public class EditorMouseState
     {

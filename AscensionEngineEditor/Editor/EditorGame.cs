@@ -6,9 +6,10 @@ using Microsoft.Xna.Framework;
 using System.Windows.Forms;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+using Ascension;
 using Ascension.Engine.Graphics.SceneSystem;
 
-namespace Ascension.Engine.Editor
+namespace AscensionEditor
 {
     using MouseButtonState = Microsoft.Xna.Framework.Input.ButtonState;
     public class GameEditor : GameEx
@@ -31,6 +32,7 @@ namespace Ascension.Engine.Editor
             graphics.PreparingDeviceSettings +=
                 new EventHandler<PreparingDeviceSettingsEventArgs>((s, e) => e.GraphicsDeviceInformation.PresentationParameters.DeviceWindowHandle = drawingSurface.Handle);
             f.VisibleChanged += (s, e) => f.Visible = false;
+            
         }
 
         protected override void Initialize()

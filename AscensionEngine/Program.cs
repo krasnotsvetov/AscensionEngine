@@ -1,6 +1,6 @@
-﻿/*using System;
+﻿using System;
 
-namespace MonogameSamples
+namespace Ascension
 {
 #if WINDOWS || LINUX
     /// <summary>
@@ -14,9 +14,9 @@ namespace MonogameSamples
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
+            using (var game = new GameEx())
                 game.Run();
         }
     }
 #endif
-}*/
+}

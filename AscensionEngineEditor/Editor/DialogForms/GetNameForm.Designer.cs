@@ -1,4 +1,4 @@
-﻿namespace Ascension.Engine.Editor.DialogForms
+﻿namespace AscensionEditor.DialogForms
 {
     partial class GetNameForm
     {

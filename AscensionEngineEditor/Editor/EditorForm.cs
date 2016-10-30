@@ -5,24 +5,19 @@ using Ascension.Engine.Core.Common;
 using Ascension.Engine.Core.Common.Attributes;
 using Ascension.Engine.Core.Common.EventArguments;
 using Ascension.Engine.Core.Components;
-using Ascension.Engine.Editor.DialogForms;
+using AscensionEditor.DialogForms;
 using Ascension.Engine.Graphics;
 using Ascension.Engine.Graphics.SceneSystem;
 using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Windows.Forms;
 
-namespace Ascension.Engine.Editor
+namespace AscensionEditor
 {
     public partial class EditorForm : Form
     {
@@ -60,7 +55,7 @@ namespace Ascension.Engine.Editor
         public void InitializateGUI(GameEditor gameEditor)
         {
             this.GameEditor = gameEditor;
-            RenderSystem rs = (RenderSystem)GameEditor.drawableComponents.Values.FirstOrDefault(t => t is RenderSystem);
+            RenderSystem rs = GameEditor.RenderSystem;
             rs.GameComponents.Where(t => (t is SceneRenderer)).ToList().ForEach(w => SceneComboBox.Items.Add((w as SceneRenderer).Scene));
             SceneComboBox.SelectedIndex = 0;
             SetFilters();
@@ -355,7 +350,7 @@ namespace Ascension.Engine.Editor
                     PictureBox pb = c as PictureBox;
                     if (pb != null)
                     {
-                        Texture2D t = m.textures[int.Parse(pb.Tag.ToString())];
+                        Texture2D t = m.Textures[int.Parse(pb.Tag.ToString())];
                         if (t == null)
                         {
                             pb.BackgroundImage = null;
@@ -395,7 +390,7 @@ namespace Ascension.Engine.Editor
                 int index = int.Parse((sender as ComboBox).Tag.ToString());
                 var textureName = (sender as ComboBox).SelectedItem.ToString();
                 activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)].TextureReferences[index] = textureName.Equals("-") ? null : Texture2DReference.FromIdentifier(textureName);
-                var texture = activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)].textures[index];
+                var texture = activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)].Textures[index];
                 if (texture != null)
                 {
                     (TexturesPanel.Controls["textureBox" + index] as PictureBox).BackgroundImage = ConvertToImage(texture);

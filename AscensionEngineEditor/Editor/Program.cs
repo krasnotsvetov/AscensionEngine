@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ascension.Engine.Editor
+namespace AscensionEditor
 {
 #if WINDOWS
     /// <summary>

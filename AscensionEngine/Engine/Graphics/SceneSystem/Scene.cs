@@ -587,6 +587,11 @@ namespace Ascension.Engine.Graphics.SceneSystem
             Materials.Add(material.Reference, material);
         }
 
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     

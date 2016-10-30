@@ -1,4 +1,4 @@
-﻿namespace Ascension.Engine.Editor
+﻿namespace AscensionEditor
 {
     partial class EditorForm
     {

@@ -97,23 +97,6 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleCreator.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
-    <Compile Include="Engine\Editor\DialogForms\GetNameForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Engine\Editor\DialogForms\GetNameForm.Designer.cs">
-      <DependentUpon>GetNameForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Engine\Editor\EditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Engine\Editor\EditorForm.Designer.cs">
-      <DependentUpon>EditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Engine\Editor\EditorGame.cs" />
-    <Compile Include="Engine\Editor\EditorMouseState.cs" />
-    <Compile Include="Engine\Editor\MaterialShower.cs" />
-    <Compile Include="Engine\Editor\Program.cs" />
-    <Compile Include="Engine\Editor\TreeViewExtension.cs" />
     <Compile Include="Engine\Graphics\Filters\DefferedLightFilter.cs" />
     <Compile Include="Engine\Graphics\Filters\Filter.cs" />
     <Compile Include="Engine\Graphics\Filters\VolumeLightFilter.cs" />
@@ -156,9 +139,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -185,12 +166,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Engine\Editor\DialogForms\GetNameForm.resx">
-      <DependentUpon>GetNameForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Engine\Editor\EditorForm.resx">
-      <DependentUpon>EditorForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

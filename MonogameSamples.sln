@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AscensionEngine", "AscensionEngine\AscensionEngine.csproj", "{BE67580B-A67F-4012-9C38-36219424B2A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AscensionEngineEditor", "AscensionEngineEditor\AscensionEngineEditor.csproj", "{B0ABA4CA-452E-479D-990D-C16E6936E870}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,14 @@ Global
 		{BE67580B-A67F-4012-9C38-36219424B2A6}.Release|x64.ActiveCfg = Release|x64
 		{BE67580B-A67F-4012-9C38-36219424B2A6}.Release|x86.ActiveCfg = Release|x86
 		{BE67580B-A67F-4012-9C38-36219424B2A6}.Release|x86.Build.0 = Release|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Debug|x64.ActiveCfg = Debug|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Debug|x86.ActiveCfg = Debug|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Debug|x86.Build.0 = Debug|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Release|Any CPU.ActiveCfg = Release|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Release|x64.ActiveCfg = Release|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Release|x86.ActiveCfg = Release|x86
+		{B0ABA4CA-452E-479D-990D-C16E6936E870}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

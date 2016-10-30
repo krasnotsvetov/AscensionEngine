@@ -20,7 +20,6 @@ using Ascension.Engine.Core.Common;
 using Ascension.Engine.Core.Common.Collections;
 using Ascension.Engine.Core.Components;
 using Ascension.Engine.Core.Components.ParticleSystemComponent;
-using Ascension.Engine.Editor;
 using Ascension.Engine.Graphics;
 using Ascension.Engine.Graphics.SceneSystem;
 using Ascension.Engine.Graphics.Shaders;
@@ -207,6 +206,8 @@ namespace Ascension
             particleEntity.AddDrawableComponent( ps);
 
             entity.AddDrawableComponent(sprite);
+
+            renderSystem.ActiveScene = scene;
 
         }
 
