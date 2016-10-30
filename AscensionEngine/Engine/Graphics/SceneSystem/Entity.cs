@@ -105,7 +105,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
             globalTransform = new Transform("GlobalTrasform");
 
 
-            //updateableComponents.Add(transform);
+            updateableComponents.Add(transform);
             transform.ParentComponent = globalTransform.ParentComponent = this;
 
             parentTransform = null;
@@ -189,7 +189,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
         public void Initialize()
         {
 
-            //TODO
+            //TODO assert here
             if (scene == null)
             {
                 throw new Exception("Entity should be attached to scene");
@@ -246,6 +246,21 @@ namespace Ascension.Engine.Graphics.SceneSystem
             return null;
         }
 
+        public virtual void RemoveDrawableComponent(EntityDrawableComponent component)
+        {
+            components.Remove(component.Name);
+            drawableComponents.Remove(component);
+        }
+
+        public virtual void RemoveUpdateableComponent(EntityUpdateableComponent component)
+        {
+            if (component is Transform)
+            {
+                throw new Exception("Trasnform could not be removed");
+            }
+            components.Remove(component.Name);
+            updateableComponents.Remove(component);
+        }
 
         public virtual void AddDrawableComponent(EntityDrawableComponent component)
         {
@@ -274,6 +289,10 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         public virtual void AddUpdateableComponent(EntityUpdateableComponent component)
         {
+            if (component is Transform)
+            {
+                throw new Exception("Only one transform can be attached to entity");
+            }
             if (component.ParentComponent != null)
             {
                 throw new Exception("ParentComponent must be null");
