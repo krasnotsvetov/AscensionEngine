@@ -146,6 +146,7 @@ namespace Ascension.Engine.Editor
             }
 
             EntityView.EndUpdate();
+            GameEditor.RenderSystem.ActiveScene = activeScene;
             lastScene = activeScene;
         }
 
@@ -250,7 +251,9 @@ namespace Ascension.Engine.Editor
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SceneComboBox.Items.Add(Scene.Load(GameEditor.renderSystem));
+            Scene scene = Scene.Load(GameEditor.renderSystem);
+            scene.sceneRenderer.LoadContent(GameEditor.Content);
+            SceneComboBox.Items.Add(scene);
         }
 
         private void addEmptyEntityToolStripMenuItem_Click(object sender, EventArgs e)

@@ -15,7 +15,7 @@ namespace Ascension.Engine.Graphics
 
         public GraphicsDevice Device { get { return device; } }
         public SpriteBatch SpriteBatch { get { return spriteBatch; } }
-
+        public Scene ActiveScene { get; set; }
 
         //public Dictionary<string, Effect> Shaders = new Dictionary<string, Effect>();
 
@@ -122,7 +122,7 @@ namespace Ascension.Engine.Graphics
 
 
             device.SetRenderTarget(null);
-            SceneRenderer sceneDrawer = (SceneRenderer)gameComponents.Values.FirstOrDefault(t => t is SceneRenderer);
+            SceneRenderer sceneDrawer = ActiveScene?.sceneRenderer;
             if (sceneDrawer == null)
             {
                 return;
@@ -130,7 +130,7 @@ namespace Ascension.Engine.Graphics
 
 
             spriteBatch.Begin();
-            spriteBatch.Draw(sceneDrawer.LightMapTexture, Vector2.Zero, Color.White);
+            spriteBatch.Draw(sceneDrawer.DiffuseTexture, Vector2.Zero, Color.White);
             spriteBatch.End();
             lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
 
