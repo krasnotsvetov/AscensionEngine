@@ -118,14 +118,14 @@ namespace Ascension
 
 
 
-            spriteFont = Content.Load<SpriteFont>("font");
-            Effect effect = Content.Load<Effect>("mainShader");
-            Effect effect2 = Content.Load<Effect>("mainShader2");
-            Effect particleEffect = Content.Load<Effect>("shaders\\particleShader");
+            spriteFont = Content.Load<SpriteFont>("Engine\\font");
+            Effect effect = Content.Load<Effect>("Engine\\mainShader");
+            Effect effect2 = Content.Load<Effect>("Engine\\mainShader2");
+            Effect particleEffect = Content.Load<Effect>("Engine\\shaders\\particleShader");
 
-            Texture2D baseTexture = Content.Load<Texture2D>("house1Live");
-            Texture2D baseNormal = Content.Load<Texture2D>("house1Normal");
-            Texture2D particleTexture = Content.Load<Texture2D>("ParticleSystem2D\\playerParticle");
+            Texture2D baseTexture = Content.Load<Texture2D>("Engine\\house1Live");
+            Texture2D baseNormal = Content.Load<Texture2D>("Engine\\house1Normal");
+            Texture2D particleTexture = Content.Load<Texture2D>("Engine\\ParticleSystem\\playerParticle");
 
 
             ContentSystem contentSystem = ContentSystem.GetInstance();

@@ -31,7 +31,7 @@ namespace Ascension.Engine.Graphics.Filters
         {
             base.LoadContent(contentManager);
 
-            effect = contentManager.Load<Effect>("shaders\\lightEffect");
+            effect = contentManager.Load<Effect>("Engine\\shaders\\lightEffect");
         }
 
 

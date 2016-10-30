@@ -84,7 +84,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         public override void LoadContent(ContentManager contentManager)
         {
-            clearEffect = contentManager.Load<Effect>("Shaders\\clearEffect");
+            clearEffect = contentManager.Load<Effect>("Engine\\Shaders\\clearEffect");
             base.LoadContent(contentManager);
         }
 
