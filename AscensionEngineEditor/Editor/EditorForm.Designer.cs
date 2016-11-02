@@ -333,7 +333,7 @@
             this.Controls.Add(this.MainMenu);
             this.MainMenuStrip = this.MainMenu;
             this.Name = "EditorForm";
-            this.Text = "EditorForm";
+            this.Text = "1";
             this.Load += new System.EventHandler(this.EditorForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.drawingSurface)).EndInit();
             this.MainMenu.ResumeLayout(false);

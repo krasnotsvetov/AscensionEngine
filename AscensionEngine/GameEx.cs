@@ -25,6 +25,7 @@ using Ascension.Engine.Graphics.SceneSystem;
 using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace Ascension
 {

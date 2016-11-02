@@ -97,6 +97,8 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleCreator.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
+    <Compile Include="Engine\Graphics\CameraSystem\Camera.cs" />
+    <Compile Include="Engine\Graphics\CameraSystem\Common.cs" />
     <Compile Include="Engine\Graphics\Filters\DefferedLightFilter.cs" />
     <Compile Include="Engine\Graphics\Filters\Filter.cs" />
     <Compile Include="Engine\Graphics\Filters\VolumeLightFilter.cs" />
@@ -146,7 +148,7 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb">
+    <MonoGameContentReference Include="Content\ContentEngine.mgcb">
       <SubType>Designer</SubType>
     </MonoGameContentReference>
   </ItemGroup>

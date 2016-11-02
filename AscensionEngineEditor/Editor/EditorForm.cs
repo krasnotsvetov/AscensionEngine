@@ -70,13 +70,15 @@ namespace AscensionEditor
         }
 
         private void EditorForm_Load(object sender, EventArgs e)
-        { 
-            
-            foreach (var t in Assembly.GetExecutingAssembly().GetTypes())
+        {
+            foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
             {
-                if (t.GetCustomAttribute(typeof(ComponentAttribute), true) != null)
+                foreach (var t in a.GetTypes())
                 {
-                    AvailableComponents.Items.Add(new TypeCell(t,t.GetCustomAttribute<ComponentAttribute>().Name));
+                    if (t.GetCustomAttribute(typeof(ComponentAttribute), true) != null)
+                    {
+                        AvailableComponents.Items.Add(new TypeCell(t, t.GetCustomAttribute<ComponentAttribute>().Name));
+                    }
                 }
             }
             ComponentPropertyGrid.MouseUp += ComponentPropertyGrid_MouseUp;

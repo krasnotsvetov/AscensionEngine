@@ -422,7 +422,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
         /// <summary>
         /// This method will be called if RenderSystem for scene will change
         /// </summary>
-        internal void RenderSystemChange()
+        internal virtual void RenderSystemChange()
         {
             foreach (var e in entities)
             {

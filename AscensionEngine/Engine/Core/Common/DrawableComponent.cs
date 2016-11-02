@@ -46,7 +46,7 @@ namespace Ascension.Engine.Core.Common
             }
         }
 
-        public virtual void SceneChanged(Scene lastScene)
+        internal virtual void SceneChanged(Scene lastScene)
         {
         }
 

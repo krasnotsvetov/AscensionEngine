@@ -63,7 +63,7 @@ namespace Ascension.Engine.Core.Components
             ParentEntity.Scene.AddLight(this);
         }
 
-        public override void SceneChanged(Scene lastScene)
+        internal override void SceneChanged(Scene lastScene)
         {
             base.SceneChanged(lastScene);
             if (lastScene != null)

@@ -24,6 +24,7 @@ namespace Ascension.Engine.Graphics.Filters
 
         public override void Initialize()
         {
+          
             base.Initialize();
         }
 
