@@ -55,6 +55,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.MaterialBox = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.addAssemblyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.drawingSurface)).BeginInit();
             this.MainMenu.SuspendLayout();
             this.TabsMain.SuspendLayout();
@@ -111,7 +112,8 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveSceneToolStripMenuItem,
-            this.openSceneToolStripMenuItem});
+            this.openSceneToolStripMenuItem,
+            this.addAssemblyToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
             this.fileToolStripMenuItem.Text = "File";
@@ -119,14 +121,14 @@
             // saveSceneToolStripMenuItem
             // 
             this.saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
+            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.saveSceneToolStripMenuItem.Text = "Save Scene";
             this.saveSceneToolStripMenuItem.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
             // 
             // openSceneToolStripMenuItem
             // 
             this.openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(163, 26);
+            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.openSceneToolStripMenuItem.Text = "Open Scene";
             this.openSceneToolStripMenuItem.Click += new System.EventHandler(this.openSceneToolStripMenuItem_Click);
             // 
@@ -323,6 +325,13 @@
             this.panel1.Size = new System.Drawing.Size(1902, 167);
             this.panel1.TabIndex = 11;
             // 
+            // addAssemblyToolStripMenuItem
+            // 
+            this.addAssemblyToolStripMenuItem.Name = "addAssemblyToolStripMenuItem";
+            this.addAssemblyToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.addAssemblyToolStripMenuItem.Text = "Add assembly";
+            this.addAssemblyToolStripMenuItem.Click += new System.EventHandler(this.addAssemblyToolStripMenuItem_Click);
+            // 
             // EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -377,5 +386,6 @@
         private System.Windows.Forms.ToolStripMenuItem materialToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addMaterialToolStripMenuItem;
         private System.Windows.Forms.Button addComponent;
+        private System.Windows.Forms.ToolStripMenuItem addAssemblyToolStripMenuItem;
     }
 }

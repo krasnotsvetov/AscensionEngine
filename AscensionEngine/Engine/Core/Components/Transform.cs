@@ -78,7 +78,7 @@ namespace Ascension.Engine.Core.Components
             Matrix world = Matrix.Identity * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
             Vector3 rot = this.rotation;
             Vector3 sc = this.scale;
-            Entity entity = ParentComponent as Entity;
+            Entity entity = Parent as Entity;
             while (entity.Parent != null)
             {
                 Transform t = entity.Parent.Transform;
@@ -93,7 +93,7 @@ namespace Ascension.Engine.Core.Components
 
         public Vector3 ToGlobalPosition(Vector3 localPosition)
         {
-            Entity entity = ParentComponent as Entity;
+            Entity entity = Parent as Entity;
             localPosition = Vector3.Transform(localPosition, World);
 
             while (entity.Parent != null)
@@ -131,7 +131,7 @@ namespace Ascension.Engine.Core.Components
         public void UpdateTransformRec(Matrix matrix)
         {
             position = Vector3.Transform(position, matrix);
-            Entity ent = ParentComponent as Entity;
+            Entity ent = Parent as Entity;
             foreach (var e in ent.Entities)
             {
                 e.Transform.UpdateTransformRec(matrix);

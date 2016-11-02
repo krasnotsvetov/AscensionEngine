@@ -37,12 +37,13 @@ namespace AscensionEditor
 
         protected override void Initialize()
         {
-            base.Initialize();
             graphics.PreferredBackBufferWidth = drawingSurface.Width;
             graphics.PreferredBackBufferHeight = drawingSurface.Height;
           
             graphics.IsFullScreen = false;
             graphics.ApplyChanges();
+
+            base.Initialize();
         }
 
 

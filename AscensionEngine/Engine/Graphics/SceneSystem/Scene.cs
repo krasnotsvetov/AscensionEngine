@@ -10,6 +10,7 @@ using Ascension.Engine.Graphics.Shaders;
 using Ascension.Engine.Core.Common.Collections;
 using Ascension.Engine.Graphics.MaterialSystem;
 using Ascension.Engine.Content;
+using Microsoft.Xna.Framework.Content;
 
 namespace Ascension.Engine.Graphics.SceneSystem
 {
@@ -77,7 +78,10 @@ namespace Ascension.Engine.Graphics.SceneSystem
             }
         }
 
-
+        public void LoadContent(ContentManager content)
+        {
+            sceneRenderer.LoadContent(content);
+        }
 
         public static Scene Load(RenderSystem renderSystem)
         {

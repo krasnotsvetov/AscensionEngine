@@ -106,7 +106,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
 
             updateableComponents.Add(transform);
-            transform.ParentComponent = globalTransform.ParentComponent = this;
+            transform.Parent = globalTransform.Parent = this;
 
             parentTransform = null;
 
@@ -293,7 +293,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
             {
                 throw new Exception("Only one transform can be attached to entity");
             }
-            if (component.ParentComponent != null)
+            if (component.Parent != null)
             {
                 throw new Exception("ParentComponent must be null");
             }
@@ -304,7 +304,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 throw new Exception("Enity has component with same name");
             }
 
-            component.ParentComponent = this;
+            component.Parent = this;
 
             if (scene != null)
             {

@@ -39,7 +39,6 @@ namespace Ascension
     public class GameEx : Game
     {
         protected GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
 
 
@@ -60,7 +59,6 @@ namespace Ascension
 
         public GameEx()
         {
-            
             graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
@@ -70,11 +68,12 @@ namespace Ascension
 
         protected override void Initialize()
         {
-
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
+            renderSystem = new RenderSystem(GraphicsDevice);
+            renderSystem.Initialize();
+            updateSystem = new UpdateSystem();
+            updateSystem.Initialize();
+            drawableComponents.Add("RenderSystem", renderSystem);
+            updateableComponents.Add("UpdateSystem", updateSystem);
 
             base.Initialize();
         }
@@ -89,35 +88,15 @@ namespace Ascension
 
         protected override void LoadContent()
         {
-            renderSystem = new RenderSystem(GraphicsDevice);
-            renderSystem.Initialize();
-            updateSystem = new UpdateSystem();
-            updateSystem.Initialize();
-            drawableComponents.Add("RenderSystem", renderSystem);
-            updateableComponents.Add("UpdateSystem", updateSystem);
-            scene = new Scene("Scene0", renderSystem);
-            updateSystem.AddComponent(new KeyValuePair<string, UpdateableComponent>("GlobalSceneUpdater", scene.sceneUpdater));
 
             foreach (var dc in drawableComponents.Values)
             {
                 dc.LoadContent(Content);
             }
 
-            Matrix test = Matrix.CreateRotationZ(-MathHelper.PiOver4) * Matrix.CreateTranslation(new Vector3(5, -2, 0));
-            Matrix test2 = Matrix.CreateRotationZ(-MathHelper.PiOver2) * Matrix.CreateTranslation(new Vector3(-9, 6, 0));
-
-
-            Matrix localWorld = Matrix.Invert(test) * test2;
-            Vector3 pos = test2.Translation;
-
-            Vector3 posLocal = Vector3.Transform(new Vector3(1, 1, 0), test);
-
-            Vector3 posLocal2 = Vector3.Transform(new Vector3(6.41f, -2, 0), Matrix.Invert(test));
-
-            Vector3 ttt = Vector3.Transform(Vector3.Zero, Matrix.CreateTranslation(1, 0, 0));
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-
+            scene = new Scene("Scene0", renderSystem);
+            scene.LoadContent(Content);
+            updateSystem.AddComponent(new KeyValuePair<string, UpdateableComponent>("GlobalSceneUpdater", scene.sceneUpdater));
 
             spriteFont = Content.Load<SpriteFont>("Engine\\font");
             Effect effect = Content.Load<Effect>("Engine\\mainShader");
@@ -136,7 +115,7 @@ namespace Ascension
             contentSystem.Effect.Add("effect", effect);
             contentSystem.Effect.Add("ParticleShader", effect2);
 
-            entity = new Entity(scene);
+            entity = new Entity();
             entity2 = new Entity(scene);
             entity3 = new Entity();
             entity4 = new Entity();
@@ -189,11 +168,11 @@ namespace Ascension
             Sprite sprite = new Sprite("Sprite0", scene.Materials["HouseMaterial"].Reference);
 
 
-            entity3.AddEntity(entity4);
+           // entity3.AddEntity(entity4);
 
            // scene2D.AddEntity(entity3);
 
-            entity2.AddEntity(entity3);
+            //entity2.AddEntity(entity3);
 
             // If you need to skip texture in Material, for example, Normal Map, use this construction:
             // sprite.Material = new Material(baseTexture, effect, m => m.effect.Parameters["NormalMap"].SetValue((Texture2D)null));
@@ -201,7 +180,7 @@ namespace Ascension
 
            
            
-            particleEntity = new Entity(scene);
+            particleEntity = new Entity();
             ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, scene.Materials["PSMaterial"].Reference);
 
             particleEntity.AddDrawableComponent( ps);
@@ -211,6 +190,8 @@ namespace Ascension
             renderSystem.ActiveScene = scene;
 
         }
+
+
 
         protected override void UnloadContent()
         {
@@ -226,17 +207,18 @@ namespace Ascension
             }
         }
 
+
+
         protected override void Update(GameTime gameTime)
         {
 
 
-            this.Window.Title = Mouse.GetState().ScrollWheelValue.ToString();
-            this.Window.Title = entity3.Transform.ToGlobalPosition(new Vector3(250, 0, 0)).ToString() + " " + Mouse.GetState().Position.ToString();
             foreach (var uc in updateableComponents.Values)
             {
                 uc.Update(gameTime);
             }
-
+            
+            /*
             if (Mouse.GetState().LeftButton == ButtonState.Pressed && Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
                 Matrix world = entity2.Parent == null ? Matrix.Identity : entity2.Parent.GlobalTransform.World;
@@ -248,22 +230,7 @@ namespace Ascension
                 
                 entity2.GlobalTransform.Position = new Vector3(Mouse.GetState().Position.ToVector2(), 0);
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
-            {
-                entity2.GlobalTransform.Scale += new Vector3(0.02f, 0, 0f);
-            }
-
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
-            {
-                entity2.GlobalTransform.Rotation += new Vector3(0f, 0f, 0.02f);
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-            {
-                entity3.GlobalTransform.Rotation += new Vector3(0f, 0f, 0.02f);
-            }
+            */
 
             base.Update(gameTime);
         }
@@ -277,10 +244,6 @@ namespace Ascension
                 dc.Draw(gameTime);
             }
 
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(spriteFont, "Hello, World", Vector2.Zero, Color.White);
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }

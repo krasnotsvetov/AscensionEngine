@@ -248,7 +248,7 @@ namespace AscensionEditor
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene scene = Scene.Load(GameEditor.renderSystem);
+            Scene scene = Scene.Load(GameEditor.RenderSystem);
             scene.sceneRenderer.LoadContent(GameEditor.Content);
             SceneComboBox.Items.Add(scene);
         }
@@ -566,6 +566,27 @@ namespace AscensionEditor
                 EntityView.SelectedNode = EntityView.GetNodeAt(e.Location);
         }
 
+
+        private void addAssemblyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Assembly.LoadFile(ofd.FileName);
+            }
+
+            AvailableComponents.Items.Clear();
+            foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var t in a.GetTypes())
+                {
+                    if (t.GetCustomAttribute(typeof(ComponentAttribute), true) != null)
+                    {
+                        AvailableComponents.Items.Add(new TypeCell(t, t.GetCustomAttribute<ComponentAttribute>().Name));
+                    }
+                }
+            }
+        }
     }
 
 
