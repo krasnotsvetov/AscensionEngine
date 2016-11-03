@@ -26,6 +26,8 @@ using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using AscensionEngine.Engine.Core;
+using AscensionEngine.Engine.Core.Systems;
 
 namespace Ascension
 {
@@ -42,8 +44,8 @@ namespace Ascension
 
 
 
-        public Dictionary<string, DrawableComponent> drawableComponents = new Dictionary<string, DrawableComponent>();
-        public Dictionary<string, UpdateableComponent> updateableComponents = new Dictionary<string, UpdateableComponent>();
+        public Dictionary<string, IDrawableSystem> drawableSystems = new Dictionary<string, IDrawableSystem>();
+        public Dictionary<string, IUpdateableSystem> updateableSystems = new Dictionary<string, IUpdateableSystem>();
         public RenderSystem RenderSystem { get { return renderSystem; } }
         public UpdateSystem UpdateSystem { get { return updateSystem; } }
 
@@ -72,8 +74,8 @@ namespace Ascension
             renderSystem.Initialize();
             updateSystem = new UpdateSystem();
             updateSystem.Initialize();
-            drawableComponents.Add("RenderSystem", renderSystem);
-            updateableComponents.Add("UpdateSystem", updateSystem);
+            drawableSystems.Add("RenderSystem", renderSystem);
+            updateableSystems.Add("UpdateSystem", updateSystem);
 
             base.Initialize();
         }
@@ -89,7 +91,7 @@ namespace Ascension
         protected override void LoadContent()
         {
 
-            foreach (var dc in drawableComponents.Values)
+            foreach (var dc in drawableSystems.Values)
             {
                 dc.LoadContent(Content);
             }
@@ -115,10 +117,10 @@ namespace Ascension
             contentSystem.Effect.Add("effect", effect);
             contentSystem.Effect.Add("ParticleShader", effect2);
 
-            entity = new Entity();
-            entity2 = new Entity(scene);
-            entity3 = new Entity();
-            entity4 = new Entity();
+            entity = new Entity("House");
+            entity2 = new Entity("LightA", scene);
+            entity3 = new Entity("LightB");
+            entity4 = new Entity("LightC");
 
     
            
@@ -180,7 +182,7 @@ namespace Ascension
 
            
            
-            particleEntity = new Entity();
+            particleEntity = new Entity("Particles");
             ParticleSystem2D ps = new ParticleSystem2D("ParticleSystem0", 10f, 1, scene.Materials["PSMaterial"].Reference);
 
             particleEntity.AddDrawableComponent( ps);
@@ -195,13 +197,13 @@ namespace Ascension
 
         protected override void UnloadContent()
         {
-            foreach (var c in drawableComponents.Values)
+            foreach (var c in drawableSystems.Values)
 
             {
                 c.Dispose();
             }
 
-            foreach (var c in updateableComponents.Values)
+            foreach (var c in updateableSystems.Values)
             {
                 c.Dispose();
             }
@@ -213,7 +215,7 @@ namespace Ascension
         {
 
 
-            foreach (var uc in updateableComponents.Values)
+            foreach (var uc in updateableSystems.Values)
             {
                 uc.Update(gameTime);
             }
@@ -239,7 +241,7 @@ namespace Ascension
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            foreach (var dc in drawableComponents.Values)
+            foreach (var dc in drawableSystems.Values)
             {
                 dc.Draw(gameTime);
             }

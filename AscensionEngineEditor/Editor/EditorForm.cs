@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using AscensionEngine.Engine.Graphics.CameraSystem;
 
 namespace AscensionEditor
 {
@@ -255,10 +256,14 @@ namespace AscensionEditor
 
         private void addEmptyEntityToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var ent = new Entity(activeScene);
-            EntityView.BeginUpdate();
-            int t = EntityView.Nodes.Add(new EntityTreeNode(ent));
-            EntityView.EndUpdate();
+            var form = new GetNameForm("Entity name");
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                var ent = new Entity(form.Name, activeScene);
+                EntityView.BeginUpdate();
+                int t = EntityView.Nodes.Add(new EntityTreeNode(ent));
+                EntityView.EndUpdate();
+            }
         }
 
         private void EntityView_ItemDrag(object sender, ItemDragEventArgs e)
@@ -585,6 +590,24 @@ namespace AscensionEditor
                         AvailableComponents.Items.Add(new TypeCell(t, t.GetCustomAttribute<ComponentAttribute>().Name));
                     }
                 }
+            }
+        }
+
+        private void ComponentBox_MouseUp(object sender, MouseEventArgs e)
+        {
+
+            var contextMenu = new ContextMenu();
+               
+            if (e.Button == MouseButtons.Right)
+            {
+                int index = ComponentBox.IndexFromPoint(e.Location);
+                if (index < 0) return;
+                var item = (ComponentBox.Items[index] as ComponentCell).Component;
+                if (item is Camera)
+                {
+                    contextMenu.MenuItems.Add(new MenuItem("Set as active", (s, ea) => GameEditor.renderSystem.ActiveCamera = (Camera)item));
+                }
+                contextMenu.Show(ComponentBox, e.Location);
             }
         }
     }

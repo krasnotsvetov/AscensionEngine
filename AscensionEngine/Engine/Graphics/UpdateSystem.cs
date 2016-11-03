@@ -4,10 +4,11 @@ using Ascension.Engine.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AscensionEngine.Engine.Core.Systems;
 
 namespace Ascension.Engine.Graphics
 {
-    public class UpdateSystem : UpdateableComponent
+    public class UpdateSystem : IUpdateableSystem
     {
 
         public GraphicsDevice Device { get { return device; } }
@@ -22,6 +23,10 @@ namespace Ascension.Engine.Graphics
                 return _gameComponents;
             }
         }
+
+        public bool Enabled { get; set; } = true;
+
+
         private List<UpdateableComponent> _gameComponents = new List<UpdateableComponent>();
 
         private Dictionary<string, UpdateableComponent> gameComponents = new Dictionary<string, UpdateableComponent>();
@@ -56,7 +61,7 @@ namespace Ascension.Engine.Graphics
 
 
 
-        public override void Initialize()
+        public virtual void Initialize()
         {
             foreach (var gameComponent in gameComponents.Values)
             {
@@ -77,8 +82,12 @@ namespace Ascension.Engine.Graphics
             isDirty = true;
         }
 
-        public override void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
+            if (Enabled)
+            {
+                return;
+            }
             if (isDirty)
             {
                 isDirty = false;
@@ -88,6 +97,14 @@ namespace Ascension.Engine.Graphics
             foreach (var gameComponent in _gameComponents)
             {
                 gameComponent.Update(gameTime);
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            foreach (var gameComponent in _gameComponents)
+            {
+                gameComponent.Dispose();
             }
         }
     }

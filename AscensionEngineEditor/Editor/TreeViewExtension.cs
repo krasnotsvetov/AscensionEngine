@@ -15,7 +15,7 @@ namespace AscensionEditor
         public EntityTreeNode(Entity entity) : base()
         {
             Entity = entity;
-            Text = "entity";
+            Text = entity.Name;
 
         }
         public override object Clone()

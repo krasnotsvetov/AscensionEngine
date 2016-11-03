@@ -1,4 +1,5 @@
 ﻿using Ascension.Engine.Core.Common;
+using Ascension.Engine.Core.Common.Attributes;
 using Ascension.Engine.Graphics.SceneSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AscensionEngine.Engine.Graphics.CameraSystem
 {
+    [Component("Camera")]
     public class Camera : EntityUpdateableComponent
     {
 
@@ -141,6 +143,12 @@ namespace AscensionEngine.Engine.Graphics.CameraSystem
             
         }
 
+        public override void Initialize()
+        {
+            Parent.Scene.cameras.Add(this);
+            base.Initialize();
+        }
+
         public void SetupPerspectiveCamera(Vector3 forward, Vector3 up, float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
         {
             ProjectionType = CameraProjectionType.Perspective;
@@ -158,12 +166,21 @@ namespace AscensionEngine.Engine.Graphics.CameraSystem
 
         internal override void SceneChanged(Scene lastScene)
         {
+            if (lastScene != null)
+            {
+                lastScene.cameras.Remove(this);
+            }
             base.SceneChanged(lastScene);
         }
 
         protected void TransformChanged(object sender, EventArgs e)
         {
 
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

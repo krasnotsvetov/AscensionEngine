@@ -88,7 +88,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
             base.LoadContent(contentManager);
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(Matrix view, Matrix projection, GameTime gameTime)
         {
 
             graphicsDevice.SetRenderTargets(depth, diffuse, normalMap, lightMap);
@@ -103,23 +103,23 @@ namespace Ascension.Engine.Graphics.SceneSystem
              foreach (var entity in scene.Entities)
              {
 
-                 DrawEntityRecursive(entity, gameTime);
+                 DrawEntityRecursive(view, projection, entity, gameTime);
              }
              spritebatch.End();
               
-            base.Draw(gameTime);
+            base.Draw(view, projection, gameTime);
         } 
-        private void DrawEntityRecursive(Entity entity, GameTime gameTime)
+        private void DrawEntityRecursive(Matrix view, Matrix projection, Entity entity, GameTime gameTime)
         {
             foreach (var e in entity.Entities)
             {
-                DrawEntityRecursive(e, gameTime);
+                DrawEntityRecursive(view, projection, e, gameTime);
             }
 
-            DrawEntity(entity, gameTime);
+            DrawEntity(view, projection, entity, gameTime);
         }
 
-        private void DrawEntity(Entity entity, GameTime gameTime)
+        private void DrawEntity(Matrix view, Matrix projection, Entity entity, GameTime gameTime)
         {
 
             foreach (var component in entity.DrawableComponents)
@@ -160,7 +160,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
                 if (component.Visible)
                 {
-                    component.Draw(gameTime);
+                    component.Draw(view, projection, gameTime);
                 }
             }
         }

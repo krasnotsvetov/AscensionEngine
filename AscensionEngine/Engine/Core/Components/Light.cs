@@ -60,7 +60,8 @@ namespace Ascension.Engine.Core.Components
         public override void Initialize()
         {
             base.Initialize();
-            ParentEntity.Scene.AddLight(this);
+            ParentEntity.Scene.lights.Add(this);
+
         }
 
         internal override void SceneChanged(Scene lastScene)
@@ -68,7 +69,7 @@ namespace Ascension.Engine.Core.Components
             base.SceneChanged(lastScene);
             if (lastScene != null)
             {
-                lastScene.RemoveLight(this);
+                lastScene.lights.Remove(this);
             }
         }
 

@@ -7,7 +7,7 @@ using System.Runtime.Serialization;
 namespace Ascension.Engine.Core.Common
 {
     [DataContract]
-    public class DrawableComponent : IComparable<DrawableComponent>, IDrawable, IDisposable, IGameComponent
+    public class DrawableComponent : IComparable<DrawableComponent>, IDisposable, IGameComponent
     {
 
         public event EventHandler<EventArgs> DrawOrderChanged;
@@ -65,7 +65,7 @@ namespace Ascension.Engine.Core.Common
 
         }
 
-        public virtual void Draw(GameTime gameTime)
+        public virtual void Draw(Matrix view, Matrix projection, GameTime gameTime)
         {
            
         }

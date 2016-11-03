@@ -35,6 +35,9 @@ namespace Ascension.Engine.Graphics.SceneSystem
             }
         }
 
+        public string Name { get { return name;}  set { name = value; } }
+        private string name;
+
         private Dictionary<string, IGameComponent> components = new Dictionary<string, IGameComponent>();
 
         private List<EntityDrawableComponent> drawableComponents = new List<EntityDrawableComponent>();
@@ -92,13 +95,14 @@ namespace Ascension.Engine.Graphics.SceneSystem
         private bool ignoreChangeTransformEvent = false;
 
 
-        public Entity(Scene scene) : this()
+        public Entity(string name, Scene scene) : this(name)
         {
             scene.AddEntity(this);
         }
 
-        public Entity()
-        { 
+        public Entity(string name)
+        {
+            this.Name = name;
             Guid = Guid.NewGuid();
             parent = null;
             transform = new Transform("LocalTransform");
@@ -438,7 +442,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         public override string ToString()
         {
-            return "TODO";
+            return Name;
         }
     }
 }

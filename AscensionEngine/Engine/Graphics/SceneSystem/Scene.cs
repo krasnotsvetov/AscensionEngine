@@ -11,6 +11,8 @@ using Ascension.Engine.Core.Common.Collections;
 using Ascension.Engine.Graphics.MaterialSystem;
 using Ascension.Engine.Content;
 using Microsoft.Xna.Framework.Content;
+using AscensionEngine.Engine.Graphics.CameraSystem;
+using Microsoft.Xna.Framework;
 
 namespace Ascension.Engine.Graphics.SceneSystem
 {
@@ -29,9 +31,11 @@ namespace Ascension.Engine.Graphics.SceneSystem
         //public List<Scene2D> Scenes { get { return scenes; } }
         public ReadOnlyCollection<Entity> Entities { get { return entities.AsReadOnly(); } }
         public ReadOnlyCollection<Light> Lights { get { return lights.AsReadOnly(); } }
+        public ReadOnlyCollection<Camera> Cameras { get { return cameras.AsReadOnly(); } }
 
         public ShaderCollection Shaders = new ShaderCollection();
         public MaterialCollection Materials = new MaterialCollection();
+         
 
         internal List<BaseReference<String>> NotValidReferences = new List<BaseReference<string>>();
 
@@ -41,7 +45,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
 
         public ContentSystem Content {get; set;}
-        public RenderSystem RenderSystem { get { return renderSystem; } }
+        public RenderSystem RenderSystem { get { return renderSystem;} }
 
 
         private RenderSystem renderSystem;       
@@ -53,7 +57,8 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         // private List<Scene2D> scenes = new List<Scene2D>();
         private List<Entity> entities = new List<Entity>();
-        private List<Light> lights = new List<Light>();
+        internal List<Light> lights = new List<Light>();
+        internal List<Camera> cameras = new List<Camera>();
 
         public Scene(string name, RenderSystem renderSystem)
         {
@@ -64,6 +69,11 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
             Content = ContentSystem.GetInstance();
             renderSystem.AddComponent(new KeyValuePair<string, DrawableComponent>("SceneDrawer" + Name, sceneRenderer));
+
+            Entity entity = new Entity("Camera", this);
+            Camera camera = new Camera("Camera");
+            camera.SetupPerspectiveCamera(Vector3.Forward, Vector3.Up, MathHelper.ToRadians(75f), renderSystem.Device.Viewport.AspectRatio, 0.1f, 1000f);
+            entity.AddUpdateableComponent(camera);
         }
 
 
@@ -170,11 +180,12 @@ namespace Ascension.Engine.Graphics.SceneSystem
                                 {
                                     if (reader.NodeType == XmlNodeType.Element)
                                     {
-                                        entity = new Entity();
+                                        entity = new Entity("");
 
                                         reader.MoveToNextAttribute();
-                                        int id = int.Parse(reader.Value);
-                                        entity.ID = id;
+                                        entity.ID = int.Parse(reader.Value);
+                                        reader.MoveToNextAttribute();
+                                        entity.Name = reader.Value;
                                     }
 
 
@@ -348,6 +359,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 {
                     xmlWritter.WriteStartElement(String.Format("entity-{0}", ent.ID));
                     xmlWritter.WriteAttributeString(String.Format("entity-{0}", ent.ID), ent.ID.ToString());
+                    xmlWritter.WriteAttributeString("entity-name", ent.Name);
 
                     foreach (var uc in ent.UpdateableComponents)
                     {
@@ -545,24 +557,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
             }
         }
 
-        /// <summary>
-        /// Add light to scene
-        /// </summary>
-        /// <param name="light"></param>
-        public void AddLight(Light light)
-        {
-            lights.Add(light);
-        }
-
-
-        /// <summary>
-        /// Remove light from scene
-        /// </summary>
-        /// <param name="light"></param>
-        public void RemoveLight(Light light)
-        {
-            lights.Remove(light);
-        }
+         
 
 
 

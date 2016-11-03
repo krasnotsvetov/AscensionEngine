@@ -7,15 +7,35 @@ using Ascension.Engine.Core.Common;
 using Ascension.Engine.Graphics.SceneSystem;
 using Ascension.Engine.Graphics.Filters;
 using Microsoft.Xna.Framework.Content;
+using AscensionEngine.Engine.Graphics.CameraSystem;
+using AscensionEngine.Engine.Core.Systems;
 
 namespace Ascension.Engine.Graphics
 {
-    public class RenderSystem : DrawableComponent
+    public class RenderSystem : IDrawableSystem
     {
 
         public GraphicsDevice Device { get { return device; } }
         public SpriteBatch SpriteBatch { get { return spriteBatch; } }
-        public Scene ActiveScene { get; set; }
+        public Scene ActiveScene
+        {
+            get { return activeScene; }
+            set
+            {
+                activeScene = value;
+                if (activeScene != null)
+                {
+                    if (activeScene.Cameras.Count > 0)
+                    {
+                        ActiveCamera = activeScene.Cameras[0];
+                    }
+                }
+            }
+        }
+        private Scene activeScene;
+
+        public Camera ActiveCamera { get; set; }
+
 
         //public Dictionary<string, Effect> Shaders = new Dictionary<string, Effect>();
 
@@ -30,6 +50,9 @@ namespace Ascension.Engine.Graphics
                 return _gameComponents;
             }
         }
+
+        public bool Enabled { get; set; } = true;
+
         private List<DrawableComponent> _gameComponents = new List<DrawableComponent>();
 
         private Dictionary<string, DrawableComponent> gameComponents = new Dictionary<string, DrawableComponent>();
@@ -70,7 +93,7 @@ namespace Ascension.Engine.Graphics
         DefferedLightFilter lightFilter;
 
 
-        public override void Initialize()
+        public virtual void Initialize()
         {
             lightFilter = new DefferedLightFilter(this);
             lightFilter.Initialize();
@@ -82,9 +105,8 @@ namespace Ascension.Engine.Graphics
         }
 
 
-        public override void LoadContent(ContentManager contentManager)
-        {
-            base.LoadContent(contentManager);
+        public virtual void LoadContent(ContentManager contentManager)
+        { 
             lightFilter.LoadContent(contentManager);
 
             foreach (var gameComponent in gameComponents.Values)
@@ -106,17 +128,25 @@ namespace Ascension.Engine.Graphics
             isDirty = true;
         }
 
-        public override void Draw(GameTime gameTime)
+        public virtual void Draw(GameTime gameTime)
         {
+            if (!Enabled)
+            {
+                return;
+            }
             if (isDirty)
             {
                 isDirty = false;
                 _gameComponents.Sort();
             }
 
+            if (ActiveCamera == null)
+            {
+                return;
+            }
             foreach (var gameComponent in _gameComponents)
             {
-                gameComponent.Draw(gameTime);
+                gameComponent.Draw(ActiveCamera.View, ActiveCamera.Projection, gameTime);
             }
 
 
@@ -135,6 +165,15 @@ namespace Ascension.Engine.Graphics
             lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
 
            
+        } 
+
+
+        public virtual void Dispose()
+        {
+            foreach (var gameComponent in _gameComponents)
+            {
+                gameComponent.Dispose();
+            }
         }
     }
 

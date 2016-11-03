@@ -30,7 +30,7 @@ namespace Ascension.Engine.Core.Components
             spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
         }
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(Matrix view, Matrix projection, GameTime gameTime)
         {
             
             Vector2 position = new Vector2(ParentEntity.GlobalTransform.Position.X, ParentEntity.GlobalTransform.Position.Y);
@@ -38,7 +38,7 @@ namespace Ascension.Engine.Core.Components
             {
                 spriteBatch.Draw(Material.Textures[0], position, new Rectangle(0, 0, Material.Textures[0].Width, Material.Textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
             }
-            base.Draw(gameTime);
+            base.Draw(view, projection, gameTime);
         }
 
         public override string ToString()

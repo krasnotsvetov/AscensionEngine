@@ -134,14 +134,14 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
         }
 
 
-        public override void Draw(GameTime gameTime)
+        public override void Draw(Matrix view, Matrix projection, GameTime gameTime)
         {
             Simulate(gameTime);
             foreach (Particle2D p in particles)
             {
                 p.Draw(spriteBatch);
             }
-            base.Draw(gameTime);
+            base.Draw(view, projection, gameTime);
         }
 
         public override string ToString()

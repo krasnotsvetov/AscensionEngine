@@ -86,6 +86,7 @@
     <Compile Include="Engine\Core\Common\Collections\Pooling\IObjectInitializer.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IPool.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IPoolable.cs" />
+    <Compile Include="Engine\Core\Common\Collections\StringReferenceCollection.cs" />
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\EventArguments\ResourceCollectionEventArgs.cs" />
@@ -97,6 +98,8 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleCreator.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
+    <Compile Include="Engine\Core\Systems\IDrawableSystem.cs" />
+    <Compile Include="Engine\Core\Systems\IUpdateableSystem.cs" />
     <Compile Include="Engine\Graphics\CameraSystem\Camera.cs" />
     <Compile Include="Engine\Graphics\CameraSystem\Common.cs" />
     <Compile Include="Engine\Graphics\Filters\DefferedLightFilter.cs" />
@@ -109,7 +112,6 @@
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\MaterialCollection.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\MaterialReference.cs" />
-    <Compile Include="Engine\Core\Common\Collections\StringReferenceCollection.cs" />
     <Compile Include="Engine\Graphics\Shaders\ParticleShaderShaderPipelineStateSetter.cs" />
     <Compile Include="Engine\Graphics\Shaders\NormalShaderPipelineStateSetter.cs" />
     <Compile Include="Engine\Graphics\Shaders\IPipelineStateSetter.cs" />
