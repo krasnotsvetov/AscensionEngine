@@ -50,7 +50,7 @@ namespace Ascension.Engine.Core.Components
         public float InvRadius { get { return invRadius; } }
         private float invRadius;
 
-        public Light(string name, MaterialReference reference) : base(name, reference)
+        public Light(string name, string materialName) : base(name, materialName)
         {
             Intensity = 1;
             Radius = 300;

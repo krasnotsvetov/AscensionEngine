@@ -6,18 +6,20 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AscensionEngine.Engine.Graphics.CameraSystem
+namespace Ascension.Engine.Graphics.CameraSystem
 {
+    [DataContract]
     [Component("Camera")]
-    public class Camera : EntityUpdateableComponent
+    public class Camera : EntityUpdateableComponent, ICamera
     {
 
 
 
-        public Matrix World { get { return world; } }
+        public Matrix World { get { return parent == null ? Matrix.Identity : parent.GlobalTransform.World; } }
         public Matrix View { get { return view; } }
         public Matrix Projection { get { return projection; } }
         public RenderTarget2D RenderTarget { get; set; }
@@ -37,6 +39,7 @@ namespace AscensionEngine.Engine.Graphics.CameraSystem
         }
 
         private Entity parent;
+
 
         public float FieldOfView
         {
@@ -123,24 +126,32 @@ namespace AscensionEngine.Engine.Graphics.CameraSystem
             }
         }
 
+        [DataMember]
         public CameraProjectionType ProjectionType { get; set; }
 
+        [DataMember]
         private float fieldOfView;
+        [DataMember]
         private float aspectRatio;
+        [DataMember]
         private float nearPlaneDistance;
+        [DataMember]
         private float farPlaneDistance;
+        [DataMember]
         private float width;
+        [DataMember]
         private float height;
 
-        private Matrix world = Matrix.Identity;
+        [DataMember]
         private Matrix view;
+        [DataMember]
         private Matrix projection;
 
 
 
         public Camera(string name) : base(name)
         {
-            
+            view = Matrix.CreateLookAt(new Vector3(0, 0, -5), new Vector3(0, 0, 0), Vector3.Up);   
         }
 
         public override void Initialize()

@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Content;
+using Ascension.Engine.Core.Systems.Content;
 
 namespace Ascension.Engine.Graphics.Filters
 {
@@ -28,11 +29,11 @@ namespace Ascension.Engine.Graphics.Filters
             base.Initialize();
         }
 
-        public override void LoadContent(ContentManager contentManager)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager);
+            base.LoadContent();
 
-            effect = contentManager.Load<Effect>("Engine\\shaders\\lightEffect");
+            effect = ContentContainer.Instance().GetEffect("Engine\\Shaders\\LightEffect");
         }
 
 

@@ -6,6 +6,7 @@ using Ascension.Engine.Graphics.SceneSystem;
 using Ascension.Engine.Core.Common.Attributes;
 using System;
 using System.Runtime.Serialization;
+using Ascension.Engine.Core.Systems.Content;
 
 namespace Ascension.Engine.Core.Components
 {
@@ -13,31 +14,99 @@ namespace Ascension.Engine.Core.Components
     [Component("Sprite")]
     public class Sprite : EntityDrawableComponent
     {
-       
-        private SpriteBatch spriteBatch;
-
-        private Transform transform;
-
-        public Sprite(string name, MaterialReference reference) : base(name, reference)
+        public int PixelPerOne
         {
+            get
+            {
+                return pixelPerOne;
+            }
+            set
+            {
+                pixelPerOne = value;
+            }
+        }
 
+
+        [DataMember]
+        private int pixelPerOne = 128;
+
+        [DataMember]
+        private Rectangle? sourceRectangle;
+
+        private Texture2D texture;
+        private VertexBuffer vertexBuffer;
+        private VertexPositionColorTexture[] vertices = new VertexPositionColorTexture[4];
+        public Sprite(string name, string materialName) : base(name, materialName)
+        {
+            this.sourceRectangle = null;
+            if (Material != null)
+            {
+                texture = Material.Textures["Albedo"];
+            }
+        }
+
+        public Sprite(string name, string materialName, Rectangle sourceRectangle) : base(name, materialName)
+        {
+            this.sourceRectangle = sourceRectangle;
+            if (Material != null)
+            {
+                texture = Material.Textures["Albedo"];
+            }
+        }
+
+       
+        private void setupVertices(Rectangle sourceRectangle)
+        {
+            sourceRectangle = new Rectangle(sourceRectangle.X / texture.Width, sourceRectangle.Y / texture.Height, sourceRectangle.Width / texture.Width, sourceRectangle.Height / texture.Height);
+
+            vertices[0].Color = vertices[1].Color = vertices[2].Color = vertices[3].Color = Color.White;
+
+            vertices[0].TextureCoordinate = new Vector2(sourceRectangle.X, sourceRectangle.Y + sourceRectangle.Height);
+            vertices[1].TextureCoordinate = new Vector2(sourceRectangle.X * texture.Width, sourceRectangle.Y);
+            vertices[2].TextureCoordinate = new Vector2(sourceRectangle.X + sourceRectangle.Width, sourceRectangle.Y + sourceRectangle.Height);
+            vertices[3].TextureCoordinate = new Vector2(sourceRectangle.X + sourceRectangle.Width, sourceRectangle.Y);
+
+
+
+            int halfWidth = texture.Width / 2;
+            int halfHeight = texture.Height / 2;
+
+            vertices[0].Position = new Vector3(halfWidth / (float)pixelPerOne, -halfHeight / (float)pixelPerOne, 0);
+            vertices[1].Position = new Vector3(halfWidth / (float)pixelPerOne, halfHeight / (float)pixelPerOne, 0);
+            vertices[2].Position = new Vector3(-halfWidth / (float)pixelPerOne, -halfHeight / (float)pixelPerOne, 0);
+            vertices[3].Position = new Vector3(-halfWidth / (float)pixelPerOne, halfHeight / (float)pixelPerOne, 0);
+
+
+
+            if (vertexBuffer != null)
+            {
+                vertexBuffer.Dispose();
+            }
+            vertexBuffer = new VertexBuffer(device, VertexPositionColorTexture.VertexDeclaration, vertices.Length, BufferUsage.WriteOnly);
+            vertexBuffer.SetData(vertices);
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            transform = ParentEntity.GlobalTransform;
-            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
+            if (texture != null)
+            {
+                if (sourceRectangle == null)
+                {
+                    setupVertices(new Rectangle(0, 0, texture.Width, texture.Height));
+                }
+                else
+                {
+                    setupVertices((Rectangle)sourceRectangle);
+                }
+            }
         }
 
         public override void Draw(Matrix view, Matrix projection, GameTime gameTime)
         {
-            
-            Vector2 position = new Vector2(ParentEntity.GlobalTransform.Position.X, ParentEntity.GlobalTransform.Position.Y);
-            if (Material.Textures[0] != null)
-            {
-                spriteBatch.Draw(Material.Textures[0], position, new Rectangle(0, 0, Material.Textures[0].Width, Material.Textures[0].Height), Color.White, transform.Rotation.Z, Vector2.Zero, new Vector2(transform.Scale.X, transform.Scale.Y), SpriteEffects.None, 0f);
-            }
+            device.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
+            device.SetVertexBuffer(vertexBuffer);
+            device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
             base.Draw(view, projection, gameTime);
         }
 
@@ -46,12 +115,39 @@ namespace Ascension.Engine.Core.Components
             return "Sprite";
         }
 
+        protected override void MaterialChanged(object sender, ContentOwnerEventArgs<Material> e)
+        {
+            base.MaterialChanged(sender, e);
+            if (Material != null)
+            {
+                texture = Material.Textures["Albedo"];
+                if (texture == null)
+                {
+                    return;
+                }
+                if (sourceRectangle == null)
+                {
+                    setupVertices(new Rectangle(0, 0, texture.Width, texture.Height));
+                } else
+                {
+                    setupVertices((Rectangle)sourceRectangle);
+                }
+            }
+        }
 
         internal override void RenderSystemChange()
         {
             base.RenderSystemChange();
+        }
 
-            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
+
+        public override void Dispose()
+        {
+            if (vertexBuffer != null && !vertexBuffer.IsDisposed)
+            {
+                vertexBuffer.Dispose();
+            }
+            base.Dispose();
         }
     }
 }

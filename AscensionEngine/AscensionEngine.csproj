@@ -8,7 +8,7 @@
     <ProjectGuid>{BE67580B-A67F-4012-9C38-36219424B2A6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AscensionEngine</RootNamespace>
+    <RootNamespace>Ascension</RootNamespace>
     <AssemblyName>AscensionEngine</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
@@ -76,32 +76,37 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Engine\Content\ContentSystem.cs" />
     <Compile Include="Engine\Core\Common\Attributes\ComponentAttribute.cs" />
     <Compile Include="Engine\Core\Common\BaseReference.cs" />
-    <Compile Include="Engine\Core\Common\Collections\IResourceCollection.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pair.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\DefaultObjectCreator.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IObjectCreator.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IObjectInitializer.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IPool.cs" />
     <Compile Include="Engine\Core\Common\Collections\Pooling\IPoolable.cs" />
-    <Compile Include="Engine\Core\Common\Collections\StringReferenceCollection.cs" />
     <Compile Include="Engine\Core\Common\EntityDrawableComponent.cs" />
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
-    <Compile Include="Engine\Core\Common\EventArguments\ResourceCollectionEventArgs.cs" />
     <Compile Include="Engine\Core\Common\Extension\RandomExtension.cs" />
     <Compile Include="Engine\Core\Common\IReference.cs" />
     <Compile Include="Engine\Core\Common\UpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\DrawableComponent.cs" />
+    <Compile Include="Engine\Core\Components\3DComponents\Cube.cs" />
+    <Compile Include="Engine\Core\Components\3DComponents\ModelComponent.cs" />
     <Compile Include="Engine\Core\Components\Light.cs" />
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleCreator.cs" />
     <Compile Include="Engine\Core\Components\Sprite.cs" />
     <Compile Include="Engine\Core\Components\Transform.cs" />
+    <Compile Include="Engine\Core\Systems\Content\ContentContainer.cs" />
+    <Compile Include="Engine\Core\Systems\Content\ContentContainer.Effect.cs" />
+    <Compile Include="Engine\Core\Systems\Content\ContentContainer.Model.cs" />
+    <Compile Include="Engine\Core\Systems\Content\ContentContainer.Textures.cs" />
+    <Compile Include="Engine\Core\Systems\Content\IContentObject.cs" />
+    <Compile Include="Engine\Core\Systems\Content\MaterialInformation.cs" />
     <Compile Include="Engine\Core\Systems\IDrawableSystem.cs" />
     <Compile Include="Engine\Core\Systems\IUpdateableSystem.cs" />
     <Compile Include="Engine\Graphics\CameraSystem\Camera.cs" />
     <Compile Include="Engine\Graphics\CameraSystem\Common.cs" />
+    <Compile Include="Engine\Graphics\CameraSystem\ICamera.cs" />
     <Compile Include="Engine\Graphics\Filters\DefferedLightFilter.cs" />
     <Compile Include="Engine\Graphics\Filters\Filter.cs" />
     <Compile Include="Engine\Graphics\Filters\VolumeLightFilter.cs" />
@@ -110,15 +115,7 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleSystem2D.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialFlags.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
-    <Compile Include="Engine\Graphics\MaterialSystem\MaterialCollection.cs" />
-    <Compile Include="Engine\Graphics\MaterialSystem\MaterialReference.cs" />
-    <Compile Include="Engine\Graphics\Shaders\ParticleShaderShaderPipelineStateSetter.cs" />
-    <Compile Include="Engine\Graphics\Shaders\NormalShaderPipelineStateSetter.cs" />
-    <Compile Include="Engine\Graphics\Shaders\IPipelineStateSetter.cs" />
-    <Compile Include="Engine\Graphics\Shaders\ShaderCollection.cs" />
-    <Compile Include="Engine\Graphics\Shaders\ShaderReference.cs" />
-    <Compile Include="Engine\Graphics\Texture2DCollection.cs" />
-    <Compile Include="Engine\Graphics\Texture2DReference.cs" />
+    <Compile Include="Engine\Graphics\SceneSystem\Scene.Materials.cs" />
     <Compile Include="GameEx.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Background.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Entity.cs" />

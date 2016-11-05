@@ -27,7 +27,6 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
 
         public bool EnableGenerate { get; set; }
 
-        private Texture2D texture;
 
         private IPool<Particle2D> particlePool2D;
 
@@ -48,13 +47,13 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
 
         Transform globalTransform;
 
-        public ParticleSystem2D(string name, MaterialReference reference) : base(name, reference)
+        public ParticleSystem2D(string name, string materialName) : base(name, materialName)
         {
             this.textureCount = 1;
            
         }
 
-        public ParticleSystem2D(string name, float frequency, int textureCount, MaterialReference reference) : base(name, reference)
+        public ParticleSystem2D(string name, float frequency, int textureCount, string materialName) : base(name, materialName)
         {
             this.textureCount = textureCount;
         }
@@ -74,25 +73,10 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
 
             if (Material != null)
             {
-                texture = Material.Textures[0];
-                this.width = Material.Textures[0].Width / textureCount;
-                this.height = Material.Textures[0].Height;
+                this.width = Material.Textures["Albedo"].Width / textureCount;
+                this.height = Material.Textures["Albedo"].Height;
             }
             
-        }
-
-        protected override void MaterialChanged(object sender, EventArgs empty)
-        {
-            base.MaterialChanged(sender, empty);
-            if (Material != null)
-            {
-                texture = Material.Textures[0];
-                this.width = Material.Textures[0].Width / textureCount;
-                this.height = Material.Textures[0].Height;
-            } else
-            {
-                texture = null;
-            }
         }
 
         public virtual void Generate(GameTime gameTime)
@@ -128,8 +112,13 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
         public void Spawn(int textureNum, Vector2 position, Vector2 Velocity, Vector2 Acceleration,
             float angle, float angularVelocity, float size, float sizeVelocity, int timeLife, Vector4 Color, float alphaVelocity)
         {
+            if (Material == null || !Material.Textures.ContainsKey("Albedo"))
+            {
+                return;
+            }
+
             Particle2D p = particlePool2D.Get();
-            p.Initialization(texture, textureNum, width, height, position, Velocity, Acceleration, angle, angularVelocity, size, sizeVelocity, timeLife, Color, alphaVelocity);
+            p.Initialization(Material.Textures["Albedo"], textureNum, width, height, position, Velocity, Acceleration, angle, angularVelocity, size, sizeVelocity, timeLife, Color, alphaVelocity);
             particles.Add(p);
         }
 

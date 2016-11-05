@@ -60,7 +60,7 @@ namespace Ascension.Engine.Core.Common
       
 
 
-        public virtual void LoadContent(ContentManager contentManager)
+        public virtual void LoadContent()
         {
 
         }

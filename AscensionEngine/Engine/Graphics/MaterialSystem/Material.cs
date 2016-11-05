@@ -1,139 +1,173 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Ascension.Engine.Content;
-using Ascension.Engine.Graphics.MaterialSystem;
-using Ascension.Engine.Graphics.SceneSystem;
-using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Runtime.Serialization;
+using Ascension.Engine.Core.Systems.Content;
 
 namespace Ascension.Engine.Graphics
 {
     [DataContract]
-    public class Material
+    public class Material : IEffectOwner, ITextureOwner
     {
 
-
-        internal static int MAXTEXTURESCOUNT = 16; 
-
-        public EventHandler<EventArgs> MaterialChanged;
-
         [DataMember]
-        public ShaderReference ShaderReference;
-
         public string MaterialName
         {
             get
             {
                 return name;
             }
-            set
+            internal set
             {
                 name = value;
-                reference.Name = value;
             }
         }
-
-        public ReadOnlyCollection<Texture2D> Textures { get { return textures.AsReadOnly(); } }
-
-        [DataMember]
-        public ObservableCollection<Texture2DReference> TextureReferences = new ObservableCollection<Texture2DReference>();
-
-        internal List<Texture2D> textures = new List<Texture2D>();
-
-        [DataMember]
-        public IMaterialParameters Parameters;
-
-        [DataMember]
-        public IMaterialFlags Flags;
-
-
-        public MaterialReference Reference {get { return reference;}}
-
-
-        private MaterialReference reference;
-
-        [DataMember]
         private string name;
 
-        public Material(string materialName, IEnumerable<Texture2DReference> textureCollection, ShaderReference shaderReference)
-        {
-            reference = new MaterialReference(materialName);
-            this.MaterialName = materialName;
-            this.ShaderReference = shaderReference;
-            textures = new List<Texture2D>();
-            for (int i = 0; i < MAXTEXTURESCOUNT; i++)
-            {
-                textures.Add(null);
-                TextureReferences.Add(null);
-            }
-            TextureReferences.CollectionChanged += TexturesChanged;
 
-            var index = 0;
-            if (textureCollection != null)
+        public EventHandler<ContentOwnerEventArgs<Effect>> EffectChangedHandler { get; set; }
+        public EventHandler<ContentOwnerEventArgs<Texture2D>> TextureChangedHandler { get; set; }
+
+
+
+        public ReadOnlyDictionary<string, Texture2D> Textures
+        {
+            get
             {
-                foreach (var t in textureCollection)
-                {
-                    TextureReferences[index] = t;
-                    index++;
-                }
+                return new ReadOnlyDictionary<string, Texture2D>(textures);
             }
         }
 
+        private Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
+        internal MaterialInformation info;
 
-        /// <summary>
-        /// Only for deserializer. 
-        /// </summary>
-        internal void Initialize()
+        public Effect Effect { get { return effect; } }
+        private Effect effect;
+
+        public string EffectName { get { return effectName; } }
+
+
+        private string effectName;
+
+        private RenderSystem renderSystem;
+
+        public Material(MaterialInformation info, bool immediately = false) : this(info, ContentContainer.Instance(), immediately)
         {
-            ContentSystem contentSystem = ContentSystem.GetInstance();
-            reference = new MaterialReference(MaterialName);
-            textures = new List<Texture2D>();
-            for (int i = 0; i < MAXTEXTURESCOUNT; i++)
-            {
-                textures.Add(null);
-            }
-            TextureReferences.CollectionChanged += TexturesChanged;
 
-            var index = 0;
-            foreach (var t in TextureReferences)
-            {
-                if (t != null)
-                {
-                    textures[index] = contentSystem.Textures[t.Name];
-                }
-                index++;
-            }
         }
 
-        private void TexturesChanged(object sender, NotifyCollectionChangedEventArgs args)
+        public Material(MaterialInformation info, ContentContainer contentContainer, bool immediately = false)
         {
-            ContentSystem contentSystem = ContentSystem.GetInstance();
-            switch (args.Action)
+            this.name = info.MaterialName;
+            this.info = info;
+            foreach (var p in info.Textures)
             {
-                case NotifyCollectionChangedAction.Add | NotifyCollectionChangedAction.Remove | NotifyCollectionChangedAction.Reset:
-                    //TODO
-                    throw new Exception(String.Format("You can only replace textures in material from 0 to {0}", MAXTEXTURESCOUNT));
-                    //break;
-                case NotifyCollectionChangedAction.Replace:
-                    string name = TextureReferences[args.OldStartingIndex]?.Name;
-                    if (name == null)
+                contentContainer.AddTextureListener(this, p.Value);
+                textures.Add(p.Key, contentContainer.GetTexture(p.Value, immediately));
+            }
+            effectName = info.RequiredShader;
+            contentContainer.AddEffectListener(this, info.RequiredShader);
+            effect = contentContainer.GetEffect(info.RequiredShader, immediately);
+
+            TextureChangedHandler += (s, e) =>
+            {
+                string type = "";
+                foreach (var p in info.Textures)
+                {
+                    if (p.Value.Equals(e.LastName))
                     {
-                        textures[args.OldStartingIndex] = null;
+                        type = p.Key;
+                        break;
                     }
-                    else {
-                        textures[args.OldStartingIndex] = contentSystem.Textures[name];
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    break;
-            }
-            MaterialChanged?.Invoke(this, EventArgs.Empty);
+                }
+                switch (e.Action)
+                {
+                    case ContentAction.Add:
+                        textures[type] = e.New;
+                        break;
+                    case ContentAction.Remove:
+                        textures[type] = null;
+                        break;
+                    case ContentAction.Rename:
+                        ContentContainer cc = ContentContainer.Instance();
+                        info.textures.Remove(type);
+                        textures.Remove(type);
+                        cc.RemoveTextureListener(this, e.LastName);
+                        info.textures.Add(type, e.NewName);
+                        cc.AddTextureListener(this, e.NewName);
+                        textures.Add(type, cc.GetTexture(e.NewName, true));
+                        break;
+                    case ContentAction.Replace:
+                        textures[type] = e.New;
+                        break;
+                }
+            };
 
+            EffectChangedHandler += (s, e) =>
+            {
+                ContentContainer cc = ContentContainer.Instance();
+                switch (e.Action)
+                {
+                    case ContentAction.Add:
+                        effect = e.New;
+                        break;
+                    case ContentAction.Remove:
+                        effect = null;
+                        break;
+                    case ContentAction.Rename:
+                        cc.RemoveEffectListener(this, e.LastName);
+                        info.RequiredShader = e.NewName;
+                        effectName = e.NewName;
+                        cc.AddEffectListener(this, e.NewName);
+                        effect = cc.GetEffect(e.NewName, true);
+                        break;
+                    case ContentAction.Replace:
+                        effect = e.New;
+                        break;
+                }
+            };
+        }
+
+
+        public void AddOrChangeTexture(string type, string textureName)
+        {
+            ContentContainer cc = ContentContainer.Instance();
+            if (info.Textures.ContainsKey(type))
+            {
+                cc.RemoveTextureListener(this, info.Textures[type]);
+                info.textures[type] = textureName;
+                cc.AddTextureListener(this, textureName);
+                textures[type] = cc.GetTexture(textureName, true);
+            } else
+            {
+                info.textures.Add(type, textureName);
+                cc.AddTextureListener(this, textureName);
+                textures.Add(type, cc.GetTexture(textureName, true));
+            }
+        }
+
+        public void RemoveTexture(string type)
+        {
+            ContentContainer.Instance().RemoveTextureListener(this, info.Textures[type]);
+            info.textures.Remove(type);
+            textures.Remove(type);
         }
 
         
+        public void ChangeEffect(string newEffectName)
+        {
+            ContentContainer cc = ContentContainer.Instance();
+            cc.RemoveEffectListener(this, effectName);
+            info.RequiredShader = newEffectName;
+            //We should register before we will use immediately mode.
+            cc.AddEffectListener(this, newEffectName);
+            effect = cc.GetEffect(newEffectName, true);
+        }
+    }
+
+    public interface IMaterialOwner
+    {
+        EventHandler<ContentOwnerEventArgs<Material>> MaterialChangedHandler { get; set; }
     }
 }

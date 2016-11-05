@@ -13,7 +13,18 @@ namespace AscensionEditor
         public bool onControl = false;
 
         private System.Windows.Forms.Control control;
-        private bool releaseLeftButton = false;
+
+
+        public EditorMouseState(EditorMouseState other)
+        {
+            this.LeftButton = other.LeftButton;
+            this.RightButton = other.RightButton;
+            this.MiddleButton = other.MiddleButton;
+            this.ScrollValue = other.ScrollValue;
+            this.Position = other.Position;
+            this.onControl = other.onControl;
+            this.control = other.control;
+        }
 
         public EditorMouseState(System.Windows.Forms.Control control)
         {

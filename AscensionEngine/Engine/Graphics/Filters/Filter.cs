@@ -28,7 +28,7 @@ namespace Ascension.Engine.Graphics.Filters
             spriteBatch = new SpriteBatch(RenderSystem.Device);
         }
 
-        public virtual void LoadContent(ContentManager contentManager)
+        public virtual void LoadContent()
         {
 
         }

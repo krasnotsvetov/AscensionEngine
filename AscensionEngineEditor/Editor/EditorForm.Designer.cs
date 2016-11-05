@@ -47,6 +47,7 @@
             this.EntityPropertyGrid = new System.Windows.Forms.PropertyGrid();
             this.TabsMain = new System.Windows.Forms.TabControl();
             this.ScenesPage = new System.Windows.Forms.TabPage();
+            this.switchCameraMode = new System.Windows.Forms.Button();
             this.addComponent = new System.Windows.Forms.Button();
             this.MaterialsPage = new System.Windows.Forms.TabPage();
             this.TexturesPanel = new System.Windows.Forms.Panel();
@@ -66,7 +67,7 @@
             // 
             // drawingSurface
             // 
-            this.drawingSurface.Location = new System.Drawing.Point(229, 27);
+            this.drawingSurface.Location = new System.Drawing.Point(229, 36);
             this.drawingSurface.Name = "drawingSurface";
             this.drawingSurface.Size = new System.Drawing.Size(1366, 768);
             this.drawingSurface.TabIndex = 0;
@@ -212,7 +213,7 @@
             // 
             this.EntityPropertyGrid.Location = new System.Drawing.Point(6, 493);
             this.EntityPropertyGrid.Name = "EntityPropertyGrid";
-            this.EntityPropertyGrid.Size = new System.Drawing.Size(197, 302);
+            this.EntityPropertyGrid.Size = new System.Drawing.Size(197, 311);
             this.EntityPropertyGrid.TabIndex = 9;
             // 
             // TabsMain
@@ -228,6 +229,7 @@
             // 
             // ScenesPage
             // 
+            this.ScenesPage.Controls.Add(this.switchCameraMode);
             this.ScenesPage.Controls.Add(this.addComponent);
             this.ScenesPage.Controls.Add(this.SceneComboBox);
             this.ScenesPage.Controls.Add(this.EntityView);
@@ -243,6 +245,16 @@
             this.ScenesPage.TabIndex = 0;
             this.ScenesPage.Text = "Scenes";
             this.ScenesPage.UseVisualStyleBackColor = true;
+            // 
+            // switchCameraMode
+            // 
+            this.switchCameraMode.Location = new System.Drawing.Point(1551, 2);
+            this.switchCameraMode.Name = "switchCameraMode";
+            this.switchCameraMode.Size = new System.Drawing.Size(45, 28);
+            this.switchCameraMode.TabIndex = 13;
+            this.switchCameraMode.Text = "2D";
+            this.switchCameraMode.UseVisualStyleBackColor = true;
+            this.switchCameraMode.Click += new System.EventHandler(this.button2_Click);
             // 
             // addComponent
             // 
@@ -388,5 +400,6 @@
         private System.Windows.Forms.ToolStripMenuItem addMaterialToolStripMenuItem;
         private System.Windows.Forms.Button addComponent;
         private System.Windows.Forms.ToolStripMenuItem addAssemblyToolStripMenuItem;
+        private System.Windows.Forms.Button switchCameraMode;
     }
 }

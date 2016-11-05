@@ -1,16 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Ascension.Engine.Core;
 using Ascension.Engine.Core.Common;
-using Ascension.Engine.Core.Components.ParticleSystemComponent;
-using Ascension.Engine.Graphics.Shaders;
+using Ascension.Engine.Core.Systems.Content;
 
 namespace Ascension.Engine.Graphics.SceneSystem
 {
     public class SceneRenderer : DrawableComponent
     {
 
+
+        public delegate void OnDrawStartDelegate();
+
+        public OnDrawStartDelegate OnDrawStart { get; set; }
 
         public RenderTarget2D DiffuseTexture
         {
@@ -41,6 +42,8 @@ namespace Ascension.Engine.Graphics.SceneSystem
         public SpriteBatch SpriteBatch { get { return spritebatch; } }
         public RenderSystem RenderSystem { get { return renderSystem; } }
 
+        public Vector3 Ambient;
+
         private RenderSystem renderSystem;
 
         private Scene scene;
@@ -52,11 +55,12 @@ namespace Ascension.Engine.Graphics.SceneSystem
         private RenderTarget2D lightMap;
         private RenderTarget2D volumeLightMask;
 
-
+        private BasicEffect basicEffect;
 
 
         public SceneRenderer(Scene scene, RenderSystem renderSystem)
         {
+            basicEffect = new BasicEffect(renderSystem.Device);
             this.renderSystem = renderSystem;
             graphicsDevice = renderSystem.Device;
             spritebatch = renderSystem.SpriteBatch;
@@ -82,10 +86,10 @@ namespace Ascension.Engine.Graphics.SceneSystem
         Material lastMaterial = null;
 
 
-        public override void LoadContent(ContentManager contentManager)
+        public override void LoadContent()
         {
-            clearEffect = contentManager.Load<Effect>("Engine\\Shaders\\clearEffect");
-            base.LoadContent(contentManager);
+            clearEffect = ContentContainer.Instance().GetEffect("Engine\\Shaders\\ClearEffect");
+            base.LoadContent();
         }
 
         public override void Draw(Matrix view, Matrix projection, GameTime gameTime)
@@ -93,20 +97,22 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
             graphicsDevice.SetRenderTargets(depth, diffuse, normalMap, lightMap);
 
+            clearEffect.Parameters["Ambient"].SetValue(Ambient);
             spritebatch.Begin(effect: clearEffect);
             spritebatch.Draw(clearTexture, new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), Color.White);
             spritebatch.End();
-            
-            lastMaterial = null;
-             spritebatch.Begin();
-             // DrawSceneRecursive(scene, gameTime);
-             foreach (var entity in scene.Entities)
-             {
 
-                 DrawEntityRecursive(view, projection, entity, gameTime);
-             }
-             spritebatch.End();
-              
+            OnDrawStart?.Invoke();
+
+            lastMaterial = null;
+            currentEffect = null;
+            foreach (var entity in scene.Entities)
+            {
+
+                DrawEntityRecursive(view, projection, entity, gameTime);
+            }
+
+
             base.Draw(view, projection, gameTime);
         } 
         private void DrawEntityRecursive(Matrix view, Matrix projection, Entity entity, GameTime gameTime)
@@ -118,6 +124,9 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
             DrawEntity(view, projection, entity, gameTime);
         }
+
+
+        Effect currentEffect;
 
         private void DrawEntity(Matrix view, Matrix projection, Entity entity, GameTime gameTime)
         {
@@ -132,42 +141,47 @@ namespace Ascension.Engine.Graphics.SceneSystem
                     continue;
                 }
 
-                if (!ReferenceEquals(lastMaterial, edc.Material))
+                if (lastMaterial == null || !lastMaterial.MaterialName.Equals(edc.MaterialName))
                 {
-                    spritebatch.End();
-                    var setter = edc.Material.ShaderReference != null ? scene.Shaders[edc.Material.ShaderReference] : null;
-                    //TODO
-#warning COPYPASTE
-                    spritebatch.Begin(effect: setter?.Effect);
-                    setter?.Set(RenderSystem, edc.Material);
+                    currentEffect = edc.Material.Effect;
                     lastMaterial = edc.Material;
+                    if (currentEffect == null)
+                    {
+                        continue;
+                    }
+                    foreach (var p in currentEffect.Parameters)
+                    {
+                        if (p.ParameterType == EffectParameterType.Texture2D)
+                        {
+                            if (edc.Material.Textures.ContainsKey(p.Name))
+                            {
+                                p.SetValue(edc.Material.Textures[p.Name]);
+                            } else
+                            {
+                                p.SetValue(default(Texture2D));
+                            }
+                        }
+                    }
                 }
-
-                if (component is ParticleSystem2D)
-                {
-                    lastMaterial = null; // 
-                    spritebatch.End();
-                    Vector3 p = Vector3.Transform(Vector3.One, entity.GlobalTransform.World);
-                    //TODO
-#warning COPYPASTE
-                    var setter = edc.Material.ShaderReference != null ? scene.Shaders[edc.Material.ShaderReference] : null;
-
-                    spritebatch.Begin(blendState: BlendState.AlphaBlend, effect: setter?.Effect, transformMatrix: entity.GlobalTransform.World); // Mul Camera Matrix TODO , before implement camera class.
-                    setter?.Set(RenderSystem, edc.Material);
-
-                }
-
+               
 
                 if (component.Visible)
                 {
+                    renderSystem.Device.BlendState = BlendState.AlphaBlend;
+                    renderSystem.Device.DepthStencilState = DepthStencilState.Default;
+                    renderSystem.Device.SamplerStates[0] = SamplerState.LinearClamp;
+                    currentEffect.Parameters["World"].SetValue(entity.GlobalTransform.World);
+                    currentEffect.Parameters["View"].SetValue(view);
+                    currentEffect.Parameters["Projection"].SetValue(projection);
+                    currentEffect.CurrentTechnique.Passes[0].Apply();
                     component.Draw(view, projection, gameTime);
                 }
             }
         }
 
-
         public override void Dispose()
         {
+            basicEffect.Dispose();
             base.Dispose();
         }
     }

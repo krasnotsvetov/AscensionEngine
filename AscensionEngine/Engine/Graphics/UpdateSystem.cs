@@ -4,7 +4,7 @@ using Ascension.Engine.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AscensionEngine.Engine.Core.Systems;
+using Ascension.Engine.Core.Systems;
 
 namespace Ascension.Engine.Graphics
 {

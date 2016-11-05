@@ -44,6 +44,7 @@ struct VertexShaderInput
 {
 	float4 Position : SV_POSITION;
 	float3 Normal : NORMAL0;
+	float3 Color : COLOR0;
 	float2 UV : TEXCOORD0;
 };
 

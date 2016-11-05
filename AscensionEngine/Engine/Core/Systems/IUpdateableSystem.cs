@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AscensionEngine.Engine.Core.Systems
+namespace Ascension.Engine.Core.Systems
 {
     public interface IUpdateableSystem : IDisposable
     {

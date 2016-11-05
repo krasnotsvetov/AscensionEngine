@@ -2,8 +2,6 @@ float4x4 World;
 float4x4 View;
 float4x4 Projection;
 
-sampler TextureSampler : register(s0);
-
 
 texture Albedo;
 sampler2D AlbedoSampler = sampler_state
@@ -15,12 +13,6 @@ sampler2D AlbedoSampler = sampler_state
 };
 
 
-struct Light
-{
-	float3 position;
-	float3 color;
-	float invRadius;
-};
 
 struct PixelShaderOutput
 {
@@ -43,14 +35,14 @@ SamplerState NormalSampler {
 struct VertexShaderInput
 {
 	float4 Position : SV_POSITION;
-	float3 Normal : NORMAL0;
+	float3 Color : COLOR0;
 	float2 UV : TEXCOORD0;
 };
 
 struct VertexShaderOutput
 {
 	float4 Position : SV_POSITION;
-	float3 Normal : NORMAL0;
+	float3 Color : COLOR0;
 	float2 UV : TEXCOORD0;
 };
 
@@ -61,7 +53,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	float4 worldPosition = mul(input.Position, World);
 	float4 viewPosition = mul(worldPosition, View);
 	output.Position = mul(viewPosition, Projection);
-	output.Normal = mul(input.Normal, World);
+	output.Color = input.Color;
 	output.UV = input.UV;
 	return output;
 }

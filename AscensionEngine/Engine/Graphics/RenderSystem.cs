@@ -7,13 +7,14 @@ using Ascension.Engine.Core.Common;
 using Ascension.Engine.Graphics.SceneSystem;
 using Ascension.Engine.Graphics.Filters;
 using Microsoft.Xna.Framework.Content;
-using AscensionEngine.Engine.Graphics.CameraSystem;
-using AscensionEngine.Engine.Core.Systems;
+using Ascension.Engine.Graphics.CameraSystem;
+using Ascension.Engine.Core.Systems;
 
 namespace Ascension.Engine.Graphics
 {
     public class RenderSystem : IDrawableSystem
     {
+        public EventHandler<EventArgs> SceneChanged;
 
         public GraphicsDevice Device { get { return device; } }
         public SpriteBatch SpriteBatch { get { return spriteBatch; } }
@@ -22,7 +23,14 @@ namespace Ascension.Engine.Graphics
             get { return activeScene; }
             set
             {
+                var lastScene = activeScene;
                 activeScene = value;
+
+                if (activeScene != lastScene)
+                {
+                    SceneChanged?.Invoke(lastScene, EventArgs.Empty);
+                }
+
                 if (activeScene != null)
                 {
                     if (activeScene.Cameras.Count > 0)
@@ -34,7 +42,7 @@ namespace Ascension.Engine.Graphics
         }
         private Scene activeScene;
 
-        public Camera ActiveCamera { get; set; }
+        public ICamera ActiveCamera { get; set; }
 
 
         //public Dictionary<string, Effect> Shaders = new Dictionary<string, Effect>();
@@ -105,13 +113,13 @@ namespace Ascension.Engine.Graphics
         }
 
 
-        public virtual void LoadContent(ContentManager contentManager)
+        public virtual void LoadContent()
         { 
-            lightFilter.LoadContent(contentManager);
+            lightFilter.LoadContent();
 
             foreach (var gameComponent in gameComponents.Values)
             {
-                gameComponent.LoadContent(contentManager);
+                gameComponent.LoadContent();
             }
         }
 
@@ -162,7 +170,7 @@ namespace Ascension.Engine.Graphics
             spriteBatch.Begin();
             spriteBatch.Draw(sceneDrawer.DiffuseTexture, Vector2.Zero, Color.White);
             spriteBatch.End();
-            lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
+            //lightFilter.Render(sceneDrawer.DiffuseTexture, sceneDrawer.NormalMapTexture, sceneDrawer.LightMapTexture, sceneDrawer.Scene.Lights);
 
            
         } 

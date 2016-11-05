@@ -59,6 +59,7 @@
     <Compile Include="Editor\DialogForms\GetNameForm.Designer.cs">
       <DependentUpon>GetNameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor\EditorCamera.cs" />
     <Compile Include="Editor\EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Ascension.Engine.Content;
 using Ascension.Engine.Core.Common;
 using Ascension.Engine.Core.Common.Attributes;
-using Ascension.Engine.Core.Common.EventArguments;
 using Ascension.Engine.Core.Components;
 using AscensionEditor.DialogForms;
 using Ascension.Engine.Graphics;
 using Ascension.Engine.Graphics.SceneSystem;
-using Ascension.Engine.Graphics.Shaders;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,12 +13,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using AscensionEngine.Engine.Graphics.CameraSystem;
+using Ascension.Engine.Graphics.CameraSystem;
+using Ascension.Engine.Core.Systems.Content;
 
 namespace AscensionEditor
 {
     public partial class EditorForm : Form
     {
+        public int gridSize = 10;
+        public int gridCount = 100;
 
         public GameEditor GameEditor;
         public Scene activeScene;
@@ -43,14 +43,16 @@ namespace AscensionEditor
                     }
 
                 })});
-            MaterialReferenceContextMenu = new ContextMenu(new[] { new MenuItem("Сopy", (s, e) => { clipboardObject = MaterialBox.SelectedItem; }),
+            /*MaterialReferenceContextMenu = new ContextMenu(new[] { new MenuItem("Сopy", (s, e) => { clipboardObject = MaterialBox.SelectedItem; }),
                 new MenuItem("Remove",
                 (s, e) =>
                 {
                     var r = MaterialBox.SelectedItem as MaterialReference;
                     r.IsValid = false;
                     activeScene.Materials.Remove(r);
-                })});
+                })});*/
+
+            SetupGrid(gridCount, gridSize);
         }
 
         public void InitializateGUI(GameEditor gameEditor)
@@ -105,14 +107,14 @@ namespace AscensionEditor
         private Scene lastScene;
         private void SceneComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+           
             if (lastScene != null)
             {
                 ///
                 /// Remove all handlers
                 ///
-                lastScene.Materials.CollectionChanged -= MaterialsChanged;
-                lastScene.Shaders.CollectionChanged -= ShadersChanged;
-
+                //lastScene.Materials.CollectionChanged -= MaterialsChanged;
+                lastScene.sceneRenderer.OnDrawStart -= DrawGrid;
             }
             EntityView.Nodes.Clear();
 
@@ -123,8 +125,7 @@ namespace AscensionEditor
 
             if (activeScene == null) return;
 
-            activeScene.Materials.CollectionChanged += MaterialsChanged;
-            activeScene.Shaders.CollectionChanged += ShadersChanged;
+            //activeScene.Materials.CollectionChanged += MaterialsChanged;
             activeScene.EnititiesChanged += EntityChanged;
             EntityView.BeginUpdate();
             foreach (var ent in activeScene.Entities)
@@ -133,54 +134,93 @@ namespace AscensionEditor
                 //int x = 5;
             }
 
-            foreach (var sr in activeScene.Shaders.References())
-            {
-                MaterialShaderBox.Items.Add(sr);
-            }
 
-            foreach (var mr in activeScene.Materials.References())
+            /*foreach (var mr in activeScene.Materials.References())
             {
                 MaterialBox.Items.Add(mr);
-            }
+            }*/
 
             EntityView.EndUpdate();
             GameEditor.RenderSystem.ActiveScene = activeScene;
             lastScene = activeScene;
+
+            activeScene.sceneRenderer.OnDrawStart += DrawGrid;
         }
 
 
-        private void MaterialsChanged(object sender, ResourceCollectionEventArgs<string> e)
+
+        VertexPositionColor[] gridVerticesProjection;
+        VertexPositionColor[] gridVerticesPerspective;
+        int[] gridIndices;
+        private void SetupGrid(int count, int size)
         {
-            switch (e.Operation)
+            gridVerticesProjection = new VertexPositionColor[count * 4];
+            gridVerticesPerspective = new VertexPositionColor[count * 4];
+            gridIndices = new int[count * 4];
+
+
+
+            for (int i = 0; i < gridVerticesProjection.Length / 2; i += 2)
             {
-                case Operation.Added:
-                    MaterialBox.Items.Add(e.Reference);
-                    break;
-                case Operation.Removed:
-                    MaterialBox.Items.Remove(e.Reference);
-                    break;
-                case Operation.Replaced:
-                    //Nothing to do, we will store only MaterialReference in our MaterialBox.
-                    break;
+                gridVerticesProjection[i].Position = new Vector3(0, i / 2 * size, 0);
+                gridVerticesProjection[i + 1].Position = new Vector3((count - 1) * size, i / 2 * size, 0);
+
+                gridVerticesPerspective[i].Position = new Vector3(0, 0, i / 2 * size);
+                gridVerticesPerspective[i + 1].Position = new Vector3((count - 1) * size, 0, i / 2 * size);
             }
+
+            for (int i = gridVerticesProjection.Length / 2; i < gridVerticesProjection.Length; i += 2)
+            {
+                gridVerticesProjection[i].Position = new Vector3((i - gridVerticesProjection.Length / 2) / 2 * size, 0, 0);
+                gridVerticesProjection[i + 1].Position = new Vector3((i - gridVerticesProjection.Length / 2) / 2 * size, (count - 1) * size, 0);
+
+                gridVerticesPerspective[i].Position = new Vector3((i - gridVerticesProjection.Length / 2) / 2 * size, 0, 0);
+                gridVerticesPerspective[i + 1].Position = new Vector3((i - gridVerticesProjection.Length / 2) / 2 * size, 0, (count - 1) * size);
+
+
+            }
+
+            for (int i = 0; i < count * 4; i++)
+            {
+                gridIndices[i] = i;
+            }
+
         }
 
-
-        private void ShadersChanged(object sender, ResourceCollectionEventArgs<string> e)
+        private void DrawGrid()
         {
-            switch (e.Operation)
+
+            RenderSystem rs = activeScene.RenderSystem;
+            Effect e = ContentContainer.Instance().GetEffect("Engine\\shaders\\GridEffect");
+
+
+            if (GameEditor.camera.ProjectionType == CameraProjectionType.Perspective) {
+                e.Parameters["World"].SetValue(Matrix.CreateTranslation(-gridSize * gridCount / 2, 0, -gridSize * gridCount / 2));
+            } else
             {
-                case Operation.Added:
-                    MaterialShaderBox.Items.Add(e.Reference);
-                    break;
-                case Operation.Removed:
-                    MaterialShaderBox.Items.Remove(e.Reference);
-                    break;
-                case Operation.Replaced:
-                    //Nothing to do, we will store only MaterialReference in our MaterialBox.
-                    break;
+                e.Parameters["World"].SetValue(Matrix.CreateTranslation(-gridSize * gridCount / 2, -gridSize * gridCount / 2, 0));
             }
+            e.Parameters["View"].SetValue(rs.ActiveCamera.View);
+            e.Parameters["Projection"].SetValue(rs.ActiveCamera.Projection);
+            e.Parameters["CameraPos"].SetValue(GameEditor.camera.Position);
+            e.CurrentTechnique.Passes[0].Apply();
+
+
+
+
+
+            activeScene.RenderSystem.Device.DrawUserIndexedPrimitives<VertexPositionColor>(
+                PrimitiveType.LineList,
+                GameEditor.camera.ProjectionType == CameraProjectionType.Orthographic ? gridVerticesProjection : gridVerticesPerspective,
+                0, 
+                gridVerticesProjection.Length,  
+                gridIndices,  
+                0,   
+                gridIndices.Length / 2 
+            );
         }
+
+
 
         private void EntityChanged(object sender, EventArgs e)
         {
@@ -250,7 +290,7 @@ namespace AscensionEditor
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Scene scene = Scene.Load(GameEditor.RenderSystem);
-            scene.sceneRenderer.LoadContent(GameEditor.Content);
+            scene.sceneRenderer.LoadContent();
             SceneComboBox.Items.Add(scene);
         }
 
@@ -327,8 +367,7 @@ namespace AscensionEditor
 
         public void SetContent()
         {
-            textureNames = ContentSystem.GetInstance().Textures.Keys.ToList();
-            textureNames.Insert(0, "-");
+          /*  textureNames.Insert(0, "-");
 
             foreach (var c in TexturesPanel.Controls)
             {
@@ -341,12 +380,12 @@ namespace AscensionEditor
                     }
                     comboBox.SelectedIndexChanged += TextureComboBox_SelectedIndexChanged;
                 }
-            }
+            }*/
         }
 
         private void MaterialBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ignoreTextureComboBox = true;
+            /*ignoreTextureComboBox = true;
             if (MaterialBox.SelectedItem != null)
             {
                 Material m = activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)];
@@ -357,7 +396,7 @@ namespace AscensionEditor
                     PictureBox pb = c as PictureBox;
                     if (pb != null)
                     {
-                        Texture2D t = m.Textures[int.Parse(pb.Tag.ToString())];
+                        Texture2D t = m.TexturesDeprected[int.Parse(pb.Tag.ToString())];
                         if (t == null)
                         {
                             pb.BackgroundImage = null;
@@ -382,13 +421,13 @@ namespace AscensionEditor
             {
                 MaterialShaderBox.SelectedItem = null;
             }
-            ignoreTextureComboBox = false;
+            ignoreTextureComboBox = false;*/
         }
 
         bool ignoreTextureComboBox = false;
         private void TextureComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ignoreTextureComboBox)
+            /*if (ignoreTextureComboBox)
             {
                 return;
             }
@@ -397,7 +436,7 @@ namespace AscensionEditor
                 int index = int.Parse((sender as ComboBox).Tag.ToString());
                 var textureName = (sender as ComboBox).SelectedItem.ToString();
                 activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)].TextureReferences[index] = textureName.Equals("-") ? null : Texture2DReference.FromIdentifier(textureName);
-                var texture = activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)].Textures[index];
+                var texture = activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)].TexturesDeprected[index];
                 if (texture != null)
                 {
                     (TexturesPanel.Controls["textureBox" + index] as PictureBox).BackgroundImage = ConvertToImage(texture);
@@ -406,16 +445,16 @@ namespace AscensionEditor
                     (TexturesPanel.Controls["textureBox" + index] as PictureBox).BackgroundImage = null;
 
                 }
-            }
+            }*/
         }
 
         private void MaterialShaderBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (MaterialBox.SelectedItem != null)
+            /*if (MaterialBox.SelectedItem != null)
             {
                 var m = activeScene.Materials[(MaterialBox.SelectedItem as MaterialReference)];
                 m.ShaderReference = MaterialShaderBox.SelectedItem as ShaderReference;
-            }
+            }*/
         }
 
 
@@ -502,7 +541,7 @@ namespace AscensionEditor
 
         private void addMaterialToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var form = new GetNameForm("Material name");
+            /*var form = new GetNameForm("Material name");
             if (form.ShowDialog() == DialogResult.OK)
             {
                 Material m = new Material(form.Name, null, null);
@@ -510,7 +549,7 @@ namespace AscensionEditor
                 {
                     activeScene.Materials.Add(m.Reference, m);
                 }
-            }
+            }*/
         }
 
         private void addComponent_Click(object sender, EventArgs e)
@@ -531,7 +570,7 @@ namespace AscensionEditor
                     }
                     if (c.IsSubclassOf(typeof(EntityDrawableComponent)))
                     {
-                        var t = Activator.CreateInstance(c, new[] { n + suffix, null });
+                        var t = Activator.CreateInstance(c, new[] { n + suffix, ""});
                         GameEditor.SelectedEntity.AddDrawableComponent((EntityDrawableComponent)t);
                     } else
                     {
@@ -608,6 +647,19 @@ namespace AscensionEditor
                     contextMenu.MenuItems.Add(new MenuItem("Set as active", (s, ea) => GameEditor.renderSystem.ActiveCamera = (Camera)item));
                 }
                 contextMenu.Show(ComponentBox, e.Location);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (GameEditor.camera.ProjectionType == CameraProjectionType.Orthographic)
+            {
+                GameEditor.camera.ProjectionType = CameraProjectionType.Perspective;
+                GameEditor.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75f), GameEditor.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+            } else
+            {
+                GameEditor.camera.ProjectionType = CameraProjectionType.Orthographic;
+                GameEditor.camera.Projection = Matrix.CreateOrthographic(GameEditor.GraphicsDevice.Viewport.Width, GameEditor.GraphicsDevice.Viewport.Height, 0.1f, 1000f);
             }
         }
     }

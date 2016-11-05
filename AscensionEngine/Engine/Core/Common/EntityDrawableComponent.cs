@@ -1,98 +1,126 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Ascension.Engine.Core.Components;
 using Ascension.Engine.Graphics;
 using Ascension.Engine.Graphics.SceneSystem;
 using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using Ascension.Engine.Core.Systems.Content;
 
 namespace Ascension.Engine.Core.Common
 {
     [DataContract]
-    public class EntityDrawableComponent : DrawableComponent
+    public class EntityDrawableComponent : DrawableComponent, IMaterialOwner
     {
+
+        protected GraphicsDevice device;
         public virtual Entity ParentEntity { get; set; }
 
         [DataMember]
         public string Name { get; set; }
 
-        public MaterialReference MaterialReference {
-            get
-            {
-                return reference;
-            }
-            set
-            {
-                reference = value;
-                if (material != null)
-                {
-                    material.MaterialChanged -= MaterialChanged;
-                }
-                material = ParentEntity.Scene.Materials[MaterialReference];
-                if (material != null)
-                {
-                    material.MaterialChanged += MaterialChanged;
-                    MaterialChanged(material, EventArgs.Empty);
-                }
-            }
-        }
-
-        [DataMember]
-        private MaterialReference reference;
-
         public Material Material
         {
             get
             {
-
-                ///Happend if material was removed.
-                if (!MaterialReference?.IsValid == true)
-                {
-                    material = null;
-                    reference = null;
-                    MaterialChanged(null, EventArgs.Empty);
-                }
                 return material;
+            }
+            set
+            {
+                var cc = ContentContainer.Instance();
+                //materialName can be null at deserealization.
+                if (material != null || materialName != null && !materialName.Equals(""))
+                {
+                    cc.RemoveMaterialListener(this, MaterialName);
+                }
+                material = value;
+                if (material != null)
+                {
+                    materialName = material.MaterialName;
+                    cc.AddMaterialListener(this, materialName);
+                }
+                else
+                {
+                    materialName = "";
+                }
             }
         }
 
+        public EventHandler<ContentOwnerEventArgs<Material>> MaterialChangedHandler { get; set; }
+
         private Material material;
 
-
-
-        public EntityDrawableComponent(string name, MaterialReference materialReference) : base()
+        [DataMember]
+        public string MaterialName
         {
-            this.reference = materialReference;
+            get
+            {
+                return materialName;
+            }
+            set
+            {
+                if (!value.Equals(""))
+                {
+                    var cc = ContentContainer.Instance();
+                    if (!cc.MaterialInformation.ContainsKey(value))
+                    {
+                        Material = null;
+                        cc.AddMaterialListener(this, value);
+                        materialName = value;
+                    }
+                    else
+                    {
+                        Material = cc.MaterialInformation[value].GetMaterial(true);
+                    }
+                }
+                else
+                {
+                    Material = null;
+                }
+            }
+        }
+
+        private string materialName = "";
+
+        public EntityDrawableComponent(string name, string materialName) : base()
+        {
+            this.MaterialName = materialName;
             this.Name = name;
+            MaterialChangedHandler += MaterialChanged;
         }
 
 
         public override void Initialize()
         {
-            if (MaterialReference != null)
-            {
-                material = ParentEntity.Scene.Materials[MaterialReference];
-                if (material != null)
-                {
-                    material.MaterialChanged += MaterialChanged;
-                    MaterialChanged(material, EventArgs.Empty);
-                }
-            }
-            base.Initialize();
+            device = ParentEntity.Scene.RenderSystem.Device;
         }
 
+        protected virtual void MaterialChanged(object sender, ContentOwnerEventArgs<Material> e)
+        {
+            switch (e.Action)
+            {
+                case ContentAction.Add:
+                    Material = e.New;
+                    break;
+                case ContentAction.Rename:
+                    materialName = Material.MaterialName;
+                    break;
+                case ContentAction.Replace:
+                    Material = e.New;
+                    break;
+                case ContentAction.Remove:
+                    Material = null;
+                    break;
+            }
+        }
         internal virtual void RenderSystemChange()
         {
-            if (MaterialReference != null)
-            {
-                material = ParentEntity.Scene.Materials[MaterialReference];
-            }
+            device = ParentEntity.Scene.RenderSystem.Device;
         }
 
-
-        protected virtual void MaterialChanged(object sender, EventArgs empty)
-        { 
-
+        internal void DeserealizationInitialize()
+        {
+            throw new NotImplementedException();
         }
     }
 }
