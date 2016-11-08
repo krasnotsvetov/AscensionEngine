@@ -28,8 +28,7 @@ namespace Ascension.Engine.Core.Common
             set
             {
                 var cc = ContentContainer.Instance();
-                //materialName can be null at deserealization.
-                if (material != null || materialName != null && !materialName.Equals(""))
+                if (material != null)
                 {
                     cc.RemoveMaterialListener(this, MaterialName);
                 }

@@ -321,11 +321,11 @@ namespace AscensionEditor
         {
             EntityTreeNode NewNode;
 
-            if (e.Data.GetDataPresent("MonogameSamples.Engine.Editor.EntityTreeNode", false))
+            if (e.Data.GetDataPresent(typeof(EntityTreeNode).FullName, false))
             {
                 System.Drawing.Point pt = ((TreeView)sender).PointToClient(new System.Drawing.Point(e.X, e.Y));
                 EntityTreeNode DestinationNode = (EntityTreeNode)((TreeView)sender).GetNodeAt(pt);
-                NewNode = (EntityTreeNode)e.Data.GetData("MonogameSamples.Engine.Editor.EntityTreeNode");
+                NewNode = (EntityTreeNode)e.Data.GetData(typeof(EntityTreeNode).FullName);
 
 
                 if (DestinationNode == null)

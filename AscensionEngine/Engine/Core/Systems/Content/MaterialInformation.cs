@@ -26,7 +26,7 @@ namespace Ascension.Engine.Core.Systems.Content
 
         public bool IsAvailable { get; private set; }
 
-        public string MaterialName
+        public string Name
         {
             get
             {
@@ -77,7 +77,7 @@ namespace Ascension.Engine.Core.Systems.Content
                 throw new Exception("Bad signature");
             }
             ReferenceCount = 0;
-            MaterialName = streamReader.ReadLine().Split('|')[1];
+            Name = streamReader.ReadLine().Split('|')[1];
             int requiredTextureCount = int.Parse(streamReader.ReadLine().Split('|')[1]);
             for (int i = 0; i < requiredTextureCount; i++)
             {
@@ -95,7 +95,7 @@ namespace Ascension.Engine.Core.Systems.Content
 
         public MaterialInformation(string materialName, Dictionary<string, string> textureMap, string requiredShader)
         {
-            this.MaterialName = materialName;
+            this.Name = materialName;
             this.textures = textureMap;
             this.requiredShader = requiredShader;
         }

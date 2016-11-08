@@ -115,6 +115,7 @@
     <Compile Include="Engine\Core\Components\ParticleSystemComponent\ParticleSystem2D.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialFlags.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
+    <Compile Include="Engine\Graphics\ModelInstance.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Scene.Materials.cs" />
     <Compile Include="GameEx.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Background.cs" />

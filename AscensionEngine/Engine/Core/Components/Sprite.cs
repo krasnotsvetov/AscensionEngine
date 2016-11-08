@@ -104,9 +104,21 @@ namespace Ascension.Engine.Core.Components
 
         public override void Draw(Matrix view, Matrix projection, GameTime gameTime)
         {
-            device.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
-            device.SetVertexBuffer(vertexBuffer);
-            device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
+            try
+            {
+                var rs = device.RasterizerState;
+                device.RasterizerState = new RasterizerState() { CullMode = CullMode.None };
+                device.SetVertexBuffer(vertexBuffer);
+                device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, 2);
+                device.RasterizerState = rs;
+            } catch (InvalidOperationException e)
+            {
+                Console.WriteLine("---" + ToString() + "---");
+                Console.WriteLine("Name: " + Name);
+                Console.WriteLine("Render error occured");
+                Console.WriteLine(e.Message);
+            }
+
             base.Draw(view, projection, gameTime);
         }
 

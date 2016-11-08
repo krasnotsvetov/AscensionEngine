@@ -44,25 +44,25 @@ namespace Ascension.Engine.Core.Systems.Content
         {
             content.Add(typeof(Texture2D), Textures);
             content.Add(typeof(Effect), Effects);
-            content.Add(typeof(Model), Models);
+            content.Add(typeof(ModelInstance), Models);
         }
 
         public void AddMaterial(MaterialInformation info)
         {
-            materialInformation.Add(info.MaterialName, info);
-            if (materialOwners.ContainsKey(info.MaterialName))
+            materialInformation.Add(info.Name, info);
+            if (materialOwners.ContainsKey(info.Name))
             {
                 var tempList = new List<IMaterialOwner>();
 
                 //User code can change materialOwners[] collection
-                foreach (var owner in materialOwners[info.MaterialName])
+                foreach (var owner in materialOwners[info.Name])
                 {
                     tempList.Add(owner);
                 }
                 foreach (var owner in tempList)
                 {
                     owner.MaterialChangedHandler?.Invoke(this, new ContentOwnerEventArgs<Material>
-                        (ContentAction.Add, info.MaterialName, info.MaterialName, info.GetMaterial(), info.GetMaterial()));
+                        (ContentAction.Add, info.Name, info.Name, info.GetMaterial(), info.GetMaterial()));
                 }
             }
         }
@@ -85,18 +85,36 @@ namespace Ascension.Engine.Core.Systems.Content
 
         
 
-        public void AddContent<T>(T obj) where T : GraphicsResource
+        public void AddContent<T>(T obj) where T : GraphicsResource 
         {
 
             var d = content[obj.GetType()] as Dictionary<string, T>;
             d.Add(obj.Name, obj);
         }
 
-        public void AddContent<T>(string name, T obj)
+        public void AddUserContent<T>(T obj) where T : IContentObject
         {
 
             var d = content[obj.GetType()] as Dictionary<string, T>;
-            d.Add(name, obj);
+
+            d.Add(obj.Name, obj);
+
+            if (typeof(T) == typeof(ModelInstance))
+            {
+                var tempList = new List<IModelOwner>();
+
+                //User code can change materialOwners[] collection
+                foreach (var owner in modelOwners[obj.Name])
+                {
+                    tempList.Add(owner);
+                }
+                foreach (var owner in tempList)
+                {
+                    owner.ModelChangedHandler?.Invoke(this, new ContentOwnerEventArgs<ModelInstance>
+                        (ContentAction.Add, obj.Name, obj.Name, obj as ModelInstance, obj as ModelInstance));
+                }
+            }
+
         }
 
 

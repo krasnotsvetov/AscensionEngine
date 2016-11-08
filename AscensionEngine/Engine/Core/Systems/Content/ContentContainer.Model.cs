@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Ascension.Engine.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,15 @@ namespace Ascension.Engine.Core.Systems.Content
 {
     public partial class ContentContainer
     {
-        private Dictionary<string, Model> Models = new Dictionary<string, Model>();
+        private Dictionary<string, ModelInstance> Models = new Dictionary<string, ModelInstance>();
         private Dictionary<string, List<IModelOwner>> modelOwners = new Dictionary<string, List<IModelOwner>>();
 
-        public Model GetModel(string name, bool immediately = false)
+        public ModelInstance GetModel(string name, bool immediately = false)
         {
+            if (!Models.ContainsKey(name))
+            {
+                return null;
+            }
             return Models[name];
         }
 
@@ -59,6 +64,6 @@ namespace Ascension.Engine.Core.Systems.Content
 
     public interface IModelOwner
     {
-        EventHandler<ContentOwnerEventArgs<Model>> ModelChangedHandler { get; set; }
+        EventHandler<ContentOwnerEventArgs<ModelInstance>> ModelChangedHandler { get; set; }
     }
 }

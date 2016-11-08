@@ -59,7 +59,7 @@ namespace Ascension.Engine.Graphics
 
         public Material(MaterialInformation info, ContentContainer contentContainer, bool immediately = false)
         {
-            this.name = info.MaterialName;
+            this.name = info.Name;
             this.info = info;
             foreach (var p in info.Textures)
             {

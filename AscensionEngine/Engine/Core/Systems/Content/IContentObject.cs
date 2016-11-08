@@ -8,7 +8,6 @@ namespace Ascension.Engine.Core.Systems.Content
 {
     public interface IContentObject
     {
-        int ReferenceCount { get; }
-        bool IsAvailable { get; }
+        string Name { get; }
     }
 }

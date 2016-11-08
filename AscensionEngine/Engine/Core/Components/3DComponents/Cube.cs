@@ -10,10 +10,9 @@ namespace Ascension.Engine.Core.Components._3DComponents
     public class Cube : ModelComponent
     {
 
-        public Cube(string name, string materialName) : base(name, materialName)
+        public Cube(string name, string materialName) : base(name, materialName, "Cube")
         {
             this.MaterialName = "HouseMaterial";
-            Model = ContentContainer.Instance().GetModel("Cube", true);
         }
 
         public override void Initialize()
@@ -25,6 +24,12 @@ namespace Ascension.Engine.Core.Components._3DComponents
         internal override void SceneChanged(Scene lastScene)
         {
             base.SceneChanged(lastScene);
+        }
+
+        public override string ToString()
+        {
+            return "Cube";
+
         }
     }
 }

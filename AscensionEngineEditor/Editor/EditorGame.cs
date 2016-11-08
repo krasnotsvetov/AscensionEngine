@@ -91,7 +91,7 @@ namespace AscensionEditor
                             }
                             break;
                         case CameraProjectionType.Orthographic:
-                            SelectedEntity.GlobalTransform.Position = new Vector3(camPosition.X, camPosition.Y, 0);
+                            SelectedEntity.GlobalTransform.Position = new Vector3(camPosition.X, camPosition.Y, SelectedEntity.GlobalTransform.Position.Z);
                             break;
                     }
                     //TODO

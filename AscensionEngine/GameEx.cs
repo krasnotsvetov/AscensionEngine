@@ -77,6 +77,8 @@ namespace Ascension
         protected override void LoadContent()
         {
 
+            Cube cube = new Cube("Cube", "HouseMaterial");
+
             Effect effect = Content.Load<Effect>("Engine\\mainShader");
             Effect effect2 = Content.Load<Effect>("Engine\\mainShader2");
             Effect gridEffect = Content.Load<Effect>("Engine\\shaders\\GridEffect");
@@ -89,8 +91,7 @@ namespace Ascension
             Model model = Content.Load<Model>("Engine\\Primitives\\Cube");
 
             ContentContainer cc = ContentContainer.Instance();
-            cc.AddContent<Model>("Cube", model);
-            Cube cube = new Cube("Cube", "HouseMaterialSprite");
+            cc.AddUserContent<ModelInstance>(new ModelInstance("Cube",  model));
             cc.AddContent<Effect>(gridEffect);
             cc.AddContent<Texture2D>(baseTexture);
             cc.AddContent<Texture2D>(baseNormal);
