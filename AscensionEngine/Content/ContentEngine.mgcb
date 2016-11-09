@@ -67,12 +67,6 @@
 /processorParam:TextureFormat=Color
 /build:Engine/ParticleSystem/playerParticle.bmp
 
-#begin Engine/Shaders/clearEffect.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Engine/Shaders/clearEffect.fx
-
 #begin Engine/Shaders/LightEffect.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -118,4 +112,16 @@
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:Engine/Shaders/SpriteEffect.fx
+
+#begin Engine\Shaders\ClearEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Engine\Shaders\ClearEffect.fx
+
+#begin Engine/Base.scene
+/copy:Engine/Base.scene
+
+#begin Data.ascension
+/copy:Data.ascension
 

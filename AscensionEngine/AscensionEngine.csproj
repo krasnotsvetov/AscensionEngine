@@ -99,6 +99,7 @@
     <Compile Include="Engine\Core\Systems\Content\ContentContainer.cs" />
     <Compile Include="Engine\Core\Systems\Content\ContentContainer.Effect.cs" />
     <Compile Include="Engine\Core\Systems\Content\ContentContainer.Model.cs" />
+    <Compile Include="Engine\Core\Systems\Content\ContentContainer.Scenes.cs" />
     <Compile Include="Engine\Core\Systems\Content\ContentContainer.Textures.cs" />
     <Compile Include="Engine\Core\Systems\Content\IContentObject.cs" />
     <Compile Include="Engine\Core\Systems\Content\MaterialInformation.cs" />
@@ -177,6 +178,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Content\Data.ascension">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ascension;
+using System;
 
 namespace AscensionEditor
 {
@@ -14,9 +15,11 @@ namespace AscensionEditor
         [STAThread]
         static void Main()
         {
+            
             using (var form = new EditorForm())
             {
-                using (var game = new GameEditor(form, form.drawingSurface))
+
+                using (var game = new GameEx(form.constructEditor, form.startEditor, form.loadEditor, form.updateEditor, form.drawEditor))
                 {
                     form.Show();
                     game.Run();

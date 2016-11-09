@@ -11,7 +11,6 @@ namespace Ascension.Engine.Graphics
     public class UpdateSystem : IUpdateableSystem
     {
 
-        public GraphicsDevice Device { get { return device; } }
         public List<UpdateableComponent> GameComponents
         {
             get
@@ -30,7 +29,7 @@ namespace Ascension.Engine.Graphics
         private List<UpdateableComponent> _gameComponents = new List<UpdateableComponent>();
 
         private Dictionary<string, UpdateableComponent> gameComponents = new Dictionary<string, UpdateableComponent>();
-        private GraphicsDevice device;
+ 
 
         private bool isDirty = false;
 
@@ -80,6 +79,19 @@ namespace Ascension.Engine.Graphics
             _gameComponents.Add(updateableComponent.Value);
             updateableComponent.Value.UpdateOrderChanged += (s, e) => isDirty = true;
             isDirty = true;
+        }
+
+
+        public UpdateableComponent RemoveComponent(string drawableComponent)
+        {
+            if (!gameComponents.ContainsKey(drawableComponent))
+            {
+                return null;
+            }
+            var rv = gameComponents[drawableComponent];
+            gameComponents.Remove(drawableComponent);
+            _gameComponents.Remove(rv);
+            return rv;
         }
 
         public virtual void Update(GameTime gameTime)

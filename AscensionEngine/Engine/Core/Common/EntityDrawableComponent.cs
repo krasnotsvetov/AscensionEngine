@@ -15,6 +15,8 @@ namespace Ascension.Engine.Core.Common
 
         protected GraphicsDevice device;
         public virtual Entity ParentEntity { get; set; }
+        protected EventHandler<EventArgs> OnMaterialChanged;
+
 
         [DataMember]
         public string Name { get; set; }
@@ -42,6 +44,7 @@ namespace Ascension.Engine.Core.Common
                 {
                     materialName = "";
                 }
+                OnMaterialChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -94,7 +97,9 @@ namespace Ascension.Engine.Core.Common
             device = ParentEntity.Scene.RenderSystem.Device;
         }
 
-        protected virtual void MaterialChanged(object sender, ContentOwnerEventArgs<Material> e)
+
+
+        private void MaterialChanged(object sender, ContentOwnerEventArgs<Material> e)
         {
             switch (e.Action)
             {

@@ -43,6 +43,8 @@ namespace Ascension.Engine.Core.Components
             {
                 texture = Material.Textures["Albedo"];
             }
+
+            OnMaterialChanged += MaterialChanged;
         }
 
         public Sprite(string name, string materialName, Rectangle sourceRectangle) : base(name, materialName)
@@ -52,6 +54,7 @@ namespace Ascension.Engine.Core.Components
             {
                 texture = Material.Textures["Albedo"];
             }
+            OnMaterialChanged += MaterialChanged;
         }
 
        
@@ -127,9 +130,8 @@ namespace Ascension.Engine.Core.Components
             return "Sprite";
         }
 
-        protected override void MaterialChanged(object sender, ContentOwnerEventArgs<Material> e)
-        {
-            base.MaterialChanged(sender, e);
+        private void MaterialChanged(object sender, EventArgs e)
+        { 
             if (Material != null)
             {
                 texture = Material.Textures["Albedo"];

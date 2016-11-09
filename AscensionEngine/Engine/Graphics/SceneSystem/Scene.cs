@@ -14,7 +14,7 @@ using System.Reflection;
 namespace Ascension.Engine.Graphics.SceneSystem
 {
 
-    public partial class Scene 
+    public partial class Scene : IContentObject
     {
 
         public Vector3 Ambient = Color.White.ToVector3();
@@ -35,7 +35,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
         private RenderSystem renderSystem;       
 
 
-        public string Name;
+        public string Name { get; set; }
 
 
         // private List<Scene2D> scenes = new List<Scene2D>();
@@ -52,7 +52,6 @@ namespace Ascension.Engine.Graphics.SceneSystem
             sceneRenderer = new SceneRenderer(this, renderSystem);
             sceneRenderer.Ambient = Ambient;
             sceneUpdater = new SceneUpdater(this);
-            renderSystem.AddComponent(new KeyValuePair<string, DrawableComponent>("SceneDrawer" + Name, sceneRenderer));
 
             contentContainer = ContentContainer.Instance();
         }
@@ -62,7 +61,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
         public void ChangeRenderSystem(RenderSystem renderSystem)
         {
             this.renderSystem = renderSystem;
-            renderSystem.AddComponent(new KeyValuePair<string, DrawableComponent>("SceneDrawer" + Name, new SceneRenderer(this, renderSystem)));
+            sceneRenderer = new SceneRenderer(this, renderSystem);
             foreach (var e in entities)
             {
                 e.RenderSystemChange();
@@ -74,14 +73,14 @@ namespace Ascension.Engine.Graphics.SceneSystem
             sceneRenderer.LoadContent();
         }
 
-        public static Scene Load(RenderSystem renderSystem)
+        public static Scene Load(string name, RenderSystem renderSystem)
         {
-             Scene scene = new Scene("temp", renderSystem);
+             Scene scene = new Scene(name, renderSystem);
              Dictionary<int, List<int>> entityGraph = new Dictionary<int, List<int>>();
              Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
              List<int> loadOrder = new List<int>();
              bool isGraphRead = false;
-             using (XmlReader reader = XmlReader.Create("test.xml"))
+             using (XmlReader reader = XmlReader.Create(name))
              {
                  while (reader.Read())
                  {
@@ -196,9 +195,10 @@ namespace Ascension.Engine.Graphics.SceneSystem
                                  isGraphRead = true;
                              }
 
-                             if (reader.Name.Equals("scene-data"))
+                             if (reader.Name.Equals("SceneData"))
                              {
-                                 //TODO
+                                reader.MoveToNextAttribute();
+                                scene.Name = reader.Value;
                              }
                              break;
 
@@ -276,6 +276,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
             {
                 xmlWritter.WriteStartDocument();
                 xmlWritter.WriteStartElement("SceneData");
+                xmlWritter.WriteAttributeString("SceneData", Name);
                 xmlWritter.WriteStartElement("requiredContent");
                 
 

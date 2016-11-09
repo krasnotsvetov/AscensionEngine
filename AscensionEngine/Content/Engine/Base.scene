@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SceneData
+  SceneData="Scene0">
+  <requiredContent />
+  <rootEntities
+    entitiesID="0 1 2" />
+  <entity-graph
+    entity-0="0"
+    entity-1="1"
+    entity-2="2" />
+  <def-entities>
+    <entity-0
+      entity-0="0"
+      entity-name="Camera">
+      <Updateable-Transform
+        Updateable-Transform="Ascension.Engine.Core.Components.Transform">
+        <Transform xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Components">
+          <isEnabled xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">true</isEnabled>
+          <updateOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</updateOrder>
+          <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">LocalTransform</Name>
+          <Position xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>0</d2p1:X>
+            <d2p1:Y>0</d2p1:Y>
+            <d2p1:Z>0</d2p1:Z>
+          </Position>
+          <Rotation xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>0</d2p1:X>
+            <d2p1:Y>0</d2p1:Y>
+            <d2p1:Z>0</d2p1:Z>
+          </Rotation>
+          <Scale xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>1</d2p1:X>
+            <d2p1:Y>1</d2p1:Y>
+            <d2p1:Z>1</d2p1:Z>
+          </Scale>
+        </Transform>
+      </Updateable-Transform>
+      <Updateable-Camera
+        Updateable-Camera="Ascension.Engine.Graphics.CameraSystem.Camera">
+        <Camera xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Graphics.CameraSystem">
+          <isEnabled xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">true</isEnabled>
+          <updateOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</updateOrder>
+          <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">Camera</Name>
+          <ProjectionType>Perspective</ProjectionType>
+          <aspectRatio>0</aspectRatio>
+          <farPlaneDistance>0</farPlaneDistance>
+          <fieldOfView>0</fieldOfView>
+          <height>0</height>
+          <nearPlaneDistance>0</nearPlaneDistance>
+          <projection xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:M11>0.732706547</d2p1:M11>
+            <d2p1:M12>0</d2p1:M12>
+            <d2p1:M13>0</d2p1:M13>
+            <d2p1:M14>0</d2p1:M14>
+            <d2p1:M21>0</d2p1:M21>
+            <d2p1:M22>1.3032254</d2p1:M22>
+            <d2p1:M23>0</d2p1:M23>
+            <d2p1:M24>0</d2p1:M24>
+            <d2p1:M31>0</d2p1:M31>
+            <d2p1:M32>0</d2p1:M32>
+            <d2p1:M33>-1.0001</d2p1:M33>
+            <d2p1:M34>-1</d2p1:M34>
+            <d2p1:M41>0</d2p1:M41>
+            <d2p1:M42>0</d2p1:M42>
+            <d2p1:M43>-0.10001</d2p1:M43>
+            <d2p1:M44>0</d2p1:M44>
+          </projection>
+          <view xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:M11>-1</d2p1:M11>
+            <d2p1:M12>0</d2p1:M12>
+            <d2p1:M13>0</d2p1:M13>
+            <d2p1:M14>0</d2p1:M14>
+            <d2p1:M21>0</d2p1:M21>
+            <d2p1:M22>1</d2p1:M22>
+            <d2p1:M23>0</d2p1:M23>
+            <d2p1:M24>0</d2p1:M24>
+            <d2p1:M31>0</d2p1:M31>
+            <d2p1:M32>0</d2p1:M32>
+            <d2p1:M33>-1</d2p1:M33>
+            <d2p1:M34>0</d2p1:M34>
+            <d2p1:M41>-0</d2p1:M41>
+            <d2p1:M42>-0</d2p1:M42>
+            <d2p1:M43>-5</d2p1:M43>
+            <d2p1:M44>1</d2p1:M44>
+          </view>
+          <width>0</width>
+        </Camera>
+      </Updateable-Camera>
+    </entity-0>
+    <entity-1
+      entity-1="1"
+      entity-name="House">
+      <Updateable-Transform
+        Updateable-Transform="Ascension.Engine.Core.Components.Transform">
+        <Transform xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Components">
+          <isEnabled xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">true</isEnabled>
+          <updateOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</updateOrder>
+          <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">LocalTransform</Name>
+          <Position xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>0</d2p1:X>
+            <d2p1:Y>0</d2p1:Y>
+            <d2p1:Z>0</d2p1:Z>
+          </Position>
+          <Rotation xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>0</d2p1:X>
+            <d2p1:Y>0</d2p1:Y>
+            <d2p1:Z>0</d2p1:Z>
+          </Rotation>
+          <Scale xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>1</d2p1:X>
+            <d2p1:Y>1</d2p1:Y>
+            <d2p1:Z>1</d2p1:Z>
+          </Scale>
+        </Transform>
+      </Updateable-Transform>
+      <Drawable-Cube
+        Drawable-Cube="Ascension.Engine.Core.Components._3DComponents.Cube">
+        <Cube xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Components._3DComponents">
+          <drawOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</drawOrder>
+          <isVisible xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">true</isVisible>
+          <MaterialName xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">HouseMaterial</MaterialName>
+          <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">Cube</Name>
+          <ModelName>Cube</ModelName>
+        </Cube>
+      </Drawable-Cube>
+    </entity-1>
+    <entity-2
+      entity-2="2"
+      entity-name="Sprite">
+      <Updateable-Transform
+        Updateable-Transform="Ascension.Engine.Core.Components.Transform">
+        <Transform xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Components">
+          <isEnabled xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">true</isEnabled>
+          <updateOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</updateOrder>
+          <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">LocalTransform</Name>
+          <Position xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>0</d2p1:X>
+            <d2p1:Y>0</d2p1:Y>
+            <d2p1:Z>0</d2p1:Z>
+          </Position>
+          <Rotation xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>0</d2p1:X>
+            <d2p1:Y>0</d2p1:Y>
+            <d2p1:Z>0</d2p1:Z>
+          </Rotation>
+          <Scale xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
+            <d2p1:X>1</d2p1:X>
+            <d2p1:Y>1</d2p1:Y>
+            <d2p1:Z>1</d2p1:Z>
+          </Scale>
+        </Transform>
+      </Updateable-Transform>
+      <Drawable-Sprite
+        Drawable-Sprite="Ascension.Engine.Core.Components.Sprite">
+        <Sprite xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Components">
+          <drawOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</drawOrder>
+          <isVisible xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">true</isVisible>
+          <MaterialName xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">HouseMaterialSprite</MaterialName>
+          <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">Sprite</Name>
+          <pixelPerOne>128</pixelPerOne>
+          <sourceRectangle xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework"
+            i:nil="true" />
+        </Sprite>
+      </Drawable-Sprite>
+    </entity-2>
+  </def-entities>
+</SceneData>

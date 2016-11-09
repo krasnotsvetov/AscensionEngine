@@ -24,19 +24,33 @@ namespace Ascension.Engine.Graphics
             set
             {
                 var lastScene = activeScene;
-                activeScene = value;
 
-                if (activeScene != lastScene)
+                if (lastScene != null)
                 {
-                    SceneChanged?.Invoke(lastScene, EventArgs.Empty);
+                    RemoveComponent(lastScene.Name + "Renderer");
                 }
+                activeScene = value;
+                ActiveCamera = null;
+               
 
                 if (activeScene != null)
                 {
+                    if (activeScene.RenderSystem != this)
+                    {
+                        activeScene.ChangeRenderSystem(this);
+                    }
+
+                    AddComponent(new KeyValuePair<string, DrawableComponent>(activeScene + "Renderer", activeScene.sceneRenderer));
+
                     if (activeScene.Cameras.Count > 0)
                     {
                         ActiveCamera = activeScene.Cameras[0];
                     }
+                }
+
+                if (activeScene != lastScene)
+                {
+                    SceneChanged?.Invoke(lastScene, EventArgs.Empty);
                 }
             }
         }
@@ -136,6 +150,18 @@ namespace Ascension.Engine.Graphics
             isDirty = true;
         }
 
+        public DrawableComponent RemoveComponent(string drawableComponent)
+        {
+            if (!gameComponents.ContainsKey(drawableComponent))
+            {
+                return null;
+            }
+            var rv = gameComponents[drawableComponent];
+            gameComponents.Remove(drawableComponent);
+            _gameComponents.Remove(rv);
+            return rv;
+        }
+
         public virtual void Draw(GameTime gameTime)
         {
             if (!Enabled)
@@ -161,7 +187,7 @@ namespace Ascension.Engine.Graphics
 
             device.SetRenderTarget(null);
             SceneRenderer sceneDrawer = ActiveScene?.sceneRenderer;
-            if (sceneDrawer == null)
+            if (sceneDrawer == null || !sceneDrawer.IsInitialized)
             {
                 return;
             }

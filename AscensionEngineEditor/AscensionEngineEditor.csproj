@@ -66,7 +66,7 @@
     <Compile Include="Editor\EditorForm.Designer.cs">
       <DependentUpon>EditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\EditorGame.cs" />
+    <Compile Include="Editor\EditorLogic.cs" />
     <Compile Include="Editor\EditorMouseState.cs" />
     <Compile Include="Editor\MaterialShower.cs" />
     <Compile Include="Editor\Program.cs" />

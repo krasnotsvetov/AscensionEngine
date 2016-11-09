@@ -42,6 +42,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
         public SpriteBatch SpriteBatch { get { return spritebatch; } }
         public RenderSystem RenderSystem { get { return renderSystem; } }
 
+
         public Vector3 Ambient;
 
         private RenderSystem renderSystem;
@@ -53,7 +54,6 @@ namespace Ascension.Engine.Graphics.SceneSystem
         private RenderTarget2D depth;
         private RenderTarget2D normalMap;
         private RenderTarget2D lightMap;
-        private RenderTarget2D volumeLightMask;
 
         private BasicEffect basicEffect;
 
@@ -181,7 +181,12 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         public override void Dispose()
         {
+            diffuse.Dispose();
+            depth.Dispose();
+            lightMap.Dispose();
+            normalMap.Dispose();
             basicEffect.Dispose();
+            clearTexture.Dispose();
             base.Dispose();
         }
     }

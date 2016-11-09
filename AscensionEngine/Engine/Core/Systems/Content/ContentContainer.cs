@@ -45,6 +45,7 @@ namespace Ascension.Engine.Core.Systems.Content
             content.Add(typeof(Texture2D), Textures);
             content.Add(typeof(Effect), Effects);
             content.Add(typeof(ModelInstance), Models);
+            content.Add(typeof(Scene), Scenes);
         }
 
         public void AddMaterial(MaterialInformation info)
@@ -55,9 +56,12 @@ namespace Ascension.Engine.Core.Systems.Content
                 var tempList = new List<IMaterialOwner>();
 
                 //User code can change materialOwners[] collection
-                foreach (var owner in materialOwners[info.Name])
+                if (materialOwners.ContainsKey(info.Name))
                 {
-                    tempList.Add(owner);
+                    foreach (var owner in materialOwners[info.Name])
+                    {
+                        tempList.Add(owner);
+                    }
                 }
                 foreach (var owner in tempList)
                 {
@@ -104,9 +108,12 @@ namespace Ascension.Engine.Core.Systems.Content
                 var tempList = new List<IModelOwner>();
 
                 //User code can change materialOwners[] collection
-                foreach (var owner in modelOwners[obj.Name])
+                if (modelOwners.ContainsKey(obj.Name))
                 {
-                    tempList.Add(owner);
+                    foreach (var owner in modelOwners[obj.Name])
+                    {
+                        tempList.Add(owner);
+                    }
                 }
                 foreach (var owner in tempList)
                 {

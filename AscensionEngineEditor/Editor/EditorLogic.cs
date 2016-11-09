@@ -14,63 +14,64 @@ namespace AscensionEditor
     using Ascension.Engine.Graphics.CameraSystem;
     using AscensionEngineEditor.Editor;
     using MouseButtonState = Microsoft.Xna.Framework.Input.ButtonState;
-    public class GameEditor : GameEx
+    public class EditorLogic
     {
-        public Entity SelectedEntity = null;
+        internal Entity SelectedEntity = null;
 
         private Control drawingSurface;
         private EditorForm form;
-
+        private GameEx game;
         private EditorMouseState mouseState;
 
         internal EditorCamera camera;
-        public GameEditor(EditorForm form, Control drawingSurface)
+        public EditorLogic(EditorForm form, Control drawingSurface)
         {
-            Form f = Control.FromHandle(Window.Handle) as Form;
 
             this.form = form;
             this.drawingSurface = drawingSurface;
+           
+
+        }
+
+        internal void Construct(GameEx game)
+        {
+            form.GameApp = game;
+            this.game = game;
+            Form f = Control.FromHandle(game.Window.Handle) as Form;
             mouseState = new EditorMouseState(drawingSurface);
             form.FormClosing += (s, e) => f.Close();
-            graphics.PreparingDeviceSettings +=
+            game.graphics.PreparingDeviceSettings +=
                 new EventHandler<PreparingDeviceSettingsEventArgs>((s, e) => e.GraphicsDeviceInformation.PresentationParameters.DeviceWindowHandle = drawingSurface.Handle);
             f.VisibleChanged += (s, e) => f.Visible = false;
-
         }
 
-        protected override void Initialize()
+        internal void Start()
         {
-            graphics.PreferredBackBufferWidth = drawingSurface.Width;
-            graphics.PreferredBackBufferHeight = drawingSurface.Height;
+            game.graphics.PreferredBackBufferWidth = drawingSurface.Width;
+            game.graphics.PreferredBackBufferHeight = drawingSurface.Height;
 
-            graphics.IsFullScreen = false;
-            graphics.ApplyChanges();
+            game.graphics.IsFullScreen = false;
+            game.graphics.ApplyChanges();
 
-            camera = new EditorCamera(CameraProjectionType.Perspective, GraphicsDevice);
-            base.Initialize();
+            camera = new EditorCamera(CameraProjectionType.Perspective, game.GraphicsDevice);
+    
         }
 
 
-        protected override void LoadContent()
+        internal void LoadContent()
         {
-
-            base.LoadContent();
-            form.InitializateGUI(this);
+             
+            form.InitializateGUI();
             form.SetContent();
 
         }
 
 
-        protected override void UnloadContent()
+
+
+        internal void Update(GameTime gameTime)
         {
-            base.UnloadContent();
-        }
-
-
-
-        protected override void Update(GameTime gameTime)
-        {
-            renderSystem.ActiveCamera = camera;
+            game.renderSystem.ActiveCamera = camera;
             form.Text = mouseState.Position.ToString();
             camera.Update(mouseState, gameTime);
             if (mouseState.LeftButton == MouseButtonState.Pressed && mouseState.onControl)
@@ -79,7 +80,7 @@ namespace AscensionEditor
                 if (SelectedEntity != null)
                 {
                     float? length;
-                    Vector3 camPosition = GraphicsDevice.Viewport.Unproject(new Vector3(mouseState.Position, 0), camera.Projection, camera.View, Matrix.Identity);
+                    Vector3 camPosition = game.GraphicsDevice.Viewport.Unproject(new Vector3(mouseState.Position, 0), camera.Projection, camera.View, Matrix.Identity);
                     switch (camera.ProjectionType)
                     {
                         case CameraProjectionType.Perspective:
@@ -98,8 +99,7 @@ namespace AscensionEditor
 
 
                 }
-            }
-            base.Update(gameTime);
+            } 
             mouseState.Update();
             //form.Text = camera.Forward.ToString() + camera.Position;
 
@@ -107,9 +107,8 @@ namespace AscensionEditor
 
 
 
-        protected override void Draw(GameTime gameTime)
-        {
-            base.Draw(gameTime);
+        internal void Draw(GameTime gameTime)
+        { 
         }
 
     }

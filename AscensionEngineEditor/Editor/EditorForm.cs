@@ -15,15 +15,24 @@ using System.Reflection;
 using System.Windows.Forms;
 using Ascension.Engine.Graphics.CameraSystem;
 using Ascension.Engine.Core.Systems.Content;
+using static Ascension.GameEx;
+using Ascension;
 
 namespace AscensionEditor
 {
     public partial class EditorForm : Form
     {
+        public ConstructEditorDelegate constructEditor;
+        public StartEditorDelegate startEditor;
+        public LoadEditorDelegate loadEditor;
+        public UpdateEditorDelegate updateEditor;
+        public DrawEditorDelegate drawEditor;
+
         public int gridSize = 10;
         public int gridCount = 100;
 
-        public GameEditor GameEditor;
+        public GameEx GameApp;
+        public EditorLogic logic;
         public Scene activeScene;
         private ContextMenu ComponentContextMenu;
         private ContextMenu MaterialReferenceContextMenu;
@@ -33,6 +42,14 @@ namespace AscensionEditor
         public EditorForm()
         {
             InitializeComponent();
+
+            logic = new EditorLogic(this, drawingSurface);
+            constructEditor += logic.Construct;
+            startEditor += logic.Start;
+            loadEditor += logic.LoadContent;
+            updateEditor += logic.Update;
+            drawEditor += logic.Draw;
+
             ComponentContextMenu = new ContextMenu(new[] { new MenuItem("Сopy", (s, e) => { clipboardObject = ComponentPropertyGrid.SelectedGridItem.Value; }),
                 new MenuItem("Paste",
                 (s, e) => 
@@ -55,12 +72,14 @@ namespace AscensionEditor
             SetupGrid(gridCount, gridSize);
         }
 
-        public void InitializateGUI(GameEditor gameEditor)
+        public void InitializateGUI()
         {
-            this.GameEditor = gameEditor;
-            RenderSystem rs = GameEditor.RenderSystem;
-            rs.GameComponents.Where(t => (t is SceneRenderer)).ToList().ForEach(w => SceneComboBox.Items.Add((w as SceneRenderer).Scene));
-            SceneComboBox.SelectedIndex = 0;
+            var cc = ContentContainer.Instance();
+            cc.GetSceneNames().ForEach(w => SceneComboBox.Items.Add(cc.GetScene(w)));
+            if (SceneComboBox.Items.Count > 0)
+            {
+                SceneComboBox.SelectedIndex = 0;
+            }
             SetFilters();
         }
 
@@ -141,7 +160,7 @@ namespace AscensionEditor
             }*/
 
             EntityView.EndUpdate();
-            GameEditor.RenderSystem.ActiveScene = activeScene;
+            GameApp.RenderSystem.ActiveScene = activeScene;
             lastScene = activeScene;
 
             activeScene.sceneRenderer.OnDrawStart += DrawGrid;
@@ -194,7 +213,7 @@ namespace AscensionEditor
             Effect e = ContentContainer.Instance().GetEffect("Engine\\shaders\\GridEffect");
 
 
-            if (GameEditor.camera.ProjectionType == CameraProjectionType.Perspective) {
+            if (logic.camera.ProjectionType == CameraProjectionType.Perspective) {
                 e.Parameters["World"].SetValue(Matrix.CreateTranslation(-gridSize * gridCount / 2, 0, -gridSize * gridCount / 2));
             } else
             {
@@ -202,7 +221,7 @@ namespace AscensionEditor
             }
             e.Parameters["View"].SetValue(rs.ActiveCamera.View);
             e.Parameters["Projection"].SetValue(rs.ActiveCamera.Projection);
-            e.Parameters["CameraPos"].SetValue(GameEditor.camera.Position);
+            e.Parameters["CameraPos"].SetValue(logic.camera.Position);
             e.CurrentTechnique.Passes[0].Apply();
 
 
@@ -211,7 +230,7 @@ namespace AscensionEditor
 
             activeScene.RenderSystem.Device.DrawUserIndexedPrimitives<VertexPositionColor>(
                 PrimitiveType.LineList,
-                GameEditor.camera.ProjectionType == CameraProjectionType.Orthographic ? gridVerticesProjection : gridVerticesPerspective,
+                logic.camera.ProjectionType == CameraProjectionType.Orthographic ? gridVerticesProjection : gridVerticesPerspective,
                 0, 
                 gridVerticesProjection.Length,  
                 gridIndices,  
@@ -244,7 +263,7 @@ namespace AscensionEditor
                 ComponentBox.Items.Clear();
                 var ent = node.Entity;
                 EntityPropertyGrid.SelectedObject = ent;
-                GameEditor.SelectedEntity = ent;
+                logic.SelectedEntity = ent;
                 ComponentBox.Items.Add(new ComponentCell(ent.Transform));
 
                 foreach (var dc in ent.DrawableComponents)
@@ -289,9 +308,13 @@ namespace AscensionEditor
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Scene scene = Scene.Load(GameEditor.RenderSystem);
-            scene.sceneRenderer.LoadContent();
-            SceneComboBox.Items.Add(scene);
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Scene scene = Scene.Load(ofd.FileName, GameApp.RenderSystem);
+                scene.sceneRenderer.LoadContent();
+                SceneComboBox.Items.Add(scene);
+            }
         }
 
         private void addEmptyEntityToolStripMenuItem_Click(object sender, EventArgs e)
@@ -554,7 +577,7 @@ namespace AscensionEditor
 
         private void addComponent_Click(object sender, EventArgs e)
         {
-            if (GameEditor.SelectedEntity != null)
+            if (logic.SelectedEntity != null)
             {
                 if (AvailableComponents.SelectedItem != null)
                 {
@@ -563,7 +586,7 @@ namespace AscensionEditor
                     var n = (AvailableComponents.SelectedItem as TypeCell).Name;
                     int startIndex = 1;
                     string suffix = "";
-                    while (GameEditor.SelectedEntity.ContainsComponentName(n + suffix))
+                    while (logic.SelectedEntity.ContainsComponentName(n + suffix))
                     {
                         suffix = startIndex.ToString();
                         startIndex++;
@@ -571,12 +594,12 @@ namespace AscensionEditor
                     if (c.IsSubclassOf(typeof(EntityDrawableComponent)))
                     {
                         var t = Activator.CreateInstance(c, new[] { n + suffix, ""});
-                        GameEditor.SelectedEntity.AddDrawableComponent((EntityDrawableComponent)t);
+                        logic.SelectedEntity.AddDrawableComponent((EntityDrawableComponent)t);
                     } else
                     {
                         
                         var t = Activator.CreateInstance(c, new[] { n + suffix });
-                        GameEditor.SelectedEntity.AddUpdateableComponent((EntityUpdateableComponent)t);
+                        logic.SelectedEntity.AddUpdateableComponent((EntityUpdateableComponent)t);
                     }
                 }
             }
@@ -644,7 +667,7 @@ namespace AscensionEditor
                 var item = (ComponentBox.Items[index] as ComponentCell).Component;
                 if (item is Camera)
                 {
-                    contextMenu.MenuItems.Add(new MenuItem("Set as active", (s, ea) => GameEditor.renderSystem.ActiveCamera = (Camera)item));
+                    contextMenu.MenuItems.Add(new MenuItem("Set as active", (s, ea) => GameApp.renderSystem.ActiveCamera = (Camera)item));
                 }
                 contextMenu.Show(ComponentBox, e.Location);
             }
@@ -652,14 +675,14 @@ namespace AscensionEditor
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (GameEditor.camera.ProjectionType == CameraProjectionType.Orthographic)
+            if (logic.camera.ProjectionType == CameraProjectionType.Orthographic)
             {
-                GameEditor.camera.ProjectionType = CameraProjectionType.Perspective;
-                GameEditor.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75f), GameEditor.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
+                logic.camera.ProjectionType = CameraProjectionType.Perspective;
+                logic.camera.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(75f), GameApp.GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
             } else
             {
-                GameEditor.camera.ProjectionType = CameraProjectionType.Orthographic;
-                GameEditor.camera.Projection = Matrix.CreateOrthographic(GameEditor.GraphicsDevice.Viewport.Width, GameEditor.GraphicsDevice.Viewport.Height, 0.1f, 1000f);
+                logic.camera.ProjectionType = CameraProjectionType.Orthographic;
+                logic.camera.Projection = Matrix.CreateOrthographic(GameApp.GraphicsDevice.Viewport.Width, GameApp.GraphicsDevice.Viewport.Height, 0.1f, 1000f);
             }
         }
     }
