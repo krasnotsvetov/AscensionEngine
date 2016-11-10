@@ -49,7 +49,7 @@ namespace Ascension.Engine.Graphics.Filters
             effect.Parameters["LightMap"].SetValue(lightMap);
            
 
-            effect.Parameters["positionLight"].SetValue(lights.Select(t => (t.ParentEntity as Entity).GlobalTransform.Position).ToArray());
+            effect.Parameters["positionLight"].SetValue(lights.Select(t => (t.Parent as Entity).GlobalTransform.Position).ToArray());
             effect.Parameters["colorLight"].SetValue(lights.Select(t => t.LightColor).ToArray());
             effect.Parameters["invRadiusLight"].SetValue(lights.Select(t => t.InvRadius).ToArray());
             spriteBatch.Draw(diffuse, Vector2.Zero, Color.White);

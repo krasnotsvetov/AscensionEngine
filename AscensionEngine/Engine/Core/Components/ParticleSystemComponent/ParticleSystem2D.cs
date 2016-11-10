@@ -68,8 +68,8 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
             EnableGenerate = true;
             particlePool2D = new Pool<Particle2D>(1000, new ParticleCreator(this));
             particles = new List<Particle2D>();
-            globalTransform = ParentEntity.GlobalTransform;
-            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
+            globalTransform = Parent.GlobalTransform;
+            spriteBatch = Parent.Scene.sceneRenderer.SpriteBatch;
 
             if (Material != null)
             {
@@ -143,7 +143,7 @@ namespace Ascension.Engine.Core.Components.ParticleSystemComponent
         {
             base.RenderSystemChange();
 
-            spriteBatch = ParentEntity.Scene.sceneRenderer.SpriteBatch;
+            spriteBatch = Parent.Scene.sceneRenderer.SpriteBatch;
         }
     }
 }

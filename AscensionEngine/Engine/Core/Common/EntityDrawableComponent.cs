@@ -14,7 +14,7 @@ namespace Ascension.Engine.Core.Common
     {
 
         protected GraphicsDevice device;
-        public virtual Entity ParentEntity { get; set; }
+        public virtual Entity Parent { get; set; }
         protected EventHandler<EventArgs> OnMaterialChanged;
 
 
@@ -94,7 +94,8 @@ namespace Ascension.Engine.Core.Common
 
         public override void Initialize()
         {
-            device = ParentEntity.Scene.RenderSystem.Device;
+            device = Parent.Scene.RenderSystem.Device;
+            IsInitialized = true;
         }
 
 
@@ -119,7 +120,7 @@ namespace Ascension.Engine.Core.Common
         }
         internal virtual void RenderSystemChange()
         {
-            device = ParentEntity.Scene.RenderSystem.Device;
+            device = Parent.Scene.RenderSystem.Device;
         }
 
         internal void DeserealizationInitialize()

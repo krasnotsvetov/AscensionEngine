@@ -184,7 +184,8 @@ namespace Ascension
                                     } else
                                     {
                                         Scene scene = Scene.Load(line, renderSystem);
-                                        scene.sceneRenderer.LoadContent();
+                                        scene.Initialize();
+                                        scene.LoadContent();
                                         cc.AddUserContent(scene);
                                     }
                                     break;
@@ -234,8 +235,9 @@ namespace Ascension
             if (editorEnabled)
             {
                 updateEditor?.Invoke(gameTime);
+
             }
-            else
+            //else
             {
 
                 foreach (var uc in updateableSystems.Values)

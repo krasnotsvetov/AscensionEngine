@@ -42,11 +42,11 @@
           <updateOrder xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">0</updateOrder>
           <Name xmlns="http://schemas.datacontract.org/2004/07/Ascension.Engine.Core.Common">Camera</Name>
           <ProjectionType>Perspective</ProjectionType>
-          <aspectRatio>0</aspectRatio>
-          <farPlaneDistance>0</farPlaneDistance>
-          <fieldOfView>0</fieldOfView>
+          <aspectRatio>1.3333</aspectRatio>
+          <farPlaneDistance>1000</farPlaneDistance>
+          <fieldOfView>1.57</fieldOfView>
           <height>0</height>
-          <nearPlaneDistance>0</nearPlaneDistance>
+          <nearPlaneDistance>0.1</nearPlaneDistance>
           <projection xmlns:d2p1="http://schemas.datacontract.org/2004/07/Microsoft.Xna.Framework">
             <d2p1:M11>0.732706547</d2p1:M11>
             <d2p1:M12>0</d2p1:M12>

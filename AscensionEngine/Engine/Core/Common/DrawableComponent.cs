@@ -12,7 +12,7 @@ namespace Ascension.Engine.Core.Common
 
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
-        public bool IsInitialized { get; private set; }
+        public bool IsInitialized { get; protected set; }
 
         [DataMember]
         private int drawOrder = 0;

@@ -86,6 +86,7 @@
             this.EntityView.DragDrop += new System.Windows.Forms.DragEventHandler(this.EntityView_DragDrop);
             this.EntityView.DragEnter += new System.Windows.Forms.DragEventHandler(this.EntityView_DragEnter);
             this.EntityView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EntityView_MouseDown);
+            this.EntityView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.EntityView_MouseUp);
             // 
             // SceneComboBox
             // 
@@ -122,21 +123,21 @@
             // saveSceneToolStripMenuItem
             // 
             this.saveSceneToolStripMenuItem.Name = "saveSceneToolStripMenuItem";
-            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.saveSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.saveSceneToolStripMenuItem.Text = "Save Scene";
             this.saveSceneToolStripMenuItem.Click += new System.EventHandler(this.saveSceneToolStripMenuItem_Click);
             // 
             // openSceneToolStripMenuItem
             // 
             this.openSceneToolStripMenuItem.Name = "openSceneToolStripMenuItem";
-            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.openSceneToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.openSceneToolStripMenuItem.Text = "Open Scene";
             this.openSceneToolStripMenuItem.Click += new System.EventHandler(this.openSceneToolStripMenuItem_Click);
             // 
             // addAssemblyToolStripMenuItem
             // 
             this.addAssemblyToolStripMenuItem.Name = "addAssemblyToolStripMenuItem";
-            this.addAssemblyToolStripMenuItem.Size = new System.Drawing.Size(177, 26);
+            this.addAssemblyToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.addAssemblyToolStripMenuItem.Text = "Add assembly";
             this.addAssemblyToolStripMenuItem.Click += new System.EventHandler(this.addAssemblyToolStripMenuItem_Click);
             // 

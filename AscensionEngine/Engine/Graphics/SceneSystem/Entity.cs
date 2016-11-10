@@ -11,9 +11,9 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
     public class Entity
     {
-         
 
-       
+
+        public EventHandler<EventArgs> TransformChanged;
         public ReadOnlyCollection<Entity> Entities { get { return entities.AsReadOnly(); } }
         public Scene Scene
         {
@@ -63,6 +63,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                     {
                         ent.isGlobalTransformDirty = true;
                     }
+                    TransformChanged?.Invoke(this, EventArgs.Empty);
                 }
                 return globalTransform;
             }
@@ -121,6 +122,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 {
                     isGlobalTransformDirty = true;
                 }
+                //TODO, call tree times
             };
 
             transform.PositionChanged += localTransformChanged;
@@ -145,6 +147,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 {
                     ent.isGlobalTransformDirty = true;
                 }
+                
             };
 
             globalTransform.RotationChanged += (s, e) =>
@@ -164,6 +167,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 {
                     ent.isGlobalTransformDirty = true;
                 }
+
             };
 
             globalTransform.ScaleChanged += (s, e) =>
@@ -252,6 +256,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         public virtual void RemoveDrawableComponent(EntityDrawableComponent component)
         {
+            component.Parent = null;
             components.Remove(component.Name);
             drawableComponents.Remove(component);
         }
@@ -262,13 +267,14 @@ namespace Ascension.Engine.Graphics.SceneSystem
             {
                 throw new Exception("Trasnform could not be removed");
             }
+            component.Parent = null;
             components.Remove(component.Name);
             updateableComponents.Remove(component);
         }
 
         public virtual void AddDrawableComponent(EntityDrawableComponent component)
         {
-            if (component.ParentEntity != null)
+            if (component.Parent != null)
             {
                 throw new Exception("ParentComponent must be null");
             }
@@ -279,7 +285,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 throw new Exception("Enity has component with same name");
             }
 
-            component.ParentEntity = this;
+            component.Parent = this;
             if (scene != null)
             {
                 component.Initialize();

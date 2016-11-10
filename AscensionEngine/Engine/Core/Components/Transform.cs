@@ -30,7 +30,7 @@ namespace Ascension.Engine.Core.Components
             {
                 Vector3 lastPosition = position;
                 position = value;
-                world = Matrix.Identity * Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
+                world = Matrix.Identity * Matrix.CreateScale(scale) * Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z) * Matrix.CreateTranslation(position);
                 if (PositionChanged != null)
                 {
                     PositionChanged(lastPosition, EventArgs.Empty);
@@ -46,7 +46,7 @@ namespace Ascension.Engine.Core.Components
             {
                 Vector3 lastRotation = rotation;
                 rotation = value;
-                world = Matrix.Identity * Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
+                world = Matrix.Identity * Matrix.CreateScale(scale) * Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z) * Matrix.CreateTranslation(position);
 
                 if (RotationChanged != null)
                 {
@@ -64,7 +64,7 @@ namespace Ascension.Engine.Core.Components
                 Vector3 lastScale = scale;
                 scale = value;
 
-                world = Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
+                world = Matrix.CreateScale(scale) * Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z) * Matrix.CreateTranslation(position);
 
                 if (ScaleChanged != null)
                 {
@@ -75,7 +75,7 @@ namespace Ascension.Engine.Core.Components
 
         internal Transform ToGlobal()
         {
-            Matrix world = Matrix.Identity * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
+            Matrix world = Matrix.Identity * Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z) * Matrix.CreateScale(scale) * Matrix.CreateTranslation(position);
             Vector3 rot = this.rotation;
             Vector3 sc = this.scale;
             Entity entity = Parent as Entity;
@@ -106,8 +106,13 @@ namespace Ascension.Engine.Core.Components
         }
 
         
+        //TODO, implement lazy calculation.
+        public Vector3 Up { get { return Vector3.Transform(Vector3.Up, Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z)); } }
+        public Vector3 Forward { get { return Vector3.Transform(Vector3.Forward, Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z)); } }
+        public Vector3 Left { get { return Vector3.Transform(Vector3.Left, Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z)); } }
+        public Vector3 Right { get { return Vector3.Transform(Vector3.Right, Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z)); } }
 
-  
+
         private Vector3 position;
         private Vector3 rotation;
         private Vector3 scale;
@@ -115,7 +120,7 @@ namespace Ascension.Engine.Core.Components
         public Transform(string name) : base(name)
         {
             scale = new Vector3(1, 1, 1);
-            world = Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
+            world = Matrix.CreateScale(scale) * Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z) * Matrix.CreateTranslation(position);
 
         }
 
@@ -125,7 +130,7 @@ namespace Ascension.Engine.Core.Components
             this.position = position;
             this.rotation = rotation;
             this.scale = scale;
-            world = Matrix.CreateScale(scale) * Matrix.CreateFromYawPitchRoll(rotation.X, rotation.Y, rotation.Z) * Matrix.CreateTranslation(position);
+            world = Matrix.CreateScale(scale) * Matrix.CreateRotationX(rotation.X) * Matrix.CreateRotationY(rotation.Y) * Matrix.CreateRotationZ(rotation.Z) * Matrix.CreateTranslation(position);
         }
 
         public void UpdateTransformRec(Matrix matrix)

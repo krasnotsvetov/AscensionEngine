@@ -9,6 +9,7 @@ namespace Ascension.Engine.Core.Common
     [DataContract]
     public class EntityUpdateableComponent : UpdateableComponent
     {
+
         [DataMember]
         public string Name { get; set; }
 
@@ -17,6 +18,16 @@ namespace Ascension.Engine.Core.Common
         public EntityUpdateableComponent(String name) : base()
         {
             this.Name = name;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Parent != null)
+            {
+                //Update global transform
+                var t = Parent.GlobalTransform;
+            }
+            base.Update(gameTime);
         }
 
     }

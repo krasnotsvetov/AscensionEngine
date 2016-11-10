@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{BE67580B-A67F-4012-9C38-36219424B2A6}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ascension</RootNamespace>
     <AssemblyName>AscensionEngine</AssemblyName>
@@ -75,6 +75,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Engine\Core\Common\Attributes\ComponentAttribute.cs" />
     <Compile Include="Engine\Core\Common\BaseReference.cs" />
@@ -88,6 +91,7 @@
     <Compile Include="Engine\Core\Common\EntityUpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\Extension\RandomExtension.cs" />
     <Compile Include="Engine\Core\Common\IReference.cs" />
+    <Compile Include="Engine\Core\Common\Mathematics\AscensionMath.cs" />
     <Compile Include="Engine\Core\Common\UpdateableComponent.cs" />
     <Compile Include="Engine\Core\Common\DrawableComponent.cs" />
     <Compile Include="Engine\Core\Components\3DComponents\Cube.cs" />

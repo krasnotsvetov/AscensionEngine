@@ -15,11 +15,11 @@ namespace Ascension.Engine.Core.Components
     public class Light : EntityDrawableComponent
     {
 
-        public override Entity ParentEntity
+        public override Entity Parent
         {
             get
             {
-                return base.ParentEntity;
+                return base.Parent;
             }
 
             set
@@ -31,7 +31,7 @@ namespace Ascension.Engine.Core.Components
                 if (value == null) return;
 
                 (value as Entity).Scene?.AddLight(this);*/
-                base.ParentEntity = value;
+                base.Parent = value;
             }
         }
 
@@ -60,7 +60,7 @@ namespace Ascension.Engine.Core.Components
         public override void Initialize()
         {
             base.Initialize();
-            ParentEntity.Scene.lights.Add(this);
+            Parent.Scene.lights.Add(this);
 
         }
 

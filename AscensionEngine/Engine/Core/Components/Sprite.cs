@@ -60,6 +60,10 @@ namespace Ascension.Engine.Core.Components
        
         private void setupVertices(Rectangle sourceRectangle)
         {
+            if (!IsInitialized)
+            {
+                return;
+            }
             sourceRectangle = new Rectangle(sourceRectangle.X / texture.Width, sourceRectangle.Y / texture.Height, sourceRectangle.Width / texture.Width, sourceRectangle.Height / texture.Height);
 
             vertices[0].Color = vertices[1].Color = vertices[2].Color = vertices[3].Color = Color.White;
@@ -131,7 +135,8 @@ namespace Ascension.Engine.Core.Components
         }
 
         private void MaterialChanged(object sender, EventArgs e)
-        { 
+        {
+
             if (Material != null)
             {
                 texture = Material.Textures["Albedo"];

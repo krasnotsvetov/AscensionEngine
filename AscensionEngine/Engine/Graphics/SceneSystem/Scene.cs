@@ -17,6 +17,8 @@ namespace Ascension.Engine.Graphics.SceneSystem
     public partial class Scene : IContentObject
     {
 
+
+        public bool IsInitialized { get; protected set; }
         public Vector3 Ambient = Color.White.ToVector3();
 
         public SceneUpdater sceneUpdater;
@@ -29,10 +31,10 @@ namespace Ascension.Engine.Graphics.SceneSystem
         public ReadOnlyCollection<Light> Lights { get { return lights.AsReadOnly(); } }
         public ReadOnlyCollection<Camera> Cameras { get { return cameras.AsReadOnly(); } }
 
-        public RenderSystem RenderSystem { get { return renderSystem;} }
+        public RenderSystem RenderSystem { get { return renderSystem; } }
 
 
-        private RenderSystem renderSystem;       
+        private RenderSystem renderSystem;
 
 
         public string Name { get; set; }
@@ -57,6 +59,14 @@ namespace Ascension.Engine.Graphics.SceneSystem
         }
 
 
+        public void Initialize()
+        {
+            foreach (var e in entities)
+            {
+                e.Initialize();
+            }
+            IsInitialized = true;
+        }
 
         public void ChangeRenderSystem(RenderSystem renderSystem)
         {
@@ -75,154 +85,162 @@ namespace Ascension.Engine.Graphics.SceneSystem
 
         public static Scene Load(string name, RenderSystem renderSystem)
         {
-             Scene scene = new Scene(name, renderSystem);
-             Dictionary<int, List<int>> entityGraph = new Dictionary<int, List<int>>();
-             Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
-             List<int> loadOrder = new List<int>();
-             bool isGraphRead = false;
-             using (XmlReader reader = XmlReader.Create(name))
-             {
-                 while (reader.Read())
-                 {
-                     switch (reader.NodeType)
-                     {
-                         case XmlNodeType.Element:
-                             var matSerializer = new DataContractSerializer(typeof(Material));
-                             if (reader.Name.Equals("requiredContent"))
-                             {
+            Scene scene = new Scene(name, renderSystem);
+            Dictionary<int, List<int>> entityGraph = new Dictionary<int, List<int>>();
+            Dictionary<int, Entity> entities = new Dictionary<int, Entity>();
+            List<int> loadOrder = new List<int>();
+            bool isGraphRead = false;
+            using (XmlReader reader = XmlReader.Create(name))
+            {
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            var matSerializer = new DataContractSerializer(typeof(Material));
+                            if (reader.Name.Equals("requiredContent"))
+                            {
 
-                             }
-                             if (reader.Name.Equals("rootEntities"))
-                             {
-                                 if (reader.HasAttributes)
-                                 {
-                                     while (reader.MoveToNextAttribute())
-                                     {
-                                         string[] loadOrderValue = reader.Value.Split(' ');
-                                         foreach (var s in loadOrderValue)
-                                         {
-                                             loadOrder.Add(int.Parse(s));
-                                         }
-                                     }
-                                 }
-                             }
+                            }
+                            if (reader.Name.Equals("rootEntities"))
+                            {
+                                if (reader.HasAttributes)
+                                {
+                                    while (reader.MoveToNextAttribute())
+                                    {
+                                        string[] loadOrderValue = reader.Value.Split(' ');
+                                        foreach (var s in loadOrderValue)
+                                        {
+                                            loadOrder.Add(int.Parse(s));
+                                        }
+                                    }
+                                }
+                            }
 
-                             Entity entity = null; ;
-                             if (reader.Name.StartsWith("def-entities"))
-                             {
-                                 NextElement(reader, 2);
-                                 while (isGraphRead && reader.Name.StartsWith("entity") && reader.Depth == 2)
-                                 {
-                                     if (reader.NodeType == XmlNodeType.Element)
-                                     {
-                                         entity = new Entity("");
+                            Entity entity = null; ;
+                            if (reader.Name.StartsWith("def-entities"))
+                            {
+                                NextElement(reader, 2);
+                                while (isGraphRead && reader.Name.StartsWith("entity") && reader.Depth == 2)
+                                {
+                                    if (reader.NodeType == XmlNodeType.Element)
+                                    {
+                                        entity = new Entity("");
 
-                                         reader.MoveToNextAttribute();
-                                         entity.ID = int.Parse(reader.Value);
-                                         reader.MoveToNextAttribute();
-                                         entity.Name = reader.Value;
-                                     }
+                                        reader.MoveToNextAttribute();
+                                        entity.ID = int.Parse(reader.Value);
+                                        reader.MoveToNextAttribute();
+                                        entity.Name = reader.Value;
+                                    }
 
 
-                                     NextElement(reader, 3);
+                                    NextElement(reader, 3);
 
-                                     while (reader.Depth == 3)
-                                     {
-                                         reader.MoveToNextAttribute();
-                                         Console.WriteLine(reader.AttributeCount);
-                                         string typeName = reader.Value;
-                                         var serializer = new DataContractSerializer(Type.GetType(typeName));
+                                    while (reader.Depth == 3)
+                                    {
+                                        reader.MoveToNextAttribute();
+                                        Console.WriteLine(reader.AttributeCount);
+                                        string typeName = reader.Value;
 
-                                         NextElement(reader, 3);
-                                         var t = serializer.ReadObject(reader);
+                                        DataContractSerializer serializer = null;
+                                        foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
+                                        {
+                                            if (a.GetType(typeName) != null)
+                                            {
+                                                serializer = new DataContractSerializer(a.GetType(typeName));
+                                            }
+                                        }
+
+                                        NextElement(reader, 3);
+                                        var t = serializer.ReadObject(reader);
 
                                         if (t is Transform)
                                         {
                                             var temp = t as Transform;
                                             entity.Transform.SetTransform(temp.Position, temp.Rotation, temp.Scale);
-                                        } else
+                                        }
+                                        else
                                         if (t is EntityUpdateableComponent)
-                                         {
+                                        {
                                             var component = Activator.CreateInstance(t.GetType(), new[] { (t as EntityUpdateableComponent).Name });
                                             //TODO, fix COPY-PASTE.
                                             foreach (var field in t.GetType().GetRuntimeFields().Where(p => p.IsDefined(typeof(DataMemberAttribute), false)))
                                             {
                                                 field.SetValue(component, field.GetValue(t));
                                             }
-                                            foreach (var field in t.GetType().GetRuntimeFields().Where(p => p.IsDefined(typeof(DataMemberAttribute), false)))
+                                            foreach (var field in t.GetType().GetRuntimeProperties().Where(p => p.IsDefined(typeof(DataMemberAttribute), false)))
                                             {
                                                 field.SetValue(component, field.GetValue(t));
                                             }
                                             entity.AddUpdateableComponent((EntityUpdateableComponent)component);
-                                         }
+                                        }
 
-                                         if (t is EntityDrawableComponent)
-                                         {
+                                        if (t is EntityDrawableComponent)
+                                        {
                                             var component = Activator.CreateInstance(t.GetType(), new[] { (t as EntityDrawableComponent).Name, (t as EntityDrawableComponent).MaterialName });
                                             foreach (var field in t.GetType().GetRuntimeFields().Where(p => p.IsDefined(typeof(DataMemberAttribute), false)))
                                             {
                                                 field.SetValue(component, field.GetValue(t));
                                             }
-                                            foreach (var field in t.GetType().GetRuntimeFields().Where(p => p.IsDefined(typeof(DataMemberAttribute), false)))
+                                            foreach (var field in t.GetType().GetRuntimeProperties().Where(p => p.IsDefined(typeof(DataMemberAttribute), false)))
                                             {
                                                 field.SetValue(component, field.GetValue(t));
                                             }
                                             entity.AddDrawableComponent((EntityDrawableComponent)component);
-                                         }
-                                         NextElement(reader, 3);
-                                     }
-                                     entities.Add(entity.ID, entity);
-                                     NextElement(reader, 2);
-                                 }
-                             }
+                                        }
+                                        NextElement(reader, 3);
+                                    }
+                                    entities.Add(entity.ID, entity);
+                                    NextElement(reader, 2);
+                                }
+                            }
 
 
-                             if (reader.Name.Equals("entity-graph"))
-                             {
-                                 if (reader.HasAttributes)
-                                 {
-                                     while (reader.MoveToNextAttribute())
-                                     {
-                                         string[] splitString = reader.Value.Split(' ');
-                                         List<int> temp = new List<int>();
-                                         for (int i = 1; i < splitString.Length; i++)
-                                         {
-                                             temp.Add(int.Parse(splitString[i]));
-                                         }
-                                         entityGraph.Add(int.Parse(splitString[0]), temp);
-                                     }
-                                 }
-                                 isGraphRead = true;
-                             }
+                            if (reader.Name.Equals("entity-graph"))
+                            {
+                                if (reader.HasAttributes)
+                                {
+                                    while (reader.MoveToNextAttribute())
+                                    {
+                                        string[] splitString = reader.Value.Split(' ');
+                                        List<int> temp = new List<int>();
+                                        for (int i = 1; i < splitString.Length; i++)
+                                        {
+                                            temp.Add(int.Parse(splitString[i]));
+                                        }
+                                        entityGraph.Add(int.Parse(splitString[0]), temp);
+                                    }
+                                }
+                                isGraphRead = true;
+                            }
 
-                             if (reader.Name.Equals("SceneData"))
-                             {
+                            if (reader.Name.Equals("SceneData"))
+                            {
                                 reader.MoveToNextAttribute();
                                 scene.Name = reader.Value;
-                             }
-                             break;
+                            }
+                            break;
 
-                     }
-                 }
+                    }
+                }
 
-             }
+            }
 
-             ///Create entity graph
-             foreach (int i in loadOrder)
-             {
-                 var list = entityGraph[entities[i].ID];
-                 createEntityGraph(entities[i], list, entityGraph, entities);
-             }
+            ///Create entity graph
+            foreach (int i in loadOrder)
+            {
+                var list = entityGraph[entities[i].ID];
+                createEntityGraph(entities[i], list, entityGraph, entities);
+            }
 
-             ///Add them all to scene
-             ///
-             foreach (int i in loadOrder)
-             {
-                 scene.AddEntity(entities[i]);
-             }
-             return scene;
-             
-            throw new Exception();
+            ///Add them all to scene
+            ///
+            foreach (int i in loadOrder)
+            {
+                scene.AddEntity(entities[i]);
+            }
+            return scene;
+
         }
 
 
@@ -260,7 +278,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
             return true;
         }
 
-        public void Save()
+        public void Save(string path)
         {
             List<List<int>> graph = new List<List<int>>();
             List<int> invTopSort = new List<int>();
@@ -272,13 +290,13 @@ namespace Ascension.Engine.Graphics.SceneSystem
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.NewLineOnAttributes = true;
-            using (XmlWriter xmlWritter = XmlWriter.Create("test.xml", settings))
+            using (XmlWriter xmlWritter = XmlWriter.Create(path, settings))
             {
                 xmlWritter.WriteStartDocument();
                 xmlWritter.WriteStartElement("SceneData");
                 xmlWritter.WriteAttributeString("SceneData", Name);
                 xmlWritter.WriteStartElement("requiredContent");
-                
+
 
                 xmlWritter.WriteEndElement();
                 xmlWritter.WriteStartElement("rootEntities");
@@ -310,7 +328,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                         xmlWritter.WriteAttributeString((String.Format("Updateable-{0}", uc.ToString())), uc.GetType().FullName);
                         serializer.WriteObject(xmlWritter, uc);
                         xmlWritter.WriteEndElement();
-                        
+
                     }
                     foreach (var dc in ent.DrawableComponents)
                     {
@@ -323,7 +341,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                     xmlWritter.WriteEndElement();
                 }
                 xmlWritter.WriteEndElement();
-               
+
                 xmlWritter.WriteEndElement();
                 xmlWritter.WriteEndDocument();
             }
@@ -384,7 +402,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 throw new Exception("Entity have been already attached to this scene");
             }
 
-           
+
 
 
             if (entity.Scene != this)
@@ -395,7 +413,10 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 }
                 entity.Scene = this;
                 entityDFSGetID(entity);
-                entity.Initialize();
+                if (IsInitialized)
+                {
+                    entity.Initialize();
+                }
             }
 
             entities.Add(entity);
@@ -416,13 +437,13 @@ namespace Ascension.Engine.Graphics.SceneSystem
             if (entity.Scene != this)
             {
                 throw new Exception("Entity is attached to another scene");
-            } 
+            }
 
             if (!entities.Contains(entity))
             {
                 throw new Exception("entity is not attached to this scene");
             }
-            
+
 
             //TODO, make it assert
             if (entity.ID == -1)
@@ -505,5 +526,5 @@ namespace Ascension.Engine.Graphics.SceneSystem
         }
     }
 
-    
+
 }

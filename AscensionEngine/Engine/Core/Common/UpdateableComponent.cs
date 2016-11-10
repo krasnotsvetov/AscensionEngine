@@ -54,7 +54,7 @@ namespace Ascension.Engine.Core.Common
 
         public virtual void Initialize()
         {
-
+           
         }
 
 
@@ -71,6 +71,7 @@ namespace Ascension.Engine.Core.Common
 
         public virtual void Update(GameTime gameTime)
         {
+
         }
     }
 }

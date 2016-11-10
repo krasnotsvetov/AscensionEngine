@@ -11,9 +11,11 @@ using Ascension.Engine.Graphics.SceneSystem;
 
 namespace AscensionEditor
 {
+
     using Ascension.Engine.Graphics.CameraSystem;
     using AscensionEngineEditor.Editor;
     using MouseButtonState = Microsoft.Xna.Framework.Input.ButtonState;
+    using XNAKeys = Microsoft.Xna.Framework.Input.Keys;
     public class EditorLogic
     {
         internal Entity SelectedEntity = null;
@@ -68,17 +70,19 @@ namespace AscensionEditor
 
 
 
-
+        float rotationSpeed = 1f;
         internal void Update(GameTime gameTime)
         {
+            float delta = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000f;
             game.renderSystem.ActiveCamera = camera;
             form.Text = mouseState.Position.ToString();
             camera.Update(mouseState, gameTime);
-            if (mouseState.LeftButton == MouseButtonState.Pressed && mouseState.onControl)
+            if (SelectedEntity != null)
             {
-
-                if (SelectedEntity != null)
+                if (mouseState.LeftButton == MouseButtonState.Pressed && mouseState.onControl)
                 {
+
+
                     float? length;
                     Vector3 camPosition = game.GraphicsDevice.Viewport.Unproject(new Vector3(mouseState.Position, 0), camera.Projection, camera.View, Matrix.Identity);
                     switch (camera.ProjectionType)
@@ -96,10 +100,37 @@ namespace AscensionEditor
                             break;
                     }
                     //TODO
-
+                    
 
                 }
-            } 
+
+                if (Keyboard.GetState().IsKeyDown(XNAKeys.Q))
+                {
+                    SelectedEntity.Transform.Rotation += new Vector3(rotationSpeed, 0, 0) * delta;
+                }
+                if (Keyboard.GetState().IsKeyDown(XNAKeys.E))
+                {
+                    SelectedEntity.Transform.Rotation -= new Vector3(rotationSpeed, 0, 0) * delta;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(XNAKeys.Z))
+                {
+                    SelectedEntity.Transform.Rotation += new Vector3(0, rotationSpeed, 0) * delta;
+                }
+                if (Keyboard.GetState().IsKeyDown(XNAKeys.X))
+                {
+                    SelectedEntity.Transform.Rotation -= new Vector3(0, rotationSpeed, 0) * delta;
+                }
+
+                if (Keyboard.GetState().IsKeyDown(XNAKeys.F))
+                {
+                    SelectedEntity.Transform.Rotation += new Vector3(0, 0, rotationSpeed) * delta;
+                }
+                if (Keyboard.GetState().IsKeyDown(XNAKeys.G))
+                {
+                    SelectedEntity.Transform.Rotation -= new Vector3(0, 0, rotationSpeed) * delta;
+                }
+            }
             mouseState.Update();
             //form.Text = camera.Forward.ToString() + camera.Position;
 

@@ -69,9 +69,13 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 {
 	PixelShaderOutput output;
-	output.depth = input.Position.z / input.Position.w;
+	float4 baseColor = tex2D(AlbedoSampler, input.UV);
+	clip((baseColor.a == 0) ? -1 : 1);
+
 	output.diffuse = tex2D(AlbedoSampler, input.UV);
 	output.normal = tex2D(NormalSampler, input.UV);
+	output.depth = input.Position.z / input.Position.w;
+
 	return output;
 }
 

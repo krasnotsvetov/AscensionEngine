@@ -96,7 +96,7 @@ namespace Ascension.Engine.Graphics
 
         public virtual void Update(GameTime gameTime)
         {
-            if (Enabled)
+            if (!Enabled)
             {
                 return;
             }

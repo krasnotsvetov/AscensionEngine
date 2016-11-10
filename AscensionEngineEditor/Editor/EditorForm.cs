@@ -303,7 +303,11 @@ namespace AscensionEditor
 
         private void saveSceneToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            activeScene.Save();
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                activeScene.Save(sfd.FileName);
+            }
         }
 
         private void openSceneToolStripMenuItem_Click(object sender, EventArgs e)
@@ -312,7 +316,8 @@ namespace AscensionEditor
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Scene scene = Scene.Load(ofd.FileName, GameApp.RenderSystem);
-                scene.sceneRenderer.LoadContent();
+                scene.Initialize();
+                scene.LoadContent();
                 SceneComboBox.Items.Add(scene);
             }
         }
@@ -683,6 +688,20 @@ namespace AscensionEditor
             {
                 logic.camera.ProjectionType = CameraProjectionType.Orthographic;
                 logic.camera.Projection = Matrix.CreateOrthographic(GameApp.GraphicsDevice.Viewport.Width, GameApp.GraphicsDevice.Viewport.Height, 0.1f, 1000f);
+            }
+        }
+
+        private void EntityView_MouseUp(object sender, MouseEventArgs e)
+        {
+            var contextMenu = new ContextMenu();
+
+            var c = EntityView.GetNodeAt(e.Location);
+            if (e.Button == MouseButtons.Right && c != null)
+            {
+                activeScene.RemoveEntity((c as EntityTreeNode).Entity);
+                contextMenu.MenuItems.Add(new MenuItem("Remove", (s, ea) => c.Remove()));
+                contextMenu.MenuItems.Add(new MenuItem("Rename", (s, ea) => { }));
+                contextMenu.Show(EntityView, e.Location);
             }
         }
     }

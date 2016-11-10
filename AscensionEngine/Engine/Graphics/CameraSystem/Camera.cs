@@ -34,7 +34,17 @@ namespace Ascension.Engine.Graphics.CameraSystem
 
             set
             {
+                if (Parent != null)
+                {
+                    Parent.TransformChanged -= TransformChanged;
+                    Parent.TransformChanged -= TransformChanged;
+                }
                 base.Parent = value;
+                if (Parent != null)
+                {
+                    Parent.TransformChanged += TransformChanged;
+                    Parent.TransformChanged += TransformChanged;
+                }
             }
         }
 
@@ -125,7 +135,7 @@ namespace Ascension.Engine.Graphics.CameraSystem
                 }
             }
         }
-
+         
         [DataMember]
         public CameraProjectionType ProjectionType { get; set; }
 
@@ -151,16 +161,28 @@ namespace Ascension.Engine.Graphics.CameraSystem
 
         public Camera(string name) : base(name)
         {
-            view = Matrix.CreateLookAt(new Vector3(0, 0, -5), new Vector3(0, 0, 0), Vector3.Up);   
         }
 
         public override void Initialize()
         {
             Parent.Scene.cameras.Add(this);
-            base.Initialize();
+            Vector3 forward = Parent.GlobalTransform.Forward;
+            Vector3 position = Parent.GlobalTransform.Position;
+            Vector3 Up = Parent.GlobalTransform.Up;
+            view = Matrix.CreateLookAt(position, position - forward, Up);
+
+            if (ProjectionType == CameraProjectionType.Perspective)
+            {
+                projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance);
+            }
+            else
+            {
+                projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+            }
+
         }
 
-        public void SetupPerspectiveCamera(Vector3 forward, Vector3 up, float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
+        public void SetupPerspectiveCamera(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
         {
             ProjectionType = CameraProjectionType.Perspective;
             projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance);
@@ -168,10 +190,16 @@ namespace Ascension.Engine.Graphics.CameraSystem
         }
 
 
-        public void SetupOrthographicCamera(Vector3 forward, Vector3 up, float width, float height, float nearPlaneDistance, float farPlaneDistance)
+        public void SetupOrthographicCamera(float width, float height, float nearPlaneDistance, float farPlaneDistance)
         {
             ProjectionType = CameraProjectionType.Orthographic;
             projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+        }
+
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
         }
 
 
@@ -186,7 +214,10 @@ namespace Ascension.Engine.Graphics.CameraSystem
 
         protected void TransformChanged(object sender, EventArgs e)
         {
-
+            Vector3 forward = Parent.GlobalTransform.Forward;
+            Vector3 position = Parent.GlobalTransform.Position;
+            Vector3 Up = Parent.GlobalTransform.Up;
+            view = Matrix.CreateLookAt(position, position - forward, Up);
         }
 
         public override string ToString()
