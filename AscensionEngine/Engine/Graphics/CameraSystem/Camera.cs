@@ -89,7 +89,7 @@ namespace Ascension.Engine.Graphics.CameraSystem
                 }
                 else
                 {
-                    projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+                    projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Ascension.Engine.Graphics.CameraSystem
                     projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance);
                 } else
                 {
-                    projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+                    projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace Ascension.Engine.Graphics.CameraSystem
                 width = value;
                 if (ProjectionType == CameraProjectionType.Orthographic)
                 {
-                    projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+                    projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
                 }
             }
         }
@@ -131,7 +131,21 @@ namespace Ascension.Engine.Graphics.CameraSystem
                 height = value;
                 if (ProjectionType == CameraProjectionType.Orthographic)
                 {
-                    projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+                    projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
+                }
+            }
+        }
+
+
+        public float Zoom
+        {
+            get { return zoom; }
+            set
+            {
+                zoom = value;
+                if (ProjectionType == CameraProjectionType.Orthographic)
+                {
+                    projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
                 }
             }
         }
@@ -151,6 +165,9 @@ namespace Ascension.Engine.Graphics.CameraSystem
         private float width;
         [DataMember]
         private float height;
+
+        [DataMember]
+        private float zoom;
 
         [DataMember]
         private Matrix view;
@@ -177,7 +194,7 @@ namespace Ascension.Engine.Graphics.CameraSystem
             }
             else
             {
-                projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+                projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
             }
 
         }
@@ -193,7 +210,7 @@ namespace Ascension.Engine.Graphics.CameraSystem
         public void SetupOrthographicCamera(float width, float height, float nearPlaneDistance, float farPlaneDistance)
         {
             ProjectionType = CameraProjectionType.Orthographic;
-            projection = Matrix.CreateOrthographic(width, height, nearPlaneDistance, farPlaneDistance);
+            projection = Matrix.CreateOrthographic(width * zoom, height * zoom, nearPlaneDistance, farPlaneDistance);
         }
 
 
