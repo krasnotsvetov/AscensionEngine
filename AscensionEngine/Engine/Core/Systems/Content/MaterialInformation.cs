@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Ascension.Engine.Core.Systems.Content
 {
-    public class MaterialInformation : IContentObject
+    public class MaterialInformation : IContentObject, IDisposable
     {
 
         private Material material = null;
@@ -172,6 +172,13 @@ namespace Ascension.Engine.Core.Systems.Content
             data += "}\n";
             return data;
         }
-       
+
+        public void Dispose()
+        {
+            if (material != null)
+            {
+                material.Dispose();
+            }
+        }
     }
 }

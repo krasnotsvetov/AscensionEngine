@@ -86,9 +86,9 @@ namespace Ascension.Engine.Core.Common
 
         public EntityDrawableComponent(string name, string materialName) : base()
         {
+            MaterialChangedHandler += MaterialChanged;
             this.MaterialName = materialName;
             this.Name = name;
-            MaterialChangedHandler += MaterialChanged;
         }
 
 
@@ -123,9 +123,5 @@ namespace Ascension.Engine.Core.Common
             device = Parent.Scene.RenderSystem.Device;
         }
 
-        internal void DeserealizationInitialize()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

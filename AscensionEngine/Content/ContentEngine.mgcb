@@ -73,12 +73,6 @@
 /processorParam:DebugMode=Auto
 /build:Engine/Shaders/LightEffect.fx
 
-#begin Engine/Shaders/particleShader.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Engine/Shaders/particleShader.fx
-
 #begin Engine/Primitives/cube.fbx
 /importer:FbxImporter
 /processor:ModelProcessor
@@ -124,4 +118,10 @@
 
 #begin Data.ascension
 /copy:Data.ascension
+
+#begin Engine/Shaders/ParticleEffect.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Engine/Shaders/ParticleEffect.fx
 

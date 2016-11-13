@@ -698,8 +698,19 @@ namespace AscensionEditor
             var c = EntityView.GetNodeAt(e.Location);
             if (e.Button == MouseButtons.Right && c != null)
             {
-                activeScene.RemoveEntity((c as EntityTreeNode).Entity);
-                contextMenu.MenuItems.Add(new MenuItem("Remove", (s, ea) => c.Remove()));
+
+                Entity entity = (c as EntityTreeNode).Entity;
+                contextMenu.MenuItems.Add(new MenuItem("Remove", (s, ea) => 
+                {
+                    if (entity.Parent == null)
+                    {
+                        activeScene.RemoveEntity(entity);
+                    }
+                    else
+                    {
+                        entity.Parent.RemoveEntity(entity);
+                    };
+                    c.Remove(); }));
                 contextMenu.MenuItems.Add(new MenuItem("Rename", (s, ea) => { }));
                 contextMenu.Show(EntityView, e.Location);
             }

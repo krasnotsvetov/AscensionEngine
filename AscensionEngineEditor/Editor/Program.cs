@@ -18,7 +18,6 @@ namespace AscensionEditor
             
             using (var form = new EditorForm())
             {
-
                 using (var game = new GameEx(form.constructEditor, form.startEditor, form.loadEditor, form.updateEditor, form.drawEditor))
                 {
                     form.Show();

@@ -25,6 +25,7 @@ using Ascension.Engine.Core.Components;
 using System.IO;
 using System.Text;
 using System;
+using Ascension.Engine.Graphics.Particles;
 
 namespace Ascension
 {
@@ -121,7 +122,6 @@ namespace Ascension
             }
 
         }
-
 
 
         private Scene lastActiveScene;
@@ -245,7 +245,7 @@ namespace Ascension
                     uc.Update(gameTime);
                 }
             }
-            
+
             /*
             if (Mouse.GetState().LeftButton == ButtonState.Pressed && Keyboard.GetState().IsKeyDown(Keys.LeftControl))
             {
@@ -259,7 +259,6 @@ namespace Ascension
                 entity2.GlobalTransform.Position = new Vector3(Mouse.GetState().Position.ToVector2(), 0);
             }
             */
-
             base.Update(gameTime);
         }
 

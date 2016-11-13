@@ -405,7 +405,7 @@ namespace Ascension.Engine.Graphics.SceneSystem
                 }
                 else
                 {
-                    scene.RemoveEntity(entity);
+                    scene.entityDFSFreeID(entity);
                 }
             }
         }

@@ -10,6 +10,7 @@ Engine\ParticleSystem\playerParticle
 Engine\Shaders\LightEffect
 Engine\Shaders\ClearEffect
 Engine\Shaders\SpriteEffect
+Engine\Shaders\ParticleEffect
 Engine\shaders\GridEffect
 Engine\mainShader
 [Sounds]

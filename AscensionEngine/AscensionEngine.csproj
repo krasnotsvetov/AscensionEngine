@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -121,6 +122,9 @@
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialFlags.cs" />
     <Compile Include="Engine\Graphics\MaterialSystem\IMaterialParameters.cs" />
     <Compile Include="Engine\Graphics\ModelInstance.cs" />
+    <Compile Include="Engine\Graphics\Particles\ParticleSystem.cs" />
+    <Compile Include="Engine\Graphics\Particles\ParticleDeclaration.cs" />
+    <Compile Include="Engine\Graphics\Particles\ParticleSystem.Settings.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Scene.Materials.cs" />
     <Compile Include="GameEx.cs" />
     <Compile Include="Engine\Graphics\SceneSystem\Background.cs" />

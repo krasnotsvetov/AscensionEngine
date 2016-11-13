@@ -11,7 +11,7 @@ using Ascension.Engine.Graphics.SceneSystem;
 
 namespace Ascension.Engine.Core.Systems.Content
 {
-    public partial class ContentContainer
+    public partial class ContentContainer : IDisposable
     {
 
 
@@ -155,6 +155,13 @@ namespace Ascension.Engine.Core.Systems.Content
             }
         }
 
+        public void Dispose()
+        {
+            foreach (var material in materialInformation.Values)
+            {
+                material.Dispose();
+            }
+        }
     }
 
     public class ContentOwnerEventArgs<T> : EventArgs

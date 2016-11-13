@@ -8,7 +8,7 @@ using Ascension.Engine.Core.Systems.Content;
 namespace Ascension.Engine.Graphics
 {
     [DataContract]
-    public class Material : IEffectOwner, ITextureOwner
+    public class Material : IEffectOwner, ITextureOwner, ICloneable, IDisposable
     {
 
         [DataMember]
@@ -68,7 +68,7 @@ namespace Ascension.Engine.Graphics
             }
             effectName = info.RequiredShader;
             contentContainer.AddEffectListener(this, info.RequiredShader);
-            effect = contentContainer.GetEffect(info.RequiredShader, immediately);
+            effect = contentContainer.GetEffect(info.RequiredShader, immediately)?.Clone();
 
             TextureChangedHandler += (s, e) =>
             {
@@ -110,9 +110,11 @@ namespace Ascension.Engine.Graphics
                 switch (e.Action)
                 {
                     case ContentAction.Add:
-                        effect = e.New;
+                        //TODO, assert effect == null
+                        effect = e.New.Clone();
                         break;
                     case ContentAction.Remove:
+                        effect.Dispose();
                         effect = null;
                         break;
                     case ContentAction.Rename:
@@ -120,10 +122,18 @@ namespace Ascension.Engine.Graphics
                         info.RequiredShader = e.NewName;
                         effectName = e.NewName;
                         cc.AddEffectListener(this, e.NewName);
-                        effect = cc.GetEffect(e.NewName, true);
+                        if (effect != null)
+                        {
+                            effect.Dispose();
+                        }
+                        effect = cc.GetEffect(e.NewName, true)?.Clone();
                         break;
                     case ContentAction.Replace:
-                        effect = e.New;
+                        if (effect != null)
+                        {
+                            effect.Dispose();
+                        }
+                        effect = e.New?.Clone();
                         break;
                 }
             };
@@ -163,6 +173,17 @@ namespace Ascension.Engine.Graphics
             //We should register before we will use immediately mode.
             cc.AddEffectListener(this, newEffectName);
             effect = cc.GetEffect(newEffectName, true);
+        }
+
+        public object Clone()
+        {
+            return new Material(info, true);
+        }
+
+
+        public void Dispose()
+        {
+            effect.Dispose();
         }
     }
 

@@ -38,6 +38,6 @@ TextureName|Engine\ParticleSystem\playerParticle
 TextureType|Albedo
 }
 {
-ShaderName|Engine\mainShader2
+ShaderName|Engine\Shaders\ParticleEffect
 }
 }
